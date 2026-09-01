@@ -1,0 +1,183 @@
+const languageData = {
+  zh: {
+    "site.name": "上高田整骨院",
+    "nav.about": "关于本院",
+    "nav.service": "治疗项目",
+    "nav.flow": "就诊流程",
+    "nav.gallery": "院内照片",
+    "nav.faq": "常见问题",
+    "nav.contact": "联系我们",
+    "hero.eyebrow": "近新井药师前站・预约优先",
+    "hero.title": "守护社区健康的整骨院",
+    "hero.copy": "肩颈酸痛、腰痛、运动损伤等身体不适，欢迎随时咨询。",
+    "hero.phone": "电话 03-5380-1963",
+    "hero.line": "お問い合わせ",
+    "hero.hours": "营业时间 10:00-19:00",
+    "hero.address": "东京都中野区上高田5-47-8",
+    "about.label": "Greeting",
+    "about.title": "为每一位患者提供贴心治疗",
+    "about.lead": "我们希望成为您身边容易咨询的整骨院。",
+    "about.text1": "上高田整骨院会仔细了解您的身体状态与生活习惯，并根据症状提出合适的治疗方案。",
+    "about.text2": "从日常不适到运动中的疼痛与违和感，我们在安心舒适的环境中为您提供支持。",
+    "features.label": "Feature",
+    "features.title": "本院特点",
+    "features.item1.title": "细致问诊",
+    "features.item1.text": "首次来院也可安心，我们会认真倾听疼痛、担忧与身体状况。",
+    "features.item2.title": "因人而异的治疗",
+    "features.item2.text": "不做机械式处理，而是根据身体状态进行温和合适的施术。",
+    "features.item3.title": "对应运动损伤",
+    "features.item3.text": "运动造成的受伤、关节不适以及恢复训练都可以咨询。",
+    "service.label": "Service",
+    "service.title": "治疗项目",
+    "service.shoulder.title": "肩颈酸痛",
+    "service.shoulder.text": "改善因久坐办公或姿势不良引起的颈肩不适。",
+    "service.back.title": "腰痛",
+    "service.back.text": "从慢性腰部沉重到突然疼痛，都会根据状态处理。",
+    "service.sports.title": "运动损伤",
+    "service.sports.text": "支持扭伤、肌肉拉伤、关节不适以及希望继续运动的人。",
+    "service.pelvis.title": "骨盆与姿势调整",
+    "service.pelvis.text": "调整姿势和身体平衡，帮助减少日常负担。",
+    "flow.label": "Flow",
+    "flow.title": "就诊流程",
+    "flow.step1.title": "预约",
+    "flow.step1.text": "请通过电话或网站预约，如有疑问请联系我们。",
+    "flow.step2.title": "受付",
+    "flow.step2.text": "到院后填写必要信息。",
+    "flow.step3.title": "问诊",
+    "flow.step3.text": "确认症状与生活习惯。",
+    "flow.step4.title": "治疗",
+    "flow.step4.text": "根据身体状态进行治疗。",
+    "flow.step5.title": "日常建议",
+    "flow.step5.text": "说明日常生活中的注意事项。",
+    "gallery.label": "Gallery",
+    "gallery.title": "院内照片",
+    "faq.label": "FAQ",
+    "faq.title": "常见问题",
+    "faq.q1": "需要预约吗？",
+    "faq.a1": "本院预约优先。如有疑问，欢迎联系我们。",
+    "faq.q2": "可以使用健康保险吗？",
+    "faq.a2": "根据症状和原因，部分情况可以适用。请来院时咨询。",
+    "faq.q3": "应该穿什么衣服？",
+    "faq.a3": "请穿便于活动的衣服。如有需要，我们也会安排更换衣物。",
+    "contact.label": "Contact",
+    "contact.title": "联系我们",
+    "contact.phoneLabel": "电话",
+    "contact.hoursLabel": "营业时间",
+    "contact.hours": "10:00-19:00",
+    "contact.lineLabel": "お問い合わせ",
+    "contact.lineButton": "お問い合わせ",
+    "contact.access": "交通",
+    "contact.address": "〒164-0002 东京都中野区上高田5-47-8 1F",
+    "contact.mapButton": "在 Google 地图中打开",
+    "footer.address": "〒164-0002 东京都中野区上高田5-47-8 1F",
+    "footer.copy": "© 2026 上高田整骨院 All Rights Reserved.",
+    "floating.line": "お問い合わせ"
+  },
+  en: {
+    "site.name": "Kamitakada Seikotsuin",
+    "nav.about": "About",
+    "nav.service": "Services",
+    "nav.flow": "Visit Flow",
+    "nav.gallery": "Gallery",
+    "nav.faq": "FAQ",
+    "nav.contact": "Contact",
+    "hero.eyebrow": "Near Araiyakushi-mae Station",
+    "hero.title": "A local clinic supporting everyday health",
+    "hero.copy": "Please feel free to consult us about stiff shoulders, back pain, sports injuries, and other body concerns.",
+    "hero.phone": "Call 03-5380-1963",
+    "hero.line": "Contact us",
+    "hero.hours": "Open 10:00-19:00",
+    "hero.address": "5-47-8 Kamitakada, Nakano-ku, Tokyo",
+    "about.label": "Greeting",
+    "about.title": "Care tailored to each person",
+    "about.lead": "We aim to be a clinic that feels close, calm, and easy to consult.",
+    "about.text1": "At Kamitakada Seikotsuin, we listen carefully to your condition and lifestyle before suggesting treatment.",
+    "about.text2": "From everyday discomfort to sports-related concerns, we support you in a comfortable setting.",
+    "features.label": "Feature",
+    "features.title": "Our Features",
+    "features.item1.title": "Careful consultation",
+    "features.item1.text": "We listen closely to pain, concerns, and body condition, even for first-time visitors.",
+    "features.item2.title": "Personalized treatment",
+    "features.item2.text": "Treatment is adjusted to your body condition rather than following a fixed routine.",
+    "features.item3.title": "Sports injury support",
+    "features.item3.text": "Consult us about injuries, joint discomfort, and returning to activity.",
+    "service.label": "Service",
+    "service.title": "Services",
+    "service.shoulder.title": "Stiff shoulders",
+    "service.shoulder.text": "Care for neck and shoulder discomfort caused by desk work or posture.",
+    "service.back.title": "Back pain",
+    "service.back.text": "Support for both chronic heaviness and sudden pain, based on your condition.",
+    "service.sports.title": "Sports injuries",
+    "service.sports.text": "Support for sprains, muscle strain, joint discomfort, and active lifestyles.",
+    "service.pelvis.title": "Pelvis and posture",
+    "service.pelvis.text": "We help improve posture and body balance for easier movement.",
+    "flow.label": "Flow",
+    "flow.title": "Visit Flow",
+    "flow.step1.title": "Reservation",
+    "flow.step1.text": "Book by phone or Web. For questions, please contact us.",
+    "flow.step2.title": "Reception",
+    "flow.step2.text": "Fill in the necessary information after arrival.",
+    "flow.step3.title": "Consultation",
+    "flow.step3.text": "We check your symptoms and lifestyle.",
+    "flow.step4.title": "Treatment",
+    "flow.step4.text": "Treatment is provided according to your condition.",
+    "flow.step5.title": "Aftercare",
+    "flow.step5.text": "We share tips for everyday care.",
+    "gallery.label": "Gallery",
+    "gallery.title": "Clinic Photos",
+    "faq.label": "FAQ",
+    "faq.title": "FAQ",
+    "faq.q1": "Do I need a reservation?",
+    "faq.a1": "Reservations are prioritized. Please contact us if you have any questions.",
+    "faq.q2": "Can I use health insurance?",
+    "faq.a2": "It may apply depending on the symptom and cause. Please ask us during your visit.",
+    "faq.q3": "What should I wear?",
+    "faq.a3": "Please wear comfortable clothes that are easy to move in.",
+    "contact.label": "Contact",
+    "contact.title": "Contact",
+    "contact.phoneLabel": "Phone",
+    "contact.hoursLabel": "Hours",
+    "contact.hours": "10:00-19:00",
+    "contact.lineLabel": "Contact us",
+    "contact.lineButton": "Contact us",
+    "contact.access": "Access",
+    "contact.address": "1F, 5-47-8 Kamitakada, Nakano-ku, Tokyo 164-0002",
+    "contact.mapButton": "Open in Google Maps",
+    "footer.address": "1F, 5-47-8 Kamitakada, Nakano-ku, Tokyo 164-0002",
+    "footer.copy": "© 2026 Kamitakada Seikotsuin All Rights Reserved.",
+    "floating.line": "Contact us"
+  }
+};
+
+const originalText = new Map();
+
+function rememberOriginalText() {
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    if (!originalText.has(element)) originalText.set(element, element.textContent);
+  });
+}
+
+function getPreferredLanguage() {
+  const saved = localStorage.getItem("language");
+  if (saved === "ja" || languageData[saved]) return saved;
+  const browser = navigator.language.toLowerCase();
+  if (browser.startsWith("zh")) return "zh";
+  if (browser.startsWith("ja")) return "ja";
+  return "en";
+}
+
+function setLanguage(lang) {
+  rememberOriginalText();
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    if (lang === "ja") {
+      element.textContent = originalText.get(element) || element.textContent;
+      return;
+    }
+    const value = languageData[lang]?.[element.dataset.i18n];
+    if (value) element.textContent = value;
+  });
+}
+
+window.getPreferredLanguage = getPreferredLanguage;
+window.setLanguage = setLanguage;
