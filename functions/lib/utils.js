@@ -47,8 +47,8 @@ export function randomId() {
   return crypto.randomUUID();
 }
 
-export function isValidDate(s) { return /^\\d{4}-\\d{2}-\\d{2}$/.test(s); }
-export function isValidTime(s) { return /^([01]\\d|2[0-3]):[0-5]\\d$/.test(s); }
+export function isValidDate(s) { return /^\d{4}-\d{2}-\d{2}$/.test(s); }
+export function isValidTime(s) { return /^([01]\d|2[0-3]):[0-5]\d$/.test(s); }
 
 export function minutesOf(t) { const [h,m] = t.split(":").map(Number); return h*60+m; }
 export function timeString(n) { return `${String(Math.floor(n/60)).padStart(2,"0")}:${String(n%60).padStart(2,"0")}`; }
