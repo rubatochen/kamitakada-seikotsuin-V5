@@ -39,12 +39,8 @@ export async function onRequest(context) {
       json({
         ok: false,
         code: 'invalid_password',
-        error: 'Invalid password',
-        debug: {
-          configured: true,
-          secretLength: context.env.ADMIN_PASSWORD.length,
-          inputLength: password.length
-        }
+        error: 'Invalid password'
+        
       }, 401),
       context.request
     );
