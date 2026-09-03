@@ -21,21 +21,23 @@ export async function onRequest(context) {
   const body = await context.request.json().catch(() => ({}));
 
   // ① 先检查 Secret 是否真的进入当前 Worker
-  if (!context.env.ADMIN_PASSWORD) {
+  if (typeof context.env.ADMIN_PASSWORD !== 'string' || !context.env.ADMIN_PASSWORD) {
     return withCors(
       json({
         ok: false,
-        error: 'ADMIN_PASSWORD is not configured on this Worker version'
-      }, 500),
+        code: 'admin_password_not_configured',
+        error: '管理者ログインは現在設定されていません。'
+      }, 503),
       context.request
     );
   }
 
   // ② Secret 存在，再检查密码
-  if (body.password !== context.env.ADMIN_PASSWORD) {
+  if (typeof body.password !== 'string' || body.password !== context.env.ADMIN_PASSWORD) {
     return withCors(
       json({
         ok: false,
+        code: 'invalid_password',
         error: 'Invalid password'
       }, 401),
       context.request
@@ -45,15 +47,27 @@ export async function onRequest(context) {
   // ③ 密码正确，创建登录 Session
   const token = randomId();
 
-  await context.env.DB
-    .prepare('DELETE FROM sessions WHERE expires_at <= ?')
-    .bind(Date.now())
-    .run();
+  try {
+    await context.env.DB
+      .prepare('DELETE FROM sessions WHERE expires_at <= ?')
+      .bind(Date.now())
+      .run();
 
-  await context.env.DB
-    .prepare('INSERT INTO sessions(token, expires_at) VALUES(?, ?)')
-    .bind(token, Date.now() + 8 * 60 * 60 * 1000)
-    .run();
+    await context.env.DB
+      .prepare('INSERT INTO sessions(token, expires_at) VALUES(?, ?)')
+      .bind(token, Date.now() + 8 * 60 * 60 * 1000)
+      .run();
+  } catch (error) {
+    console.error('Unable to create admin session', error);
+    return withCors(
+      json({
+        ok: false,
+        code: 'session_creation_failed',
+        error: 'ログインセッションを作成できませんでした。'
+      }, 500),
+      context.request
+    );
+  }
 
   return withCors(
     json({ ok: true }, 200, {

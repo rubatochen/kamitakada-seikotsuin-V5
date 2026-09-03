@@ -1,4 +1,4 @@
-import { json, optionResponse, withCors, buildSlots, isValidDate, isValidTime, randomId } from '../lib/utils.js';
+import { json, optionResponse, withCors, buildSlots, hasSlotStartedInTokyo, isValidDate, isValidTime, randomId } from '../lib/utils.js';
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') return optionResponse(context.request);
   if (context.request.method !== 'POST') return withCors(json({error:'Method not allowed'},405),context.request);
@@ -7,11 +7,9 @@ export async function onRequest(context) {
   const name = String(body.name||'').trim(), phone = String(body.phone||'').trim();
   if (!name || !phone) return withCors(json({error:'お名前と電話番号を入力してください。'},400),context.request);
   if (name.length>80 || phone.length>40 || String(body.email||'').length>120 || String(body.note||'').length>500) return withCors(json({error:'入力内容が長すぎます。'},400),context.request);
-  const now = new Date();
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  const requested = new Date(`${body.date}T${body.time}:00`);
-  if (requested < today) return withCors(json({error:'過去の日付は予約できません。'},400),context.request);
+  if (hasSlotStartedInTokyo(body.date, body.time)) {
+    return withCors(json({error:'開始済みまたは過去の時間は予約できません。'},400),context.request);
+  }
   const availability = await buildSlots(context.env, body.date);
   const slot = availability.slots.find(s=>s.time===body.time);
   if (!slot || slot.status !== 'available') return withCors(json({error:'この時間はすでに予約済み、または予約できません。'},409),context.request);
