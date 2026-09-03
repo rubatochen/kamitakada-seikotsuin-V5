@@ -19,6 +19,7 @@ export async function onRequest(context) {
   }
 
   const body = await context.request.json().catch(() => ({}));
+  const password = typeof body?.password === 'string' ? body.password : '';
 
   // ① 先检查 Secret 是否真的进入当前 Worker
   if (typeof context.env.ADMIN_PASSWORD !== 'string' || !context.env.ADMIN_PASSWORD) {
@@ -33,12 +34,17 @@ export async function onRequest(context) {
   }
 
   // ② Secret 存在，再检查密码
-  if (typeof body.password !== 'string' || body.password !== context.env.ADMIN_PASSWORD) {
+  if (password !== context.env.ADMIN_PASSWORD) {
     return withCors(
       json({
         ok: false,
         code: 'invalid_password',
-        error: 'Invalid password'
+        error: 'Invalid password',
+        debug: {
+          configured: true,
+          secretLength: context.env.ADMIN_PASSWORD.length,
+          inputLength: password.length
+        }
       }, 401),
       context.request
     );
