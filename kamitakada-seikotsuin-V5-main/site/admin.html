@@ -1,0 +1,1396 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>予約管理 | 上高田整骨院</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .admin {
+      max-width: 1100px;
+      margin: auto;
+      padding: 45px 20px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .panel {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .login {
+      max-width: 420px;
+      margin: 100px auto;
+    }
+
+    .login input {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 12px 0;
+    }
+
+    .calendar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tabs button,
+    .daybtn {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: #eef3ef;
+      cursor: pointer;
+    }
+
+    .tabs .active,
+    .daybtn.active {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .appt {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 15px;
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
+      align-items: center;
+    }
+
+    .muted {
+      color: #777;
+    }
+
+    .danger {
+      border: 0;
+      border-radius: 7px;
+      padding: 8px 12px;
+      cursor: pointer;
+      background: #eee;
+    }
+
+    .danger:hover {
+      background: #ddd;
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td,
+    th {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    select {
+      padding: 8px;
+    }
+
+    /* 电话预约 */
+    .phone-reserve-btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .phone-reserve-btn:hover {
+      background: var(--green-dark);
+    }
+
+    .phone-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, .45);
+    }
+
+    .phone-modal.open {
+      display: flex;
+    }
+
+    .phone-modal-box {
+      width: min(480px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, .25);
+      box-sizing: border-box;
+    }
+
+    .phone-modal-box h2 {
+      margin: 0;
+      color: var(--green-dark);
+    }
+
+    .phone-field {
+      margin-bottom: 14px;
+    }
+
+    .phone-field label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .phone-field input,
+    .phone-field textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--edge);
+      border-radius: 8px;
+      box-sizing: border-box;
+      font: inherit;
+    }
+
+    .phone-error {
+      color: #c0392b;
+      margin: 10px 0 0;
+      min-height: 1.5em;
+    }
+
+    .phone-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .grid2 {
+        grid-template-columns: 1fr;
+      }
+
+      .appt {
+        grid-template-columns: 60px 1fr;
+      }
+
+      .appt button {
+        grid-column: 2;
+      }
+
+      .top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<main class="admin">
+
+  <!-- 登录 -->
+  <div id="login" class="panel login">
+    <h1>预约管理</h1>
+    <p>上高田整骨院</p>
+
+    <input
+      id="pw"
+      type="password"
+      placeholder="管理员密码"
+      autocomplete="current-password"
+    >
+
+    <button
+      class="primary"
+      style="width:100%"
+      onclick="login()"
+    >
+      登录
+    </button>
+
+    <p id="err" class="muted"></p>
+  </div>
+
+
+  <!-- 管理后台 -->
+  <div id="app" style="display:none">
+
+    <div class="top">
+
+      <div>
+        <h1>预约管理</h1>
+        <p class="muted">上高田整骨院</p>
+      </div>
+
+      <div
+        class="top-actions"
+        style="display:flex;gap:10px;align-items:center"
+      >
+        <button
+          class="phone-reserve-btn"
+          type="button"
+          onclick="openPhoneModal()"
+        >
+          ＋ 電話予約
+        </button>
+
+        <button
+          class="secondary"
+          type="button"
+          onclick="logout()"
+        >
+          退出登录
+        </button>
+      </div>
+
+    </div>
+
+
+    <!-- 日期 -->
+    <div class="panel">
+      <div class="calendar">
+        <button
+          class="secondary"
+          type="button"
+          onclick="change(-1)"
+        >
+          ←
+        </button>
+
+        <input id="date" type="date">
+
+        <button
+          class="secondary"
+          type="button"
+          onclick="change(1)"
+        >
+          →
+        </button>
+      </div>
+    </div>
+
+
+    <!-- 当前不可预约时间 -->
+    <section class="panel">
+      <h2>本日の予約停止時間</h2>
+      <p class="muted">
+        预约和临时停止时间都会显示在这里。患者加时或无预约到店时，可从当前不可预约时间继续向后延长。
+      </p>
+      <div id="unavailableToday"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
+        <button class="primary" type="button" onclick="extendToday(10)">＋10分延長</button>
+        <button class="primary" type="button" onclick="extendToday(30)">＋30分延長</button>
+      </div>
+    </section>
+
+
+    <!-- 预约 / 休息 -->
+    <div class="grid2">
+
+      <section class="panel">
+        <h2>今日预约</h2>
+        <div id="appts"></div>
+      </section>
+
+
+      <section class="panel">
+
+        <h2>临时休息</h2>
+
+        <label>日期</label>
+        <input id="breakDate" type="date">
+
+        <div
+          style="display:flex;gap:10px;margin-top:10px"
+        >
+          <input
+            id="bs"
+            type="time"
+            value="12:00"
+          >
+
+          <input
+            id="be"
+            type="time"
+            value="14:00"
+          >
+        </div>
+
+        <button
+          class="primary"
+          style="margin-top:12px"
+          type="button"
+          onclick="addBreak()"
+        >
+          添加休息时间
+        </button>
+
+        <div
+          id="breaks"
+          style="margin-top:20px"
+        ></div>
+
+
+        <h2 style="margin-top:30px">
+          休诊日
+        </h2>
+
+        <input
+          id="holidayDate"
+          type="date"
+        >
+
+        <button
+          class="primary"
+          style="margin-top:12px"
+          type="button"
+          onclick="addHoliday()"
+        >
+          设为休诊
+        </button>
+
+        <div
+          id="holidays"
+          style="margin-top:15px"
+        ></div>
+
+      </section>
+
+    </div>
+
+
+    <!-- 营业时间 -->
+    <section class="panel">
+
+      <h2>营业时间</h2>
+
+      <p class="muted">
+        设置每周营业时间和预约间隔。
+      </p>
+
+      <div id="hours"></div>
+
+      <button
+        class="primary"
+        type="button"
+        onclick="saveHours()"
+      >
+        保存营业时间
+      </button>
+
+    </section>
+
+  </div>
+
+
+  <!-- 电话预约 Modal -->
+  <div
+    id="phoneReserveModal"
+    class="phone-modal"
+  >
+
+    <div class="phone-modal-box">
+
+      <div
+        style="display:flex;justify-content:space-between;align-items:center"
+      >
+        <h2>電話予約を登録</h2>
+
+        <button
+          class="danger"
+          type="button"
+          onclick="closePhoneModal()"
+        >
+          ×
+        </button>
+      </div>
+
+
+      <div style="margin-top:20px">
+
+        <div class="phone-field">
+          <label>予約日</label>
+
+          <input
+            id="phoneReserveDate"
+            type="date"
+          >
+        </div>
+
+
+        <div class="phone-field">
+          <label>予約時間</label>
+
+          <input
+            id="phoneReserveTime"
+            type="time"
+          >
+        </div>
+
+
+        <div class="phone-field">
+          <label>お名前</label>
+
+          <input
+            id="phoneReserveName"
+            type="text"
+            maxlength="80"
+            placeholder="患者姓名"
+          >
+        </div>
+
+
+        <div class="phone-field">
+          <label>電話番号</label>
+
+          <input
+            id="phoneReservePhone"
+            type="tel"
+            maxlength="40"
+            placeholder="電話番号"
+          >
+        </div>
+
+
+        <div class="phone-field">
+          <label>備考</label>
+
+          <textarea
+            id="phoneReserveNote"
+            rows="3"
+            maxlength="500"
+            placeholder="備考（任意）"
+          ></textarea>
+        </div>
+
+
+        <p
+          id="phoneReserveError"
+          class="phone-error"
+        ></p>
+
+
+        <div class="phone-modal-actions">
+
+          <button
+            class="secondary"
+            type="button"
+            onclick="closePhoneModal()"
+          >
+            キャンセル
+          </button>
+
+          <button
+            class="primary"
+            type="button"
+            onclick="submitPhoneReservation()"
+          >
+            電話予約を登録
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<script>
+  let D = null;
+
+  const days = ['日', '月', '火', '水', '木', '金', '土'];
+
+
+  function today() {
+    const d = new Date();
+
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+
+  function change(n) {
+    const d = new Date(date.value + 'T00:00');
+
+    d.setDate(d.getDate() + n);
+
+    date.value = d.toISOString().slice(0, 10);
+
+    render().catch(handleAdminLoadError);
+  }
+
+
+  /*
+   * 共通 API
+   *
+   * credentials: same-origin を明示して、
+   * 管理者セッション Cookie を必ず送信する。
+   */
+  async function api(path, opt = {}) {
+
+    const r = await fetch(path, {
+      ...opt,
+      credentials: 'same-origin'
+    });
+
+    const j = await r.json().catch(() => ({
+      error: '通信エラー'
+    }));
+
+    if (!r.ok) {
+
+      const error = new Error(
+        j.error || 'error'
+      );
+
+      error.code = j.code;
+      error.status = r.status;
+
+      throw error;
+    }
+
+    return j;
+  }
+
+
+  function loginErrorMessage(e) {
+
+    if (e.code === 'admin_password_not_configured') {
+      return '管理者ログインは現在設定されていません。';
+    }
+
+    if (e.code === 'session_creation_failed') {
+      return 'ログインセッションを作成できませんでした。';
+    }
+
+    if (e.code === 'invalid_password') {
+      return 'パスワードが正しくありません。';
+    }
+
+    return 'ログイン処理に失敗しました。';
+  }
+
+
+  async function login() {
+
+    const errorBox =
+      document.getElementById('err');
+
+    const passwordInput =
+      document.getElementById('pw');
+
+    errorBox.textContent = '';
+
+    try {
+
+      await api('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          password: passwordInput.value
+        })
+      });
+
+    } catch (e) {
+
+      errorBox.textContent =
+        loginErrorMessage(e);
+
+      return;
+    }
+
+    passwordInput.value = '';
+
+    showApp();
+  }
+
+
+  function showApp() {
+
+    document.getElementById('login').style.display =
+      'none';
+
+    document.getElementById('app').style.display =
+      'block';
+
+    document.getElementById('date').value =
+      today();
+
+    document.getElementById('breakDate').value =
+      today();
+
+    document.getElementById('holidayDate').value =
+      today();
+
+    render().catch(handleAdminLoadError);
+  }
+
+
+  function showLogin() {
+
+    document.getElementById('login').style.display =
+      'block';
+
+    document.getElementById('app').style.display =
+      'none';
+  }
+
+
+  function handleAdminLoadError(e) {
+
+    const errorBox =
+      document.getElementById('err');
+
+    if (e.status === 401 || e.status === 403) {
+
+      errorBox.textContent =
+        'セッションが無効です。もう一度ログインしてください。';
+
+    } else if (e.status >= 500) {
+
+      errorBox.textContent =
+        '管理者データを読み込めませんでした。';
+
+    } else {
+
+      errorBox.textContent =
+        '管理者データを取得できませんでした。';
+    }
+
+    showLogin();
+  }
+
+
+  async function render() {
+
+    D = await api('/api/admin/data');
+
+    renderAppts();
+    renderBreaks();
+    renderUnavailableToday();
+    renderHolidays();
+    renderHours();
+  }
+
+
+  function renderAppts() {
+
+    const a = D.appointments
+      .filter(x => x.date === date.value)
+      .sort((a, b) =>
+        a.time.localeCompare(b.time)
+      );
+
+    document.getElementById('appts').innerHTML =
+      a.length
+        ? a.map(x => `
+          <div class="appt">
+
+            <strong>${x.time}</strong>
+
+            <div>
+              <strong>${esc(x.name)}</strong>
+
+              <div class="muted">
+                ${esc(x.phone)}
+                ${x.note ? ' · ' + esc(x.note) : ''}
+              </div>
+            </div>
+
+            <button
+              class="danger"
+              type="button"
+              onclick="cancelA('${x.id}')"
+            >
+              ${x.status === 'cancelled' ? '删除' : '取消'}
+            </button>
+
+          </div>
+        `).join('')
+
+        : '<p class="muted">この日の予約はありません。</p>';
+  }
+
+
+  function renderBreaks() {
+
+    const list = D.breaks
+      .slice()
+      .sort((a, b) =>
+        (a.date + a.startTime)
+          .localeCompare(b.date + b.startTime)
+      );
+
+    document.getElementById('breaks').innerHTML =
+      list.length
+
+        ? list.map(x => `
+          <div style="padding:7px 0">
+            ${x.date}
+            ${x.startTime}–${x.endTime}
+
+            <button
+              class="danger"
+              type="button"
+              onclick="delBreak('${x.id}')"
+            >
+              删除
+            </button>
+          </div>
+        `).join('')
+
+        : '<p class="muted">なし</p>';
+  }
+
+
+  function renderUnavailableToday() {
+    const box = document.getElementById('unavailableToday');
+    const todayValue = today();
+
+    const intervals = [];
+
+    D.appointments
+      .filter(x => x.date === todayValue && x.status === 'confirmed')
+      .forEach(x => {
+        intervals.push({
+          start: toMinutes(x.time),
+          end: toMinutes(x.time) + 30,
+          label: '预约'
+        });
+      });
+
+    D.breaks
+      .filter(x => x.date === todayValue)
+      .forEach(x => {
+        intervals.push({
+          start: toMinutes(x.startTime),
+          end: toMinutes(x.endTime),
+          label: '停止'
+        });
+      });
+
+    intervals.sort((x, y) => x.start - y.start);
+
+    const merged = [];
+    intervals.forEach(x => {
+      const last = merged[merged.length - 1];
+      if (!last || x.start > last.end) {
+        merged.push({ start: x.start, end: x.end });
+      } else {
+        last.end = Math.max(last.end, x.end);
+      }
+    });
+
+    box.innerHTML = merged.length
+      ? merged.map(x => `
+          <div style="padding:10px 0;border-bottom:1px solid #eee">
+            <strong>${timeText(x.start)} ～ ${timeText(x.end)}</strong>
+          </div>
+        `).join('')
+      : '<p class="muted">現在予約停止時間はありません。</p>';
+  }
+
+
+  function toMinutes(value) {
+    const parts = String(value).split(':').map(Number);
+    return parts[0] * 60 + parts[1];
+  }
+
+
+  function timeText(value) {
+    return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
+  }
+
+
+  async function extendToday(minutes) {
+    const todayValue = today();
+
+    if (date.value !== todayValue) {
+      date.value = todayValue;
+      await render();
+    }
+
+    try {
+      await api('/api/admin/extend', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          date: todayValue,
+          minutes
+        })
+      });
+
+      await render();
+      alert(`予約停止時間を${minutes}分延長しました。`);
+    } catch (e) {
+      alert(e.message || '延長できませんでした。');
+    }
+  }
+
+
+  function renderHolidays() {
+
+    const list = D.holidays
+      .slice()
+      .sort();
+
+    document.getElementById('holidays').innerHTML =
+      list.length
+
+        ? list.map(x => `
+          <div style="padding:7px 0">
+            ${x}
+
+            <button
+              class="danger"
+              type="button"
+              onclick="delHoliday('${x}')"
+            >
+              解除
+            </button>
+          </div>
+        `).join('')
+
+        : '<p class="muted">なし</p>';
+  }
+
+
+  function renderHours() {
+
+    document.getElementById('hours').innerHTML =
+      '<table>' +
+      '<tr>' +
+      '<th>曜日</th>' +
+      '<th>営業</th>' +
+      '<th>开始</th>' +
+      '<th>结束</th>' +
+      '</tr>' +
+
+      days.map((n, i) => {
+
+        const v = D.businessHours[i];
+
+        return `
+          <tr>
+
+            <td>${n}</td>
+
+            <td>
+              <input
+                type="checkbox"
+                id="e${i}"
+                ${v ? 'checked' : ''}
+              >
+            </td>
+
+            <td>
+              <input
+                id="s${i}"
+                type="time"
+                value="${v ? v[0] : '10:00'}"
+              >
+            </td>
+
+            <td>
+              <input
+                id="t${i}"
+                type="time"
+                value="${v ? v[1] : '19:00'}"
+              >
+            </td>
+
+          </tr>
+        `;
+
+      }).join('') +
+
+      '</table>' +
+
+      '<p class="muted">施術時間：30分（固定）・開始時間は1分単位で選択できます。</p>';
+  }
+
+
+  async function cancelA(id) {
+
+    const a =
+      D.appointments.find(x => x.id === id);
+
+    if (!a) return;
+
+    await api(
+      '/api/admin/' +
+      (a.status === 'cancelled'
+        ? 'delete'
+        : 'cancel'),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id })
+      }
+    );
+
+    await render();
+  }
+
+
+  async function addBreak() {
+
+    await api('/api/admin/breaks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        date: document.getElementById('breakDate').value,
+        start: document.getElementById('bs').value,
+        end: document.getElementById('be').value
+      })
+    });
+
+    await render();
+  }
+
+
+  async function delBreak(id) {
+
+    await api('/api/admin/breaks-delete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id })
+    });
+
+    await render();
+  }
+
+
+  async function addHoliday() {
+
+    await api('/api/admin/holiday', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        date:
+          document.getElementById('holidayDate').value
+      })
+    });
+
+    await render();
+  }
+
+
+  async function delHoliday(dateValue) {
+
+    await api('/api/admin/holiday-delete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        date: dateValue
+      })
+    });
+
+    await render();
+  }
+
+
+  async function saveHours() {
+
+    const h = {};
+
+    for (let i = 0; i < 7; i++) {
+
+      h[i] =
+        document.getElementById('e' + i).checked
+
+          ? [
+              document.getElementById('s' + i).value,
+              document.getElementById('t' + i).value
+            ]
+
+          : null;
+    }
+
+
+    await api('/api/admin/hours', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        businessHours: h,
+        slotMinutes: 30
+      })
+    });
+
+
+    alert('保存しました');
+
+    await render();
+  }
+
+
+  async function logout() {
+
+    await fetch('/api/logout', {
+      method: 'POST',
+      credentials: 'same-origin'
+    });
+
+    showLogin();
+  }
+
+
+  function esc(s) {
+
+    return String(s).replace(
+      /[&<>'"]/g,
+      c => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[c])
+    );
+  }
+
+
+  /*
+   * 电话预约
+   */
+
+  function openPhoneModal() {
+
+    const modal =
+      document.getElementById(
+        'phoneReserveModal'
+      );
+
+    document.getElementById(
+      'phoneReserveDate'
+    ).value =
+      document.getElementById('date').value ||
+      today();
+
+    document.getElementById(
+      'phoneReserveTime'
+    ).value = '';
+
+    document.getElementById(
+      'phoneReserveName'
+    ).value = '';
+
+    document.getElementById(
+      'phoneReservePhone'
+    ).value = '';
+
+    document.getElementById(
+      'phoneReserveNote'
+    ).value = '';
+
+    document.getElementById(
+      'phoneReserveError'
+    ).textContent = '';
+
+    modal.classList.add('open');
+
+    document.getElementById(
+      'phoneReserveName'
+    ).focus();
+  }
+
+
+  function closePhoneModal() {
+
+    const modal =
+      document.getElementById(
+        'phoneReserveModal'
+      );
+
+    modal.classList.remove('open');
+  }
+
+
+  async function submitPhoneReservation() {
+
+    const dateValue =
+      document.getElementById(
+        'phoneReserveDate'
+      ).value;
+
+    const timeValue =
+      document.getElementById(
+        'phoneReserveTime'
+      ).value;
+
+    const nameValue =
+      document.getElementById(
+        'phoneReserveName'
+      ).value.trim();
+
+    const phoneValue =
+      document.getElementById(
+        'phoneReservePhone'
+      ).value.trim();
+
+    const noteValue =
+      document.getElementById(
+        'phoneReserveNote'
+      ).value.trim();
+
+    const errorBox =
+      document.getElementById(
+        'phoneReserveError'
+      );
+
+
+    errorBox.textContent = '';
+
+
+    if (!dateValue) {
+
+      errorBox.textContent =
+        '予約日を入力してください。';
+
+      return;
+    }
+
+
+    if (!timeValue) {
+
+      errorBox.textContent =
+        '予約時間を入力してください。';
+
+      return;
+    }
+
+
+    if (!nameValue) {
+
+      errorBox.textContent =
+        'お名前を入力してください。';
+
+      return;
+    }
+
+
+    if (!phoneValue) {
+
+      errorBox.textContent =
+        '電話番号を入力してください。';
+
+      return;
+    }
+
+
+    try {
+
+      await api('/api/admin/reserve', {
+
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+
+          date: dateValue,
+
+          time: timeValue,
+
+          name: nameValue,
+
+          phone: phoneValue,
+
+          note: noteValue
+
+        })
+      });
+
+
+      closePhoneModal();
+
+
+      document.getElementById('date').value =
+        dateValue;
+
+
+      await render();
+
+
+      alert(
+        '電話予約を登録しました。'
+      );
+
+
+    } catch (e) {
+
+      if (e.code === 'already_booked') {
+
+        errorBox.textContent =
+          'この時間はすでに予約されています。';
+
+      } else if (e.code === 'past_time') {
+
+        errorBox.textContent =
+          '過去の時間は予約できません。';
+
+      } else if (e.code === 'break_time') {
+
+        errorBox.textContent =
+          '休憩時間のため予約できません。';
+
+      } else if (e.code === 'unavailable') {
+
+        errorBox.textContent =
+          'この時間は予約できません。';
+
+      } else if (e.code === 'invalid_date') {
+
+        errorBox.textContent =
+          '予約日が正しくありません。';
+
+      } else if (e.code === 'invalid_time') {
+
+        errorBox.textContent =
+          '予約時間が正しくありません。';
+
+      } else if (e.code === 'invalid_name') {
+
+        errorBox.textContent =
+          'お名前を入力してください。';
+
+      } else if (e.code === 'invalid_phone') {
+
+        errorBox.textContent =
+          '電話番号を入力してください。';
+
+      } else if (
+        e.status === 401 ||
+        e.status === 403
+      ) {
+
+        errorBox.textContent =
+          'ログインセッションが切れています。';
+
+      } else {
+
+        errorBox.textContent =
+          '電話予約の登録に失敗しました。';
+      }
+    }
+  }
+
+
+  /*
+   * 点击 Modal 外部关闭
+   */
+  document
+    .getElementById('phoneReserveModal')
+    .addEventListener('click', function (e) {
+
+      if (e.target === this) {
+        closePhoneModal();
+      }
+
+    });
+
+
+  /*
+   * 页面事件
+   */
+
+  document
+    .getElementById('date')
+    .addEventListener('change', function () {
+
+      render().catch(handleAdminLoadError);
+
+    });
+
+
+  document
+    .getElementById('pw')
+    .addEventListener('keydown', function (e) {
+
+      if (e.key === 'Enter') {
+        login();
+      }
+
+    });
+
+
+  /*
+   * 如果已有有效管理员 Session，
+   * 自动尝试进入后台。
+   */
+  (async function () {
+
+    try {
+
+      await api('/api/admin/data');
+
+      showApp();
+
+    } catch (e) {
+
+      showLogin();
+
+    }
+
+  })();
+</script>
+
+</body>
+</html>
