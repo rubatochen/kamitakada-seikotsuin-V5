@@ -31,7 +31,7 @@ export async function onRequest(context) {
     return withCors(json({ ok: false, code: 'invalid_date', error: '予約日が正しくありません。' }, 400), context.request);
   }
 
-  if (minutes !== 10 && minutes !== 30) {
+  if (![30, 40, 50, 60].includes(minutes)) {
     return withCors(json({ ok: false, code: 'invalid_minutes', error: '延長時間が正しくありません。' }, 400), context.request);
   }
 
@@ -40,54 +40,25 @@ export async function onRequest(context) {
     return withCors(json({ ok: false, code: 'past_date', error: '過去の日付は延長できません。' }, 409), context.request);
   }
 
-  // 「現在すでに予約できない時間」があれば、その連続した終点から延長。
-  // なければ現在時刻から新しい一時停止時間を作る。
-  const appointments = await context.env.DB.prepare(
-    "SELECT time FROM appointments WHERE date = ? AND status = 'confirmed' ORDER BY time"
-  ).bind(date).all();
-
+  // 延長は「現在時刻」から指定分だけ予約停止にする。
+  // 既存の一時停止時間と重なる場合は、その区間を維持したまま結合する。
   const breaks = await context.env.DB.prepare(
     "SELECT id,start_time,end_time FROM breaks WHERE date = ? ORDER BY start_time"
   ).bind(date).all();
 
-  const intervals = [
-    ...(appointments.results || []).map(x => ({
-      start: minutesOf(x.time),
-      end: minutesOf(x.time) + 30
-    })),
-    ...(breaks.results || []).map(x => ({
-      start: minutesOf(x.start_time),
-      end: minutesOf(x.end_time)
-    }))
-  ].filter(x => x.end > x.start).sort((a, b) => a.start - b.start);
-
   const nowMinutes = minutesOf(now.time);
-  let start = date === now.date ? nowMinutes : 0;
-  let end = start;
+  const start = nowMinutes;
+  const newEnd = start + minutes;
 
-  // 找到当前时刻所在的不可预约区间，并沿连续/相接区间向后合并。
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const item of intervals) {
-      if (item.start <= end && item.end > start && item.end > end) {
-        end = item.end;
-        changed = true;
-      }
-    }
+  // 今日以外はこのボタンでは扱わない。
+  if (date !== now.date) {
+    return withCors(json({ ok: false, code: 'today_only', error: '延長は本日のみです。' }, 400), context.request);
   }
 
-  if (end <= start) {
-    end = start;
-  }
-
-  const newEnd = end + minutes;
-
-  // 与现有 breaks 合并，避免连续点击产生很多重叠记录。
   const overlappingBreaks = (breaks.results || []).filter(x => {
     const s = minutesOf(x.start_time);
     const e = minutesOf(x.end_time);
-    return s <= newEnd && e >= start;
+    return s < newEnd && e > start;
   });
 
   try {

@@ -310,12 +310,14 @@
     <section class="panel">
       <h2>本日の予約停止時間</h2>
       <p class="muted">
-        预约和临时停止时间都会显示在这里。患者加时或无预约到店时，可从当前不可预约时间继续向后延长。
+        预约和临时停止时间都会显示在这里。患者加时或无预约到店时，可从现在的时间开始向后延长。
       </p>
       <div id="unavailableToday"></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
-        <button class="primary" type="button" onclick="extendToday(10)">＋10分延長</button>
         <button class="primary" type="button" onclick="extendToday(30)">＋30分延長</button>
+        <button class="primary" type="button" onclick="extendToday(40)">＋40分延長</button>
+        <button class="primary" type="button" onclick="extendToday(50)">＋50分延長</button>
+        <button class="primary" type="button" onclick="extendToday(60)">＋60分延長</button>
       </div>
     </section>
 

@@ -1,44 +1,86 @@
 <!doctype html>
 <html lang="ja">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Web予約 | 上高田整骨院</title><link rel="stylesheet" href="style.css"><style>
-.reserve-wrap{max-width:900px;margin:0 auto;padding:60px 20px}.reserve-head{text-align:center;margin-bottom:30px}.reserve-head span{color:var(--green);font-weight:800;letter-spacing:.08em}.reserve-head h1{font-size:42px;margin:8px 0}.reserve-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:30px}.date-row{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:20px}.date-row button,.primary,.secondary{border:0;border-radius:8px;padding:12px 18px;cursor:pointer;font-weight:700}.date-row button{background:#eef3ef}.primary{background:var(--green);color:#fff}.secondary{background:#eef3ef;color:var(--ink)}.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:20px 0}.slot{padding:13px;border:1px solid #dfe6e1;border-radius:8px;background:#fff;cursor:pointer;font-weight:700}.slot.unavailable{background:#f1f2f1;color:#999;cursor:not-allowed}.slot.selected{background:var(--green);color:#fff}.notice{padding:12px;background:#f5f7f5;border-radius:8px;margin:10px 0 20px}.field{margin:14px 0}.field label{display:block;font-weight:700;margin-bottom:7px}.field input,.field textarea{width:100%;box-sizing:border-box;border:1px solid #d7ddd8;border-radius:8px;padding:12px;font:inherit}.success{display:none;text-align:center;padding:20px}.back{text-align:center;margin-top:25px}@media(max-width:600px){.slots{grid-template-columns:repeat(3,1fr)}.reserve-card{padding:20px}.reserve-head h1{font-size:32px}}
+.reserve-wrap{max-width:900px;margin:0 auto;padding:60px 20px}.reserve-head{text-align:center;margin-bottom:30px}.reserve-head span{color:var(--green);font-weight:800;letter-spacing:.08em}.reserve-head h1{font-size:42px;margin:8px 0}.reserve-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:30px}.date-row{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:20px}.date-row button,.primary,.secondary{border:0;border-radius:8px;padding:12px 18px;cursor:pointer;font-weight:700}.date-row button{background:#eef3ef}.primary{background:var(--green);color:#fff}.secondary{background:#eef3ef;color:var(--ink)}.time-picker{margin:20px 0}.time-picker input{width:100%;box-sizing:border-box;border:1px solid #d7ddd8;border-radius:8px;padding:14px 12px;font:inherit;font-size:20px;font-weight:700;background:#fff}.time-picker small{display:block;color:#6b756e;margin-top:7px}.notice{padding:12px;background:#f5f7f5;border-radius:8px;margin:10px 0 20px}.field{margin:14px 0}.field label{display:block;font-weight:700;margin-bottom:7px}.field input,.field textarea{width:100%;box-sizing:border-box;border:1px solid #d7ddd8;border-radius:8px;padding:12px;font:inherit}.success{display:none;text-align:center;padding:20px}.back{text-align:center;margin-top:25px}@media(max-width:600px){.reserve-card{padding:20px}.reserve-head h1{font-size:32px}}
 </style></head>
-<body><main class="reserve-wrap"><div class="reserve-head"><span>WEB RESERVATION</span><h1>ご予約</h1><p>ご希望の日付と時間を選択してください。</p></div><div class="reserve-card"><div id="app"><div class="date-row"><button id="prev" type="button">←</button><strong id="dateLabel"></strong><button id="next" type="button">→</button></div><div class="notice">開始時間は1分単位で自由に選択できます。1回の施術は30分です。予約済み・不可予約時間と重なる時間は選択できません。</div><div id="unavailableInfo" class="notice" style="display:none"></div><div id="slots" class="slots"></div><form id="form"><div class="field"><label for="name">お名前 *</label><input id="name" required maxlength="80"></div><div class="field"><label for="phone">電話番号 *</label><input id="phone" required maxlength="40" inputmode="tel"></div><div class="field"><label for="email">メールアドレス（任意）</label><input id="email" type="email" maxlength="120"></div><div class="field"><label for="note">備考（任意）</label><textarea id="note" rows="4" maxlength="500"></textarea></div><button class="primary" type="submit" style="width:100%;margin-top:10px">この内容で予約する</button></form></div><div id="success" class="success"><h2>予約を受け付けました</h2><p id="successText"></p><p class="notice">ご予約ありがとうございます。内容をご確認のうえご来院ください。</p><a class="secondary" style="display:inline-block;text-decoration:none" href="index.html">トップへ戻る</a></div></div><div class="back"><a href="index.html">← 上高田整骨院トップへ</a></div></main><script src="config.js"></script><script>
+<body><main class="reserve-wrap"><div class="reserve-head"><span>WEB RESERVATION</span><h1>ご予約</h1><p>ご希望の日付と時間を選択してください。</p></div><div class="reserve-card"><div id="app"><div class="date-row"><button id="prev" type="button">←</button><strong id="dateLabel"></strong><button id="next" type="button">→</button></div><div class="notice">開始時間は1分単位で自由に選択できます。1回の施術は30分です。予約済み・不可予約時間と重なる時間は選択できません。</div><div id="unavailableInfo" class="notice" style="display:none"></div><div class="time-picker"><label for="reserveTime" style="display:block;font-weight:700;margin-bottom:7px">予約時間</label><input id="reserveTime" type="time" step="60" required><small>開始時間を選択してください。施術時間は30分です。</small></div><form id="form"><div class="field"><label for="name">お名前 *</label><input id="name" required maxlength="80"></div><div class="field"><label for="phone">電話番号 *</label><input id="phone" required maxlength="40" inputmode="tel"></div><div class="field"><label for="email">メールアドレス（任意）</label><input id="email" type="email" maxlength="120"></div><div class="field"><label for="note">備考（任意）</label><textarea id="note" rows="4" maxlength="500"></textarea></div><button class="primary" type="submit" style="width:100%;margin-top:10px">この内容で予約する</button></form></div><div id="success" class="success"><h2>予約を受け付けました</h2><p id="successText"></p><p class="notice">ご予約ありがとうございます。内容をご確認のうえご来院ください。</p><a class="secondary" style="display:inline-block;text-decoration:none" href="index.html">トップへ戻る</a></div></div><div class="back"><a href="index.html">← 上高田整骨院トップへ</a></div></main><script src="config.js"></script><script>
 const pad=n=>String(n).padStart(2,'0');const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;const tokyoDate=()=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const v=Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));return `${v.year}-${v.month}-${v.day}`};let date=new Date(`${tokyoDate()}T12:00:00`);let selected='';const fmt=d=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日月火水木金土'[d.getDay()]}）`;
-function renderSlots(list, unavailable){
-  const box=document.getElementById('slots');
+function renderSlots(list, unavailable, settings, holiday){
   const info=document.getElementById('unavailableInfo');
-  box.innerHTML='';
+  const input=document.getElementById('reserveTime');
   selected='';
+  input.value='';
+  input.disabled=false;
 
   if(unavailable && unavailable.length){
     info.style.display='block';
-    info.innerHTML='<strong>現在予約できない時間</strong><br>'+unavailable.map(x=>`${x.startTime} ～ ${x.endTime}`).join('<br>');
+    info.innerHTML='<strong>予約できない時間</strong><br>'+unavailable.map(x=>`${x.startTime} ～ ${x.endTime}`).join('<br>');
   }else{
     info.style.display='none';
   }
 
-  if(!list.length){
-    box.innerHTML='<p>この日は予約を受け付けていません。</p>';
+  if(holiday || !list.length){
+    input.disabled=true;
+    input.value='';
+    info.style.display='block';
+    info.innerHTML=holiday ? '<strong>この日は休診です。</strong>' : '<strong>この日は予約を受け付けていません。</strong>';
     return;
   }
 
-  list.forEach(s=>{
-    const b=document.createElement('button');
-    b.type='button';
-    b.className='slot '+(s.status!=='available'?'unavailable':'');
-    b.textContent=s.status==='booked'?'予約済み':s.status==='break'?'不可':s.status==='past'?'受付終了':s.time;
-    b.disabled=s.status!=='available';
-    b.setAttribute('aria-disabled',String(b.disabled));
-    b.title=s.status==='booked'?'予約済み（30分）':s.status==='break'?'予約できない時間':s.status==='past'?'受付終了':`${s.time}から30分`;
-    b.onclick=()=>{
-      document.querySelectorAll('.slot.selected').forEach(x=>x.classList.remove('selected'));
-      b.classList.add('selected');
-      selected=s.time;
-    };
-    box.appendChild(b);
-  });
+  input.onchange=()=>{ selected=input.value; };
+  input.oninput=()=>{ selected=input.value; };
+
+  // 浏览器时间选择器不能表达“预约占用30分钟”的全部规则，提交前再用当前 API 数据检查。
+  input.dataset.validSlots=JSON.stringify(list);
 }
-async function load(){document.getElementById('dateLabel').textContent=fmt(date);selected='';document.getElementById('form').reset();try{const r=await fetch(`/api/availability?date=${iso(date)}`);const j=await r.json();if(!r.ok)throw new Error(j.error||'取得できませんでした');if(j.past){document.getElementById('slots').innerHTML='<p>過去の日付は予約できません。</p>';return}renderSlots(j.slots||[], j.unavailable||[])}catch(e){document.getElementById('slots').innerHTML='<p>予約枠を取得できませんでした。しばらくしてから再度お試しください。</p>'}}
-document.getElementById('prev').onclick=()=>{date.setDate(date.getDate()-1);load()};document.getElementById('next').onclick=()=>{date.setDate(date.getDate()+1);load()};document.getElementById('form').onsubmit=async e=>{e.preventDefault();if(!selected)return alert('時間を選択してください。');const data={name:document.getElementById('name').value,phone:document.getElementById('phone').value,email:document.getElementById('email').value,note:document.getElementById('note').value,date:iso(date),time:selected};try{const r=await fetch('/api/reserve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||'予約できませんでした');document.getElementById('app').style.display='none';document.getElementById('success').style.display='block';document.getElementById('successText').textContent=`${j.date} ${j.time} の予約を受け付けました。`}catch(err){alert(err.message||'予約できませんでした。');load()}};load();
+async function load(){
+  document.getElementById('dateLabel').textContent=fmt(date);
+  selected='';
+  document.getElementById('form').reset();
+  try{
+    const r=await fetch(`/api/availability?date=${iso(date)}`);
+    const j=await r.json();
+    if(!r.ok)throw new Error(j.error||'取得できませんでした');
+    if(j.past){
+      const input=document.getElementById('reserveTime');
+      input.disabled=true;
+      input.value='';
+      document.getElementById('unavailableInfo').style.display='block';
+      document.getElementById('unavailableInfo').innerHTML='<strong>過去の日付は予約できません。</strong>';
+      return;
+    }
+    renderSlots(j.slots||[], j.unavailable||[], j.settings, j.holiday);
+  }catch(e){
+    document.getElementById('reserveTime').disabled=true;
+    document.getElementById('unavailableInfo').style.display='block';
+    document.getElementById('unavailableInfo').textContent='予約枠を取得できませんでした。しばらくしてから再度お試しください。';
+  }
+}
+document.getElementById('prev').onclick=()=>{date.setDate(date.getDate()-1);load()};
+document.getElementById('next').onclick=()=>{date.setDate(date.getDate()+1);load()};
+document.getElementById('form').onsubmit=async e=>{
+  e.preventDefault();
+  const timeInput=document.getElementById('reserveTime');
+  const time=timeInput.value;
+  if(!time)return alert('時間を選択してください。');
+
+  // 画面上でも「30分の施術が営業終了を超えない」「現在より前でない」「既存予約/停止時間と重ならない」を確認。
+  const slots=JSON.parse(timeInput.dataset.validSlots||'[]');
+  const matched=slots.find(x=>x.time===time);
+  if(!matched || matched.status!=='available'){
+    return alert(matched?.status==='booked' ? 'その時間は予約済みです。' : matched?.status==='break' ? 'その時間は予約できません。' : 'その時間は予約できません。');
+  }
+  selected=time;
+
+  const data={name:document.getElementById('name').value,phone:document.getElementById('phone').value,email:document.getElementById('email').value,note:document.getElementById('note').value,date:iso(date),time:selected};
+  try{
+    const r=await fetch('/api/reserve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    const j=await r.json();
+    if(!r.ok||!j.ok)throw new Error(j.error||'予約できませんでした');
+    document.getElementById('app').style.display='none';
+    document.getElementById('success').style.display='block';
+    document.getElementById('successText').textContent=`${j.date} ${j.time} の予約を受け付けました。`;
+  }catch(err){alert(err.message||'予約できませんでした。');load()}
+};
+load();
 </script></body></html>
