@@ -1,6 +1,53 @@
 <!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><title>予約管理 | 上高田整骨院</title><link rel="stylesheet" href="style.css"><style>
 .admin{max-width:1100px;margin:auto;padding:45px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}.panel{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:24px;margin-bottom:20px}.login{max-width:420px;margin:100px auto}.login input{width:100%;box-sizing:border-box;margin:12px 0}.calendar{display:flex;gap:10px;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button,.daybtn{border:0;border-radius:8px;padding:10px 14px;background:#eef3ef;cursor:pointer}.tabs .active,.daybtn.active{background:var(--green);color:#fff}.appt{display:grid;grid-template-columns:80px 1fr auto;gap:15px;padding:14px 0;border-bottom:1px solid #eee;align-items:center}.muted{color:#777}.danger{border:0;border-radius:7px;padding:8px 12px;cursor:pointer;background:#eee}.danger:hover{background:#ddd}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid #eee}select{padding:8px}@media(max-width:700px){.grid2{grid-template-columns:1fr}.appt{grid-template-columns:60px 1fr}.appt button{grid-column:2}.top{align-items:flex-start;flex-direction:column}}
-</style></head><body><main class="admin"><div id="login" class="panel login"><h1>预约管理</h1><p>上高田整骨院</p><input id="pw" type="password" placeholder="管理员密码"><button class="primary" style="width:100%" onclick="login()">登录</button><p id="err" class="muted"></p></div><div id="app" style="display:none"><div class="top"><div><h1>预约管理</h1><p class="muted">上高田整骨院</p></div><button class="secondary" onclick="logout()">退出登录</button></div><div class="panel"><div class="calendar"><button class="secondary" onclick="change(-1)">←</button><input id="date" type="date"><button class="secondary" onclick="change(1)">→</button></div></div><div class="grid2"><section class="panel"><h2>今日预约</h2><div id="appts"></div></section><section class="panel"><h2>临时休息</h2><label>日期</label><input id="breakDate" type="date"><div style="display:flex;gap:10px;margin-top:10px"><input id="bs" type="time" value="12:00"><input id="be" type="time" value="14:00"></div><button class="primary" style="margin-top:12px" onclick="addBreak()">添加休息时间</button><div id="breaks" style="margin-top:20px"></div><h2 style="margin-top:30px">休诊日</h2><input id="holidayDate" type="date"><button class="primary" style="margin-top:12px" onclick="addHoliday()">设为休诊</button><div id="holidays" style="margin-top:15px"></div></section></div><section class="panel"><h2>营业时间</h2><p class="muted">设置每周营业时间和预约间隔。</p><div id="hours"></div><button class="primary" onclick="saveHours()">保存营业时间</button></section></div></main><script>
+</style></head><body><main class="admin"><div id="login" class="panel login"><h1>预约管理</h1><p>上高田整骨院</p><input id="pw" type="password" placeholder="管理员密码"><button class="primary" style="width:100%" onclick="login()">登录</button><p id="err" class="muted"></p></div><div id="app" style="display:none"><div class="top">
+<div class="top">
+  <div>
+    <h1>预约管理</h1>
+    <p class="muted">上高田整骨院</p>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <button class="primary" onclick="openPhoneReservation()">＋ 電話予約</button>
+    <button class="secondary" onclick="logout()">退出登录</button>
+  </div>
+</div>
+  <div class="panel"><div class="calendar"><button class="secondary" onclick="change(-1)">←</button><input id="date" type="date"><button class="secondary" onclick="change(1)">→</button></div></div><div class="grid2"><section class="panel"><h2>今日预约</h2><div id="appts"></div></section><section class="panel"><h2>临时休息</h2><label>日期</label><input id="breakDate" type="date"><div style="display:flex;gap:10px;margin-top:10px"><input id="bs" type="time" value="12:00"><input id="be" type="time" value="14:00"></div><button class="primary" style="margin-top:12px" onclick="addBreak()">添加休息时间</button><div id="breaks" style="margin-top:20px"></div><h2 style="margin-top:30px">休诊日</h2><input id="holidayDate" type="date"><button class="primary" style="margin-top:12px" onclick="addHoliday()">设为休诊</button><div id="holidays" style="margin-top:15px"></div></section></div><section class="panel"><h2>营业时间</h2><p class="muted">设置每周营业时间和预约间隔。</p><div id="hours"></div><button class="primary" onclick="saveHours()">保存营业时间</button></section>
+</div>
+
+<div id="phoneModal" class="phone-modal" style="display:none">
+  <div class="phone-modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2 style="margin:0">電話予約を登録</h2>
+      <button class="danger" onclick="closePhoneReservation()">×</button>
+    </div>
+
+    <div style="margin-top:20px">
+      <label>日期</label>
+      <input id="phoneDate" type="date">
+
+      <label style="display:block;margin-top:12px">时间</label>
+      <input id="phoneTime" type="time">
+
+      <label style="display:block;margin-top:12px">姓名</label>
+      <input id="phoneName" type="text" placeholder="患者姓名">
+
+      <label style="display:block;margin-top:12px">电话</label>
+      <input id="phoneNumber" type="tel" placeholder="電話番号">
+
+      <label style="display:block;margin-top:12px">备注</label>
+      <textarea id="phoneNote" rows="3" placeholder="备注（可选）"></textarea>
+
+      <p id="phoneError" class="muted" style="margin-top:12px"></p>
+
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:15px">
+        <button class="secondary" onclick="closePhoneReservation()">取消</button>
+        <button class="primary" onclick="submitPhoneReservation()">電話予約を登録</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main><script>
 let D=null;const days=['日','月','火','水','木','金','土'];function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}function change(n){let d=new Date(date.value+'T00:00');d.setDate(d.getDate()+n);date.value=d.toISOString().slice(0,10);render()}async function api(path,opt){const r=await fetch(path,opt);const j=await r.json().catch(()=>({error:'通信エラー'}));if(r.status===401){showLogin()}if(!r.ok){const error=new Error(j.error||'error');error.code=j.code;throw error}return j}async function login(){err.textContent='';try{await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw.value})});pw.value='';showApp();}catch(e){err.textContent=e.code==='admin_password_not_configured'?'管理者ログインは現在設定されていません。':e.code==='session_creation_failed'?'ログインセッションを作成できませんでした。':'パスワードが正しくありません。'}}function showApp(){login.style.display='none';app.style.display='block';date.value=today();breakDate.value=today();holidayDate.value=today();render()}function showLogin(){login.style.display='block';app.style.display='none'}async function render(){D=await api('/api/admin/data');renderAppts();renderBreaks();renderHolidays();renderHours()}function renderAppts(){const a=D.appointments.filter(x=>x.date===date.value).sort((a,b)=>a.time.localeCompare(b.time));appts.innerHTML=a.length?a.map(x=>`<div class="appt"><strong>${x.time}</strong><div><strong>${esc(x.name)}</strong><div class="muted">${esc(x.phone)}${x.note?' · '+esc(x.note):''}</div></div><button class="danger" onclick="cancelA('${x.id}')">${x.status==='cancelled'?'删除':'取消'}</button></div>`).join(''):'<p class="muted">この日の予約はありません。</p>'}function renderBreaks(){breaks.innerHTML=D.breaks.sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start)).map(x=>`<div style="padding:7px 0">${x.date} ${x.startTime}–${x.endTime} <button class="danger" onclick="delBreak('${x.id}')">削除</button></div>`).join('')||'<p class="muted">なし</p>'}function renderHolidays(){holidays.innerHTML=D.holidays.sort().map(x=>`<div style="padding:7px 0">${x} <button class="danger" onclick="delHoliday('${x}')">解除</button></div>`).join('')||'<p class="muted">なし</p>'}function renderHours(){hours.innerHTML='<table><tr><th>曜日</th><th>営業</th><th>开始</th><th>结束</th></tr>'+days.map((n,i)=>{const v=D.businessHours[i];return `<tr><td>${n}</td><td><input type="checkbox" id="e${i}" ${v?'checked':''}></td><td><input id="s${i}" type="time" value="${v?v[0]:'10:00'}"></td><td><input id="t${i}" type="time" value="${v?v[1]:'19:00'}"></td></tr>`}).join('')+'</table><p>预约间隔： <select id="mins"><option value="15">15分</option><option value="30">30分</option><option value="60">60分</option></select></p>';mins.value=D.slotMinutes}async function cancelA(id){const a=D.appointments.find(x=>x.id===id);await api('/api/admin/'+(a.status==='cancelled'?'delete':'cancel'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});render()}async function addBreak(){await api('/api/admin/breaks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:breakDate.value,start:bs.value,end:be.value})});render()}async function delBreak(id){await api('/api/admin/breaks-delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});render()}async function addHoliday(){await api('/api/admin/holiday',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:holidayDate.value})});render()}async function delHoliday(date){await api('/api/admin/holiday-delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date})});render()}async function saveHours(){const h={};for(let i=0;i<7;i++)h[i]=document.getElementById('e'+i).checked?[document.getElementById('s'+i).value,document.getElementById('t'+i).value]:null;await api('/api/admin/hours',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({businessHours:h,slotMinutes:Number(mins.value)})});alert('保存しました');render()}async function logout(){await fetch('/api/logout',{method:'POST'});showLogin()}function esc(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}date.onchange=render;pw.onkeydown=e=>{if(e.key==='Enter')login()};
 </script><script>
 // Keep login failures separate from errors raised while loading admin data.
