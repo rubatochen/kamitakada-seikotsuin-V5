@@ -92,6 +92,29 @@ export function hasSlotStartedInTokyo(date, time, now = new Date()) {
   return date < tokyo.date || (date === tokyo.date && time <= tokyo.time);
 }
 
+export function normalizeJapanesePhone(phone) {
+  return String(phone || '')
+    .replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xfee0))
+    .replace(/[\s\-ー−―]/g, '');
+}
+
+export function isValidJapanesePhone(phone) {
+  const normalized = normalizeJapanesePhone(phone);
+  return /^0\d{9,10}$/.test(normalized);
+}
+
+export function daysFromTokyoToday(date, now = new Date()) {
+  const today = tokyoNow(now).date;
+  const target = new Date(`${date}T12:00:00Z`);
+  const base = new Date(`${today}T12:00:00Z`);
+  return Math.round((target - base) / 86400000);
+}
+
+export function isWithinWebBookingWindow(date, now = new Date()) {
+  const days = daysFromTokyoToday(date, now);
+  return days >= 0 && days <= 14;
+}
+
 export function minutesOf(t) {
   const [h, m] = t.split(":").map(Number);
   return h * 60 + m;

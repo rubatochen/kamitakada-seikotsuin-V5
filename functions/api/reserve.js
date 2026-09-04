@@ -7,7 +7,9 @@ import {
   isValidDate,
   isValidTime,
   randomId,
-  minutesOf
+  minutesOf,
+  isWithinWebBookingWindow,
+  isValidJapanesePhone
 } from '../lib/utils.js';
 
 export async function onRequest(context) {
@@ -24,6 +26,14 @@ export async function onRequest(context) {
 
   if (!name || !phone) {
     return withCors(json({error:'お名前と電話番号を入力してください。'},400),context.request);
+  }
+
+  if (!isValidJapanesePhone(phone)) {
+    return withCors(json({error:'電話番号の形式が正しくありません。例：090-1234-5678'},400),context.request);
+  }
+
+  if (!isWithinWebBookingWindow(body.date)) {
+    return withCors(json({error:'Web予約は本日から14日先まで受け付けています。'},400),context.request);
   }
 
   if (

@@ -8,7 +8,8 @@ import {
   isValidDate,
   isValidTime,
   randomId,
-  minutesOf
+  minutesOf,
+  isValidJapanesePhone
 } from '../../lib/utils.js';
 
 export async function onRequest(context) {
@@ -78,6 +79,17 @@ export async function onRequest(context) {
         ok: false,
         code: 'invalid_phone',
         error: '電話番号を入力してください。'
+      }, 400),
+      context.request
+    );
+  }
+
+  if (!isValidJapanesePhone(phone)) {
+    return withCors(
+      json({
+        ok: false,
+        code: 'invalid_phone',
+        error: '電話番号の形式が正しくありません。例：090-1234-5678'
       }, 400),
       context.request
     );
