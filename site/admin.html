@@ -57,7 +57,7 @@ window.login=async function(){const errorBox=document.getElementById('err'),pass
 window.showApp=function(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';date.value=today();breakDate.value=today();holidayDate.value=today();render().catch(handleAdminLoadError)};
 window.showLogin=function(){document.getElementById('login').style.display='block';document.getElementById('app').style.display='none'};
 function handleAdminLoadError(e){const errorBox=document.getElementById('err');if(e.status===401||e.status===403){errorBox.textContent='セッションが無効です。もう一度ログインしてください。'}else if(e.status>=500){errorBox.textContent='管理者データを読み込めませんでした。'}else{errorBox.textContent='管理者データを取得できませんでした。'}showLogin()}
-<script>
+</script><script>
 (function () {
   const style = document.createElement('style');
   style.textContent = `
