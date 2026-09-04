@@ -306,6 +306,20 @@
     </div>
 
 
+    <!-- 当前不可预约时间 -->
+    <section class="panel">
+      <h2>本日の予約停止時間</h2>
+      <p class="muted">
+        预约和临时停止时间都会显示在这里。患者加时或无预约到店时，可从当前不可预约时间继续向后延长。
+      </p>
+      <div id="unavailableToday"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
+        <button class="primary" type="button" onclick="extendToday(10)">＋10分延長</button>
+        <button class="primary" type="button" onclick="extendToday(30)">＋30分延長</button>
+      </div>
+    </section>
+
+
     <!-- 预约 / 休息 -->
     <div class="grid2">
 
@@ -694,6 +708,7 @@
 
     renderAppts();
     renderBreaks();
+    renderUnavailableToday();
     renderHolidays();
     renderHours();
   }
@@ -766,6 +781,93 @@
         `).join('')
 
         : '<p class="muted">なし</p>';
+  }
+
+
+  function renderUnavailableToday() {
+    const box = document.getElementById('unavailableToday');
+    const todayValue = today();
+
+    const intervals = [];
+
+    D.appointments
+      .filter(x => x.date === todayValue && x.status === 'confirmed')
+      .forEach(x => {
+        intervals.push({
+          start: toMinutes(x.time),
+          end: toMinutes(x.time) + 30,
+          label: '预约'
+        });
+      });
+
+    D.breaks
+      .filter(x => x.date === todayValue)
+      .forEach(x => {
+        intervals.push({
+          start: toMinutes(x.startTime),
+          end: toMinutes(x.endTime),
+          label: '停止'
+        });
+      });
+
+    intervals.sort((x, y) => x.start - y.start);
+
+    const merged = [];
+    intervals.forEach(x => {
+      const last = merged[merged.length - 1];
+      if (!last || x.start > last.end) {
+        merged.push({ start: x.start, end: x.end });
+      } else {
+        last.end = Math.max(last.end, x.end);
+      }
+    });
+
+    box.innerHTML = merged.length
+      ? merged.map(x => `
+          <div style="padding:10px 0;border-bottom:1px solid #eee">
+            <strong>${timeText(x.start)} ～ ${timeText(x.end)}</strong>
+          </div>
+        `).join('')
+      : '<p class="muted">現在予約停止時間はありません。</p>';
+  }
+
+
+  function toMinutes(value) {
+    const parts = String(value).split(':').map(Number);
+    return parts[0] * 60 + parts[1];
+  }
+
+
+  function timeText(value) {
+    return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
+  }
+
+
+  async function extendToday(minutes) {
+    const todayValue = today();
+
+    if (date.value !== todayValue) {
+      date.value = todayValue;
+      await render();
+    }
+
+    try {
+      await api('/api/admin/extend', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          date: todayValue,
+          minutes
+        })
+      });
+
+      await render();
+      alert(`予約停止時間を${minutes}分延長しました。`);
+    } catch (e) {
+      alert(e.message || '延長できませんでした。');
+    }
   }
 
 
@@ -847,19 +949,7 @@
 
       '</table>' +
 
-      '<p>' +
-      '预约间隔：' +
-
-      '<select id="mins">' +
-        '<option value="15">15分</option>' +
-        '<option value="30">30分</option>' +
-        '<option value="60">60分</option>' +
-      '</select>' +
-
-      '</p>';
-
-    document.getElementById('mins').value =
-      D.slotMinutes;
+      '<p class="muted">施術時間：30分（固定）・開始時間は1分単位で選択できます。</p>';
   }
 
 
@@ -978,10 +1068,7 @@
       },
       body: JSON.stringify({
         businessHours: h,
-        slotMinutes:
-          Number(
-            document.getElementById('mins').value
-          )
+        slotMinutes: 30
       })
     });
 

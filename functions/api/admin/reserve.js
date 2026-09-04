@@ -7,7 +7,8 @@ import {
   hasSlotStartedInTokyo,
   isValidDate,
   isValidTime,
-  randomId
+  randomId,
+  minutesOf
 } from '../../lib/utils.js';
 
 export async function onRequest(context) {
@@ -141,6 +142,29 @@ export async function onRequest(context) {
         ok: false,
         code: code,
         error: 'この時間は予約できません。'
+      }, 409),
+      context.request
+    );
+  }
+
+  const requestedStart = minutesOf(time);
+  const requestedEnd = requestedStart + 30;
+
+  const existing = await context.env.DB.prepare(
+    "SELECT time FROM appointments WHERE date = ? AND status = 'confirmed'"
+  ).bind(date).all();
+
+  const overlap = (existing.results || []).some(function (x) {
+    const start = minutesOf(x.time);
+    return requestedStart < start + 30 && requestedEnd > start;
+  });
+
+  if (overlap) {
+    return withCors(
+      json({
+        ok: false,
+        code: 'already_booked',
+        error: 'この時間はすでに予約されています。'
       }, 409),
       context.request
     );
