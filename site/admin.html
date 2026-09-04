@@ -57,4 +57,255 @@ window.login=async function(){const errorBox=document.getElementById('err'),pass
 window.showApp=function(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';date.value=today();breakDate.value=today();holidayDate.value=today();render().catch(handleAdminLoadError)};
 window.showLogin=function(){document.getElementById('login').style.display='block';document.getElementById('app').style.display='none'};
 function handleAdminLoadError(e){const errorBox=document.getElementById('err');if(e.status===401||e.status===403){errorBox.textContent='セッションが無効です。もう一度ログインしてください。'}else if(e.status>=500){errorBox.textContent='管理者データを読み込めませんでした。'}else{errorBox.textContent='管理者データを取得できませんでした。'}showLogin()}
+<script>
+(function () {
+  const style = document.createElement('style');
+  style.textContent = `
+    .phone-reserve-btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .phone-reserve-btn:hover {
+      background: var(--green-dark);
+    }
+
+    .phone-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,.45);
+    }
+
+    .phone-modal.open {
+      display: flex;
+    }
+
+    .phone-modal-box {
+      width: min(480px, 100%);
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 18px 45px rgba(0,0,0,.25);
+    }
+
+    .phone-modal-box h2 {
+      margin: 0 0 20px;
+      color: var(--green-dark);
+    }
+
+    .phone-field {
+      margin-bottom: 14px;
+    }
+
+    .phone-field label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .phone-field input,
+    .phone-field textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--edge);
+      border-radius: 8px;
+      box-sizing: border-box;
+      font: inherit;
+    }
+
+    .phone-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .phone-error {
+      color: #c0392b;
+      margin: 10px 0 0;
+      min-height: 1.5em;
+    }
+  `;
+  document.head.appendChild(style);
+
+  function setupPhoneReservation() {
+    const top = document.querySelector('.top');
+    if (!top || document.getElementById('phoneReserveBtn')) return;
+
+    const actions = top.querySelector('div:last-child');
+    if (!actions) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'phoneReserveBtn';
+    btn.className = 'phone-reserve-btn';
+    btn.textContent = '＋ 電話予約';
+    btn.onclick = openPhoneModal;
+
+    actions.insertBefore(btn, actions.firstChild);
+
+    const modal = document.createElement('div');
+    modal.id = 'phoneReserveModal';
+    modal.className = 'phone-modal';
+
+    modal.innerHTML = `
+      <div class="phone-modal-box">
+        <h2>電話予約を登録</h2>
+
+        <div class="phone-field">
+          <label>予約日</label>
+          <input id="phoneReserveDate" type="date">
+        </div>
+
+        <div class="phone-field">
+          <label>予約時間</label>
+          <input id="phoneReserveTime" type="time">
+        </div>
+
+        <div class="phone-field">
+          <label>お名前</label>
+          <input id="phoneReserveName" type="text" maxlength="80">
+        </div>
+
+        <div class="phone-field">
+          <label>電話番号</label>
+          <input id="phoneReservePhone" type="tel" maxlength="40">
+        </div>
+
+        <div class="phone-field">
+          <label>備考</label>
+          <textarea id="phoneReserveNote" rows="3" maxlength="500"></textarea>
+        </div>
+
+        <p id="phoneReserveError" class="phone-error"></p>
+
+        <div class="phone-modal-actions">
+          <button class="secondary" type="button" onclick="closePhoneModal()">キャンセル</button>
+          <button class="primary" type="button" onclick="submitPhoneReservation()">電話予約を登録</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) closePhoneModal();
+    });
+  }
+
+  window.openPhoneModal = function () {
+    const modal = document.getElementById('phoneReserveModal');
+    if (!modal) return;
+
+    document.getElementById('phoneReserveDate').value =
+      document.getElementById('date').value || today();
+
+    document.getElementById('phoneReserveTime').value = '';
+    document.getElementById('phoneReserveName').value = '';
+    document.getElementById('phoneReservePhone').value = '';
+    document.getElementById('phoneReserveNote').value = '';
+    document.getElementById('phoneReserveError').textContent = '';
+
+    modal.classList.add('open');
+
+    document.getElementById('phoneReserveName').focus();
+  };
+
+  window.closePhoneModal = function () {
+    const modal = document.getElementById('phoneReserveModal');
+    if (modal) modal.classList.remove('open');
+  };
+
+  window.submitPhoneReservation = async function () {
+    const dateValue = document.getElementById('phoneReserveDate').value;
+    const timeValue = document.getElementById('phoneReserveTime').value;
+    const nameValue = document.getElementById('phoneReserveName').value.trim();
+    const phoneValue = document.getElementById('phoneReservePhone').value.trim();
+    const noteValue = document.getElementById('phoneReserveNote').value.trim();
+    const errorBox = document.getElementById('phoneReserveError');
+
+    errorBox.textContent = '';
+
+    if (!dateValue) {
+      errorBox.textContent = '予約日を入力してください。';
+      return;
+    }
+
+    if (!timeValue) {
+      errorBox.textContent = '予約時間を入力してください。';
+      return;
+    }
+
+    if (!nameValue) {
+      errorBox.textContent = 'お名前を入力してください。';
+      return;
+    }
+
+    if (!phoneValue) {
+      errorBox.textContent = '電話番号を入力してください。';
+      return;
+    }
+
+    try {
+      await window.api('/api/admin/reserve', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          date: dateValue,
+          time: timeValue,
+          name: nameValue,
+          phone: phoneValue,
+          note: noteValue
+        })
+      });
+
+      closePhoneModal();
+
+      document.getElementById('date').value = dateValue;
+
+      await render();
+
+      alert('電話予約を登録しました。');
+    } catch (e) {
+      if (e.code === 'already_booked') {
+        errorBox.textContent = 'この時間はすでに予約されています。';
+      } else if (e.code === 'past_time') {
+        errorBox.textContent = '過去の時間は予約できません。';
+      } else if (e.code === 'break_time') {
+        errorBox.textContent = '休憩時間のため予約できません。';
+      } else if (e.code === 'unavailable') {
+        errorBox.textContent = 'この時間は予約できません。';
+      } else if (e.code === 'invalid_date') {
+        errorBox.textContent = '予約日が正しくありません。';
+      } else if (e.code === 'invalid_time') {
+        errorBox.textContent = '予約時間が正しくありません。';
+      } else if (e.code === 'invalid_name') {
+        errorBox.textContent = 'お名前を入力してください。';
+      } else if (e.code === 'invalid_phone') {
+        errorBox.textContent = '電話番号を入力してください。';
+      } else if (e.status === 401) {
+        errorBox.textContent = 'ログインセッションが切れています。';
+      } else {
+        errorBox.textContent = '電話予約の登録に失敗しました。';
+      }
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupPhoneReservation);
+  } else {
+    setupPhoneReservation();
+  }
+})();
 </script></body></html>
