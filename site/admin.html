@@ -8,214 +8,230 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    .admin {
-      max-width: 1100px;
-      margin: auto;
-      padding: 45px 20px;
+    :root {
+      --admin-green: var(--green, #21836f);
+      --admin-green-dark: var(--green-dark, #146452);
+      --admin-soft: var(--soft, #eef8f4);
+      --admin-edge: var(--edge, #dbe9e4);
+      --admin-ink: var(--ink, #25332f);
+      --admin-muted: var(--muted, #63706c);
+      --admin-shadow: 0 12px 34px rgba(32, 75, 64, .09);
     }
 
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 25px;
+    body { background: #f7faf9; }
+    button, input, textarea, select { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .admin {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 60px;
     }
+
+    .admin-shell { display: grid; gap: 18px; }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 8px 2px 10px;
+    }
+
+    .admin-brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .admin-brand-mark {
+      width: 46px; height: 46px; flex: 0 0 46px;
+      display: grid; place-items: center;
+      border-radius: 14px;
+      background: var(--admin-soft);
+      color: var(--admin-green);
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .admin-brand h1 { margin: 0; color: var(--admin-ink); font-size: clamp(24px, 3vw, 32px); line-height: 1.25; }
+    .admin-brand p { margin: 4px 0 0; color: var(--admin-muted); font-size: 14px; }
+
+    .top-actions { display: flex !important; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
 
     .panel {
       background: #fff;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
+      border: 1px solid rgba(33, 131, 111, .08);
+      border-radius: 14px;
+      box-shadow: var(--admin-shadow);
       padding: 24px;
-      margin-bottom: 20px;
+      margin: 0;
     }
+
+    .panel h2 {
+      margin: 0 0 6px;
+      color: var(--admin-ink);
+      font-size: 20px;
+      line-height: 1.4;
+    }
+
+    .panel > .muted { margin: 0 0 18px; }
+    .muted { color: var(--admin-muted); }
 
     .login {
-      max-width: 420px;
-      margin: 100px auto;
+      width: min(420px, 100%);
+      margin: 10vh auto 0;
+      padding: 34px;
+    }
+    .login h1 { margin: 0; color: var(--admin-green-dark); font-size: 28px; }
+    .login p { margin: 6px 0 22px; }
+    .login input { width: 100%; margin: 0 0 14px; }
+
+    input[type="date"], input[type="time"], input[type="text"], input[type="tel"], input[type="password"], textarea, select {
+      min-height: 44px;
+      border: 1px solid var(--admin-edge);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--admin-ink);
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(33, 131, 111, .62);
+      box-shadow: 0 0 0 3px rgba(33, 131, 111, .10);
     }
 
-    .login input {
-      width: 100%;
-      box-sizing: border-box;
-      margin: 12px 0;
-    }
-
-    .calendar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .tabs button,
-    .daybtn {
-      border: 0;
-      border-radius: 8px;
-      padding: 10px 14px;
-      background: #eef3ef;
-      cursor: pointer;
-    }
-
-    .tabs .active,
-    .daybtn.active {
-      background: var(--green);
-      color: #fff;
-    }
-
-    .appt {
-      display: grid;
-      grid-template-columns: 80px 1fr auto;
-      gap: 15px;
-      padding: 14px 0;
-      border-bottom: 1px solid #eee;
-      align-items: center;
-    }
-
-    .muted {
-      color: #777;
-    }
-
-    .danger {
-      border: 0;
-      border-radius: 7px;
-      padding: 8px 12px;
-      cursor: pointer;
-      background: #eee;
-    }
-
-    .danger:hover {
-      background: #ddd;
-    }
-
-    .grid2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    td,
-    th {
-      text-align: left;
-      padding: 8px;
-      border-bottom: 1px solid #eee;
-    }
-
-    select {
-      padding: 8px;
-    }
-
-    /* 电话预约 */
-    .phone-reserve-btn {
-      border: 0;
-      border-radius: 8px;
-      padding: 10px 16px;
-      background: var(--green);
-      color: #fff;
+    .primary, .secondary, .phone-reserve-btn, .danger {
+      min-height: 42px;
+      border-radius: 10px;
+      padding: 9px 15px;
       font-weight: 800;
       cursor: pointer;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .primary {
+      border: 1px solid var(--admin-green);
+      background: var(--admin-green);
+      color: #fff;
+      box-shadow: 0 7px 18px rgba(33, 131, 111, .16);
+    }
+    .primary:hover { background: var(--admin-green-dark); transform: translateY(-1px); }
+    .secondary {
+      border: 1px solid var(--admin-edge);
+      background: #fff;
+      color: var(--admin-ink);
+    }
+    .secondary:hover { border-color: #b9d7cf; background: var(--admin-soft); }
+    .danger {
+      border: 1px solid #e5e8e7;
+      background: #f7f8f8;
+      color: #59625f;
+    }
+    .danger:hover { background: #eef1f0; }
+
+    .phone-reserve-btn { border: 1px solid var(--admin-green); background: var(--admin-green); color: #fff; box-shadow: 0 7px 18px rgba(33, 131, 111, .16); }
+    .phone-reserve-btn:hover { background: var(--admin-green-dark); transform: translateY(-1px); }
+
+    .date-panel { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    .date-nav { display: flex; align-items: center; gap: 10px; width: min(480px, 100%); }
+    .date-nav input { flex: 1; min-width: 0; }
+    .date-nav button { width: 44px; padding: 0; font-size: 18px; }
+
+    .section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .section-kicker {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-bottom: 5px;
+      color: var(--admin-green);
+      font-size: 12px; font-weight: 900; letter-spacing: .08em;
     }
 
-    .phone-reserve-btn:hover {
-      background: var(--green-dark);
+    .stop-card { background: linear-gradient(180deg, #fff, #fbfdfc); }
+    .stop-list { display: grid; gap: 8px; }
+    .stop-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--admin-edge);
+      border-radius: 10px;
+      background: #fbfdfc;
     }
+    .stop-time { font-weight: 900; color: var(--admin-green-dark); letter-spacing: .03em; }
+    .extend-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+    .extend-actions .primary { width: 100%; }
+
+    .grid2 { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr); gap: 18px; align-items: start; }
+    .appointment-list { display: grid; }
+    .appt {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid #edf1ef;
+    }
+    .appt:first-child { padding-top: 4px; }
+    .appt:last-child { border-bottom: 0; padding-bottom: 4px; }
+    .appt-time { color: var(--admin-green-dark); font-size: 18px; font-weight: 900; }
+    .appt-name { font-weight: 800; overflow-wrap: anywhere; }
+    .appt-meta { margin-top: 2px; color: var(--admin-muted); font-size: 13px; overflow-wrap: anywhere; }
+
+    .form-stack { display: grid; gap: 12px; }
+    .field-label { display: block; margin: 0 0 6px; color: var(--admin-ink); font-size: 13px; font-weight: 800; }
+    .time-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .list-box { margin-top: 18px; padding-top: 16px; border-top: 1px solid #edf1ef; }
+    .managed-list { display: grid; gap: 8px; }
+    .managed-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid #edf1ef; }
+    .managed-item:last-child { border-bottom: 0; }
+    .managed-item span { overflow-wrap: anywhere; }
+
+    .holiday-block { margin-top: 26px; padding-top: 22px; border-top: 1px solid #edf1ef; }
+
+    .hours-wrap { overflow-x: auto; margin: 4px 0 16px; }
+    table { width: 100%; min-width: 520px; border-collapse: separate; border-spacing: 0; overflow: hidden; }
+    th { background: var(--admin-soft); color: var(--admin-green-dark); font-size: 13px; font-weight: 900; }
+    td, th { text-align: left; padding: 11px 12px; border-bottom: 1px solid #edf1ef; }
+    tbody tr:last-child td { border-bottom: 0; }
+    td input[type="time"] { min-height: 40px; }
+    input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--admin-green); }
 
     .phone-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(0, 0, 0, .45);
+      position: fixed; inset: 0; z-index: 9999;
+      display: none; align-items: center; justify-content: center;
+      padding: 18px; background: rgba(18, 37, 32, .46); backdrop-filter: blur(3px);
     }
-
-    .phone-modal.open {
-      display: flex;
-    }
-
+    .phone-modal.open { display: flex; }
     .phone-modal-box {
-      width: min(480px, 100%);
-      max-height: 90vh;
-      overflow-y: auto;
-      background: #fff;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 18px 45px rgba(0, 0, 0, .25);
-      box-sizing: border-box;
+      width: min(500px, 100%); max-height: 92vh; overflow-y: auto;
+      background: #fff; border: 1px solid rgba(33, 131, 111, .10);
+      border-radius: 16px; padding: 26px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
+    }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .modal-head h2 { margin: 0; color: var(--admin-green-dark); }
+    .modal-close { width: 40px; height: 40px; padding: 0; font-size: 22px; border-radius: 10px; }
+    .phone-field { margin-bottom: 14px; }
+    .phone-field label { display: block; margin-bottom: 6px; color: var(--admin-ink); font-size: 13px; font-weight: 800; }
+    .phone-field input, .phone-field textarea { width: 100%; box-sizing: border-box; }
+    .phone-error { min-height: 1.5em; margin: 10px 0 0; color: #b5473b; font-size: 14px; }
+    .phone-modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+    @media (max-width: 820px) {
+      .admin { width: min(100% - 22px, 680px); padding-top: 20px; }
+      .admin-header { align-items: flex-start; flex-direction: column; }
+      .top-actions { width: 100%; justify-content: stretch; }
+      .top-actions button { flex: 1; }
+      .grid2 { grid-template-columns: 1fr; }
+      .extend-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
-    .phone-modal-box h2 {
-      margin: 0;
-      color: var(--green-dark);
-    }
-
-    .phone-field {
-      margin-bottom: 14px;
-    }
-
-    .phone-field label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 700;
-    }
-
-    .phone-field input,
-    .phone-field textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--edge);
-      border-radius: 8px;
-      box-sizing: border-box;
-      font: inherit;
-    }
-
-    .phone-error {
-      color: #c0392b;
-      margin: 10px 0 0;
-      min-height: 1.5em;
-    }
-
-    .phone-modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    @media (max-width: 700px) {
-      .grid2 {
-        grid-template-columns: 1fr;
-      }
-
-      .appt {
-        grid-template-columns: 60px 1fr;
-      }
-
-      .appt button {
-        grid-column: 2;
-      }
-
-      .top {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .top-actions {
-        width: 100%;
-        flex-wrap: wrap;
-      }
+    @media (max-width: 560px) {
+      .admin { width: min(100% - 16px, 520px); padding-bottom: 34px; }
+      .panel { padding: 18px; border-radius: 12px; }
+      .admin-brand-mark { width: 42px; height: 42px; flex-basis: 42px; border-radius: 12px; }
+      .date-panel { display: block; }
+      .date-nav { width: 100%; }
+      .appt { grid-template-columns: 64px minmax(0, 1fr); gap: 10px; }
+      .appt > button { grid-column: 2; justify-self: start; }
+      .appt-time { font-size: 17px; }
+      .time-pair { grid-template-columns: 1fr 1fr; }
+      .extend-actions { gap: 8px; }
+      .phone-modal-box { padding: 20px; border-radius: 14px; }
+      .phone-modal-actions { flex-direction: column-reverse; }
+      .phone-modal-actions button { width: 100%; }
     }
   </style>
 </head>
@@ -226,316 +242,176 @@
 
   <!-- 登录 -->
   <div id="login" class="panel login">
-    <h1>预约管理</h1>
-    <p>上高田整骨院</p>
-
-    <input
-      id="pw"
-      type="password"
-      placeholder="管理员密码"
-      autocomplete="current-password"
-    >
-
-    <button
-      class="primary"
-      style="width:100%"
-      onclick="login()"
-    >
-      登录
-    </button>
-
+    <div class="admin-brand-mark" aria-hidden="true">整</div>
+    <h1>予約管理</h1>
+    <p class="muted">上高田整骨院　管理画面</p>
+    <input id="pw" type="password" placeholder="管理者パスワード" autocomplete="current-password">
+    <button class="primary" style="width:100%" onclick="login()">ログイン</button>
     <p id="err" class="muted"></p>
   </div>
 
+  <div id="app" style="display:none" class="admin-shell">
 
-  <!-- 管理后台 -->
-  <div id="app" style="display:none">
-
-    <div class="top">
-
-      <div>
-        <h1>预约管理</h1>
-        <p class="muted">上高田整骨院</p>
+    <header class="admin-header">
+      <div class="admin-brand">
+        <div class="admin-brand-mark" aria-hidden="true">整</div>
+        <div>
+          <h1>予約管理</h1>
+          <p>上高田整骨院</p>
+        </div>
       </div>
-
-      <div
-        class="top-actions"
-        style="display:flex;gap:10px;align-items:center"
-      >
-        <button
-          class="phone-reserve-btn"
-          type="button"
-          onclick="openPhoneModal()"
-        >
-          ＋ 電話予約
-        </button>
-
-        <button
-          class="secondary"
-          type="button"
-          onclick="logout()"
-        >
-          退出登录
-        </button>
+      <div class="top-actions">
+        <button class="phone-reserve-btn" type="button" onclick="openPhoneModal()">＋ 電話予約</button>
+        <button class="secondary" type="button" onclick="logout()">ログアウト</button>
       </div>
-
-    </div>
-
+    </header>
 
     <!-- 日期 -->
-    <div class="panel">
-      <div class="calendar">
-        <button
-          class="secondary"
-          type="button"
-          onclick="change(-1)"
-        >
-          ←
-        </button>
-
-        <input id="date" type="date">
-
-        <button
-          class="secondary"
-          type="button"
-          onclick="change(1)"
-        >
-          →
-        </button>
+    <section class="panel date-panel">
+      <div>
+        <div class="section-kicker">CALENDAR</div>
+        <h2>予約日</h2>
       </div>
-    </div>
-
-
-    <!-- 当前不可预约时间 -->
-    <section class="panel">
-      <h2>本日の予約停止時間</h2>
-      <p class="muted">
-        预约和临时停止时间都会显示在这里。患者加时或无预约到店时，可从现在的时间开始向后延长。
-      </p>
-      <div id="unavailableToday"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
-        <button class="primary" type="button" onclick="extendToday(30)">＋30分延長</button>
-        <button class="primary" type="button" onclick="extendToday(40)">＋40分延長</button>
-        <button class="primary" type="button" onclick="extendToday(50)">＋50分延長</button>
-        <button class="primary" type="button" onclick="extendToday(60)">＋60分延長</button>
+      <div class="date-nav">
+        <button class="secondary" type="button" onclick="change(-1)" aria-label="前の日">←</button>
+        <input id="date" type="date" aria-label="予約日">
+        <button class="secondary" type="button" onclick="change(1)" aria-label="次の日">→</button>
       </div>
     </section>
 
+    <!-- 当前不可预约时间 -->
+    <section class="panel stop-card">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">TODAY</div>
+          <h2>本日の予約停止時間</h2>
+          <p class="muted">予約済み・停止時間をまとめて表示します。患者様の延長対応などで、現在時刻から予約受付を止める場合にご利用ください。</p>
+        </div>
+      </div>
+      <div id="unavailableToday" class="stop-list"></div>
+      <div class="extend-actions">
+        <button class="primary" type="button" onclick="extendToday(30)">＋30分</button>
+        <button class="primary" type="button" onclick="extendToday(40)">＋40分</button>
+        <button class="primary" type="button" onclick="extendToday(50)">＋50分</button>
+        <button class="primary" type="button" onclick="extendToday(60)">＋60分</button>
+      </div>
+    </section>
 
-    <!-- 预约 / 休息 -->
     <div class="grid2">
-
+      <!-- 预约 -->
       <section class="panel">
-        <h2>今日预约</h2>
-        <div id="appts"></div>
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">APPOINTMENTS</div>
+            <h2>今日の予約</h2>
+            <p class="muted">選択中の日付の予約一覧です。</p>
+          </div>
+        </div>
+        <div id="appts" class="appointment-list"></div>
       </section>
 
-
+      <!-- 休息 / 休诊 -->
       <section class="panel">
-
-        <h2>临时休息</h2>
-
-        <label>日期</label>
-        <input id="breakDate" type="date">
-
-        <div
-          style="display:flex;gap:10px;margin-top:10px"
-        >
-          <input
-            id="bs"
-            type="time"
-            value="12:00"
-          >
-
-          <input
-            id="be"
-            type="time"
-            value="14:00"
-          >
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">SCHEDULE</div>
+            <h2>休憩・休診日</h2>
+          </div>
         </div>
 
-        <button
-          class="primary"
-          style="margin-top:12px"
-          type="button"
-          onclick="addBreak()"
-        >
-          添加休息时间
-        </button>
+        <div class="form-stack">
+          <div>
+            <label class="field-label" for="breakDate">休憩日</label>
+            <input id="breakDate" type="date" style="width:100%">
+          </div>
+          <div class="time-pair">
+            <div>
+              <label class="field-label" for="bs">開始</label>
+              <input id="bs" type="time" value="12:00" style="width:100%">
+            </div>
+            <div>
+              <label class="field-label" for="be">終了</label>
+              <input id="be" type="time" value="14:00" style="width:100%">
+            </div>
+          </div>
+          <button class="primary" type="button" onclick="addBreak()">休憩時間を追加</button>
+        </div>
 
-        <div
-          id="breaks"
-          style="margin-top:20px"
-        ></div>
+        <div class="list-box">
+          <div class="field-label">登録済みの休憩</div>
+          <div id="breaks" class="managed-list"></div>
+        </div>
 
+        <div class="holiday-block">
+          <div class="field-label">休診日を設定</div>
+          <div class="form-stack">
+            <input id="holidayDate" type="date" style="width:100%">
+            <button class="primary" type="button" onclick="addHoliday()">休診日に設定</button>
+          </div>
+        </div>
 
-        <h2 style="margin-top:30px">
-          休诊日
-        </h2>
-
-        <input
-          id="holidayDate"
-          type="date"
-        >
-
-        <button
-          class="primary"
-          style="margin-top:12px"
-          type="button"
-          onclick="addHoliday()"
-        >
-          设为休诊
-        </button>
-
-        <div
-          id="holidays"
-          style="margin-top:15px"
-        ></div>
-
+        <div class="list-box">
+          <div class="field-label">登録済みの休診日</div>
+          <div id="holidays" class="managed-list"></div>
+        </div>
       </section>
-
     </div>
-
 
     <!-- 营业时间 -->
     <section class="panel">
-
-      <h2>营业时间</h2>
-
-      <p class="muted">
-        设置每周营业时间和预约间隔。
-      </p>
-
-      <div id="hours"></div>
-
-      <button
-        class="primary"
-        type="button"
-        onclick="saveHours()"
-      >
-        保存营业时间
-      </button>
-
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">BUSINESS HOURS</div>
+          <h2>営業時間</h2>
+          <p class="muted">曜日ごとの営業時間を設定できます。施術時間は30分固定、開始時間は1分単位です。</p>
+        </div>
+      </div>
+      <div id="hours" class="hours-wrap"></div>
+      <button class="primary" type="button" onclick="saveHours()">営業時間を保存</button>
     </section>
-
   </div>
-
 
   <!-- 电话预约 Modal -->
-  <div
-    id="phoneReserveModal"
-    class="phone-modal"
-  >
-
+  <div id="phoneReserveModal" class="phone-modal">
     <div class="phone-modal-box">
-
-      <div
-        style="display:flex;justify-content:space-between;align-items:center"
-      >
-        <h2>電話予約を登録</h2>
-
-        <button
-          class="danger"
-          type="button"
-          onclick="closePhoneModal()"
-        >
-          ×
-        </button>
+      <div class="modal-head">
+        <div>
+          <div class="section-kicker">PHONE RESERVATION</div>
+          <h2>電話予約を登録</h2>
+        </div>
+        <button class="danger modal-close" type="button" onclick="closePhoneModal()" aria-label="閉じる">×</button>
       </div>
-
 
       <div style="margin-top:20px">
-
         <div class="phone-field">
-          <label>予約日</label>
-
-          <input
-            id="phoneReserveDate"
-            type="date"
-          >
+          <label for="phoneReserveDate">予約日</label>
+          <input id="phoneReserveDate" type="date">
         </div>
-
-
         <div class="phone-field">
-          <label>予約時間</label>
-
-          <input
-            id="phoneReserveTime"
-            type="time"
-          >
+          <label for="phoneReserveTime">予約時間</label>
+          <input id="phoneReserveTime" type="time" step="60">
         </div>
-
-
         <div class="phone-field">
-          <label>お名前</label>
-
-          <input
-            id="phoneReserveName"
-            type="text"
-            maxlength="80"
-            placeholder="患者姓名"
-          >
+          <label for="phoneReserveName">お名前</label>
+          <input id="phoneReserveName" type="text" maxlength="80" placeholder="患者様のお名前">
         </div>
-
-
         <div class="phone-field">
-          <label>電話番号</label>
-
-          <input
-            id="phoneReservePhone"
-            type="tel"
-            maxlength="40"
-            placeholder="電話番号"
-          >
+          <label for="phoneReservePhone">電話番号</label>
+          <input id="phoneReservePhone" type="tel" maxlength="40" placeholder="090-1234-5678">
         </div>
-
-
         <div class="phone-field">
-          <label>備考</label>
-
-          <textarea
-            id="phoneReserveNote"
-            rows="3"
-            maxlength="500"
-            placeholder="備考（任意）"
-          ></textarea>
+          <label for="phoneReserveNote">備考</label>
+          <textarea id="phoneReserveNote" rows="3" maxlength="500" placeholder="備考（任意）"></textarea>
         </div>
-
-
-        <p
-          id="phoneReserveError"
-          class="phone-error"
-        ></p>
-
-
+        <p id="phoneReserveError" class="phone-error"></p>
         <div class="phone-modal-actions">
-
-          <button
-            class="secondary"
-            type="button"
-            onclick="closePhoneModal()"
-          >
-            キャンセル
-          </button>
-
-          <button
-            class="primary"
-            type="button"
-            onclick="submitPhoneReservation()"
-          >
-            電話予約を登録
-          </button>
-
+          <button class="secondary" type="button" onclick="closePhoneModal()">キャンセル</button>
+          <button class="primary" type="button" onclick="submitPhoneReservation()">電話予約を登録</button>
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </main>
-
 
 <script>
   let D = null;
