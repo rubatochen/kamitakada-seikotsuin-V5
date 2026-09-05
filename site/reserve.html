@@ -1,94 +1,357 @@
 <!doctype html>
 <html lang="ja">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Web予約 | 上高田整骨院</title><link rel="stylesheet" href="style.css"><style>
-.reserve-wrap{max-width:900px;margin:0 auto;padding:60px 20px}.reserve-head{text-align:center;margin-bottom:30px}.reserve-head span{color:var(--green);font-weight:800;letter-spacing:.08em}.reserve-head h1{font-size:42px;margin:8px 0}.reserve-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:30px}.date-row{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:20px}.date-row button,.primary,.secondary{border:0;border-radius:8px;padding:12px 18px;cursor:pointer;font-weight:700}.date-row button{background:#eef3ef}.primary{background:var(--green);color:#fff}.secondary{background:#eef3ef;color:var(--ink)}.time-picker{margin:20px 0}.time-picker input{width:100%;box-sizing:border-box;border:1px solid #d7ddd8;border-radius:8px;padding:14px 12px;font:inherit;font-size:20px;font-weight:700;background:#fff}.time-picker small{display:block;color:#6b756e;margin-top:7px}.notice{padding:12px;background:#f5f7f5;border-radius:8px;margin:10px 0 20px}.field{margin:14px 0}.field label{display:block;font-weight:700;margin-bottom:7px}.field input,.field textarea{width:100%;box-sizing:border-box;border:1px solid #d7ddd8;border-radius:8px;padding:12px;font:inherit}.success{display:none;text-align:center;padding:20px}.back{text-align:center;margin-top:25px}@media(max-width:600px){.reserve-card{padding:20px}.reserve-head h1{font-size:32px}}
-</style></head>
-<body><main class="reserve-wrap"><div class="reserve-head"><span>WEB RESERVATION</span><h1>ご予約</h1><p>ご希望の日付と時間を選択してください。</p></div><div class="reserve-card"><div id="app"><div class="date-row"><button id="prev" type="button">←</button><strong id="dateLabel"></strong><button id="next" type="button">→</button></div><div class="notice"><strong>営業時間：10:00～19:00</strong><br>予約は本日から14日先まで受け付けています。<br>1回の施術は25分です。予約済み・不可予約時間と重なる時間は選択できません。<br>予約時間から5分を過ぎてもご来院が確認できず、お電話やLINEでのご連絡もない場合は、スタッフの判断によりキャンセルとさせていただくことがございます。</div><div id="unavailableInfo" class="notice" style="display:none"></div><div class="time-picker"><label for="reserveTime" style="display:block;font-weight:700;margin-bottom:7px">予約時間</label><input id="reserveTime" type="time" step="60" required><small>開始時間を選択してください。施術時間は30分です。</small></div><form id="form"><div class="field"><label for="name">お名前 *</label><input id="name" required maxlength="80"></div><div class="field"><label for="phone">電話番号 *</label><input id="phone" required maxlength="40" inputmode="tel" autocomplete="tel" placeholder="090-1234-5678"><small style="display:block;color:#6b756e;margin-top:7px">例：090-1234-5678</small></div><div class="field"><label for="email">メールアドレス（任意）</label><input id="email" type="email" maxlength="120"></div><div class="field"><label for="note">備考（任意）</label><textarea id="note" rows="4" maxlength="500"></textarea></div><button class="primary" type="submit" style="width:100%;margin-top:10px">この内容で予約する</button></form></div><div id="success" class="success"><h2>予約を受け付けました</h2><p id="successText"></p><p class="notice">ご予約ありがとうございます。内容をご確認のうえご来院ください。</p><a class="secondary" style="display:inline-block;text-decoration:none" href="index.html">トップへ戻る</a></div></div><div class="back"><a href="index.html">← 上高田整骨院トップへ</a></div></main><script src="config.js"></script><script>
-const pad=n=>String(n).padStart(2,'0');const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};const maxDate=()=>addDays(new Date(`${tokyoDate()}T12:00:00`),14);const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;const tokyoDate=()=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const v=Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));return `${v.year}-${v.month}-${v.day}`};let date=new Date(`${tokyoDate()}T12:00:00`);let selected='';const fmt=d=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日月火水木金土'[d.getDay()]}）`;
-function renderSlots(list, unavailable, settings, holiday){
-  const info=document.getElementById('unavailableInfo');
-  const input=document.getElementById('reserveTime');
-  selected='';
-  input.value='';
-  input.disabled=false;
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="上高田整骨院のWeb予約ページ。営業時間10:00～19:00。">
+  <title>Web予約 | 上高田整骨院</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root{--reserve-max:760px}
+    body.reserve-page{background:#f6faf8}
+    .reserve-header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);border-bottom:1px solid var(--edge);backdrop-filter:blur(14px)}
+    .reserve-header-inner{width:min(1120px,calc(100% - 32px));min-height:68px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .reserve-brand{font-weight:800;color:var(--green);font-size:20px;white-space:nowrap}
+    .reserve-header-actions{display:flex;align-items:center;gap:10px}
+    .reserve-back{font-size:14px;font-weight:700;color:var(--muted)}
+    .reserve-language{border:1px solid var(--edge);border-radius:8px;background:#fff;color:var(--ink);padding:8px 30px 8px 10px;font-size:14px}
 
-  if(unavailable && unavailable.length){
-    info.style.display='block';
-    info.innerHTML='<strong>予約できない時間</strong><br>'+unavailable.map(x=>`${x.startTime} ～ ${x.endTime}`).join('<br>');
-  }else{
-    info.style.display='none';
-  }
+    .reserve-main{padding:42px 16px 72px}
+    .reserve-shell{width:min(var(--reserve-max),100%);margin:0 auto}
+    .reserve-hero{text-align:center;margin:8px 0 28px}
+    .reserve-eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 10px;color:var(--green);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .reserve-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}
+    .reserve-hero h1{margin:0;color:var(--ink);font-size:clamp(30px,6vw,44px);line-height:1.2;letter-spacing:.01em}
+    .reserve-hero p{margin:10px 0 0;color:var(--muted);font-size:15px}
 
-  if(holiday || !list.length){
-    input.disabled=true;
-    input.value='';
-    info.style.display='block';
-    info.innerHTML=holiday ? '<strong>この日は休診です。</strong>' : '<strong>この日は予約を受け付けていません。</strong>';
-    return;
-  }
+    .reserve-card{background:var(--paper);border:1px solid var(--edge);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+    .reserve-card-section{padding:24px clamp(20px,5vw,34px)}
+    .reserve-card-section+ .reserve-card-section{border-top:1px solid #edf2ef}
+    .reserve-section-title{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:18px;color:var(--ink)}
+    .reserve-section-title .num{width:28px;height:28px;display:inline-grid;place-items:center;border-radius:50%;background:var(--soft);color:var(--green-dark);font-size:13px;font-weight:800;flex:0 0 auto}
 
-  input.onchange=()=>{ selected=input.value; };
-  input.oninput=()=>{ selected=input.value; };
+    .reserve-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+    .reserve-info-item{padding:13px 14px;border-radius:10px;background:#f7faf8;border:1px solid #e5eeea}
+    .reserve-info-item strong{display:block;font-size:13px;color:var(--muted);margin-bottom:2px}
+    .reserve-info-item span{font-weight:800;color:var(--ink)}
+    .reserve-info-note{margin:0;padding:12px 14px;border-radius:10px;background:#fff8e8;color:#69572e;font-size:13px;line-height:1.65}
 
-  // 浏览器时间选择器不能表达“预约占用30分钟”的全部规则，提交前再用当前 API 数据检查。
-  input.dataset.validSlots=JSON.stringify(list);
-}
-async function load(){
-  document.getElementById('dateLabel').textContent=fmt(date);
-  const today=new Date(`${tokyoDate()}T12:00:00`);
-  document.getElementById('prev').disabled=iso(date)<=iso(today);
-  document.getElementById('next').disabled=iso(date)>=iso(maxDate());
-  selected='';
-  document.getElementById('form').reset();
-  try{
-    const r=await fetch(`/api/availability?date=${iso(date)}`);
-    const j=await r.json();
-    if(!r.ok)throw new Error(j.error||'取得できませんでした');
-    if(j.past){
-      const input=document.getElementById('reserveTime');
-      input.disabled=true;
-      input.value='';
-      document.getElementById('unavailableInfo').style.display='block';
-      document.getElementById('unavailableInfo').innerHTML='<strong>過去の日付は予約できません。</strong>';
-      return;
+    .reserve-date-row{display:grid;grid-template-columns:44px 1fr 44px;gap:10px;align-items:center}
+    .reserve-date-btn{width:44px;height:44px;border:1px solid var(--edge);border-radius:10px;background:#fff;color:var(--green-dark);font-size:20px;font-weight:700;cursor:pointer}
+    .reserve-date-btn:hover:not(:disabled){background:var(--soft)}
+    .reserve-date-btn:disabled{opacity:.35;cursor:not-allowed}
+    .reserve-date-label{text-align:center;font-weight:800;color:var(--ink);font-size:17px}
+    .reserve-date-help{text-align:center;margin:8px 0 0;color:var(--muted);font-size:12px}
+
+    .reserve-time-box{padding:18px;border:1px solid var(--edge);border-radius:12px;background:#fbfdfc}
+    .reserve-time-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px;font-weight:800;color:var(--ink)}
+    .reserve-time-label span{font-size:12px;color:var(--muted);font-weight:600}
+    .reserve-time-input{width:100%;min-height:58px;box-sizing:border-box;border:2px solid #d9e5e0;border-radius:10px;padding:10px 14px;background:#fff;color:var(--ink);font:inherit;font-size:22px;font-weight:800;letter-spacing:.04em;outline:none}
+    .reserve-time-input:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(33,131,111,.10)}
+    .reserve-time-input:disabled{background:#f2f5f3;color:#9aa7a1;cursor:not-allowed}
+    .reserve-field-help{margin:8px 0 0;color:var(--muted);font-size:12px;line-height:1.6}
+
+    .reserve-notice{margin-top:12px;padding:13px 14px;border-radius:10px;background:#f5f8f6;border:1px solid #e4ece8;color:#52605b;font-size:13px;line-height:1.7}
+    .reserve-notice strong{color:var(--ink)}
+    .reserve-unavailable{margin-top:12px}
+    .reserve-unavailable:empty{display:none}
+
+    .reserve-fields{display:grid;gap:16px}
+    .reserve-field label{display:flex;align-items:center;gap:6px;margin-bottom:7px;font-size:14px;font-weight:800;color:var(--ink)}
+    .reserve-required{color:#b64d3d;font-size:11px}
+    .reserve-field input,.reserve-field textarea{width:100%;box-sizing:border-box;border:1px solid #d7e2de;border-radius:10px;background:#fff;color:var(--ink);padding:12px 13px;font:inherit;outline:none}
+    .reserve-field input{min-height:48px}
+    .reserve-field textarea{resize:vertical;min-height:104px}
+    .reserve-field input:focus,.reserve-field textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(33,131,111,.08)}
+    .reserve-field-help{display:block;margin-top:6px;color:var(--muted);font-size:12px}
+    .reserve-submit{width:100%;min-height:54px;margin-top:20px;border:0;border-radius:10px;background:var(--green);color:#fff;font:inherit;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 8px 20px rgba(33,131,111,.18);transition:transform .15s ease,background .15s ease}
+    .reserve-submit:hover{background:var(--green-dark);transform:translateY(-1px)}
+    .reserve-submit:disabled{opacity:.6;cursor:wait;transform:none}
+    .reserve-privacy{margin:10px 0 0;text-align:center;color:var(--muted);font-size:11px}
+
+    .reserve-success{display:none;padding:36px clamp(20px,5vw,40px);text-align:center}
+    .reserve-success-icon{width:58px;height:58px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--green);font-size:28px;font-weight:800}
+    .reserve-success h2{margin:0;color:var(--ink);font-size:26px}
+    .reserve-success-main{margin:10px 0 18px;color:var(--muted)}
+    .reserve-success-time{display:inline-block;padding:12px 18px;border-radius:10px;background:#f5f8f6;color:var(--ink);font-size:17px;font-weight:800}
+    .reserve-home{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin-top:20px;padding:0 18px;border-radius:9px;background:#eef3ef;color:var(--ink);font-weight:700}
+    .reserve-footer{text-align:center;margin-top:20px;color:var(--muted);font-size:12px}
+    .reserve-footer a{color:var(--green-dark);font-weight:700}
+
+    @media(max-width:600px){
+      .reserve-header-inner{min-height:60px}
+      .reserve-brand{font-size:17px}
+      .reserve-back{display:none}
+      .reserve-main{padding:28px 12px 48px}
+      .reserve-hero{margin-bottom:20px}
+      .reserve-hero p{font-size:14px}
+      .reserve-card-section{padding:20px 16px}
+      .reserve-info{grid-template-columns:1fr 1fr;gap:8px}
+      .reserve-info-item{padding:11px 10px}
+      .reserve-info-item strong{font-size:11px}
+      .reserve-info-item span{font-size:14px}
+      .reserve-time-input{font-size:20px}
+      .reserve-date-label{font-size:15px}
     }
-    renderSlots(j.slots||[], j.unavailable||[], j.settings, j.holiday);
-  }catch(e){
-    document.getElementById('reserveTime').disabled=true;
-    document.getElementById('unavailableInfo').style.display='block';
-    document.getElementById('unavailableInfo').textContent='予約枠を取得できませんでした。しばらくしてから再度お試しください。';
-  }
-}
-document.getElementById('prev').onclick=()=>{if(iso(date)>tokyoDate()){date.setDate(date.getDate()-1);load()}};
-document.getElementById('next').onclick=()=>{if(iso(date)<iso(maxDate())){date.setDate(date.getDate()+1);load()}};
-document.getElementById('form').onsubmit=async e=>{
-  e.preventDefault();
-  const timeInput=document.getElementById('reserveTime');
-  const time=timeInput.value;
-  if(!time)return alert('時間を選択してください。');
+    @media(max-width:380px){
+      .reserve-info{grid-template-columns:1fr}
+      .reserve-date-row{grid-template-columns:40px 1fr 40px;gap:6px}
+      .reserve-date-btn{width:40px;height:40px}
+    }
+  </style>
+</head>
+<body class="reserve-page">
+  <header class="reserve-header">
+    <div class="reserve-header-inner">
+      <a class="reserve-brand" href="index.html" data-i18n="site.name">上高田整骨院</a>
+      <div class="reserve-header-actions">
+        <a class="reserve-back" href="index.html" data-i18n="reserve.back">← トップへ戻る</a>
+        <select id="language" class="reserve-language" aria-label="Language">
+          <option value="ja">日本語</option>
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+  </header>
 
-  // 画面上でも「30分の施術が営業終了を超えない」「現在より前でない」「既存予約/停止時間と重ならない」を確認。
-  const slots=JSON.parse(timeInput.dataset.validSlots||'[]');
-  const matched=slots.find(x=>x.time===time);
-  if(!matched || matched.status!=='available'){
-    return alert(matched?.status==='booked' ? 'その時間は予約済みです。' : matched?.status==='break' ? 'その時間は予約できません。' : 'その時間は予約できません。');
-  }
-  selected=time;
+  <main class="reserve-main">
+    <div class="reserve-shell">
+      <div class="reserve-hero">
+        <div class="reserve-eyebrow">WEB RESERVATION</div>
+        <h1 data-i18n="reserve.title">Web予約</h1>
+        <p data-i18n="reserve.subtitle">ご希望の日付と開始時間を選択してください。</p>
+      </div>
 
-  const phone=document.getElementById('phone').value.trim().replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xfee0)).replace(/[\s\-ー−―]/g,'');
-  if(!/^0\d{9,10}$/.test(phone)){
-    return alert('電話番号の形式が正しくありません。例：090-1234-5678');
-  }
+      <div class="reserve-card">
+        <div id="app">
+          <section class="reserve-card-section">
+            <h2 class="reserve-section-title"><span class="num">1</span><span data-i18n="reserve.dateTitle">予約日・時間</span></h2>
+            <div class="reserve-info">
+              <div class="reserve-info-item"><strong data-i18n="reserve.hoursLabel">営業時間</strong><span>10:00～19:00</span></div>
+              <div class="reserve-info-item"><strong data-i18n="reserve.receptionLabel">予約受付</strong><span data-i18n="reserve.receptionValue">本日から14日先まで</span></div>
+            </div>
 
-  const data={name:document.getElementById('name').value,phone:document.getElementById('phone').value,email:document.getElementById('email').value,note:document.getElementById('note').value,date:iso(date),time:selected};
-  try{
-    const r=await fetch('/api/reserve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-    const j=await r.json();
-    if(!r.ok||!j.ok)throw new Error(j.error||'予約できませんでした');
-    document.getElementById('app').style.display='none';
-    document.getElementById('success').style.display='block';
-    document.getElementById('successText').textContent=`${j.date} ${j.time} の予約を受け付けました。`;
-  }catch(err){alert(err.message||'予約できませんでした。');load()}
-};
-load();
-</script></body></html>
+            <div class="reserve-date-row">
+              <button id="prev" class="reserve-date-btn" type="button" aria-label="前の日">‹</button>
+              <div id="dateLabel" class="reserve-date-label"></div>
+              <button id="next" class="reserve-date-btn" type="button" aria-label="次の日">›</button>
+            </div>
+            <p class="reserve-date-help" data-i18n="reserve.dateHelp">14日先まで予約できます</p>
+
+            <div class="reserve-time-box" style="margin-top:18px">
+              <label class="reserve-time-label" for="reserveTime">
+                <span data-i18n="reserve.timeLabel">予約時間</span>
+                <span data-i18n="reserve.duration">施術時間 30分</span>
+              </label>
+              <input id="reserveTime" class="reserve-time-input" type="time" step="60" required>
+              <p class="reserve-field-help" data-i18n="reserve.timeHelp">開始時間を1分単位で選択してください。予約枠は30分です。</p>
+            </div>
+
+            <div id="unavailableInfo" class="reserve-notice reserve-unavailable" style="display:none"></div>
+            <div class="reserve-notice">
+              <strong data-i18n="reserve.rulesTitle">ご予約について</strong><br>
+              <span data-i18n="reserve.rule1">予約済み・不可予約時間と重なる時間は選択できません。</span><br>
+              <span data-i18n="reserve.rule2">予約時間から5分経過してもご来院がない場合、スタッフの判断により予約をキャンセルする場合があります。</span>
+            </div>
+          </section>
+
+          <section class="reserve-card-section">
+            <h2 class="reserve-section-title"><span class="num">2</span><span data-i18n="reserve.infoTitle">お客様情報</span></h2>
+            <form id="form">
+              <div class="reserve-fields">
+                <div class="reserve-field">
+                  <label for="name"><span data-i18n="reserve.name">お名前</span><span class="reserve-required" data-i18n="reserve.required">必須</span></label>
+                  <input id="name" required maxlength="80" autocomplete="name" data-i18n-placeholder="reserve.namePlaceholder" placeholder="お名前を入力してください">
+                </div>
+                <div class="reserve-field">
+                  <label for="phone"><span data-i18n="reserve.phone">電話番号</span><span class="reserve-required" data-i18n="reserve.required">必須</span></label>
+                  <input id="phone" required maxlength="40" inputmode="tel" autocomplete="tel" data-i18n-placeholder="reserve.phonePlaceholder" placeholder="090-1234-5678">
+                  <small class="reserve-field-help" data-i18n="reserve.phoneHelp">例：090-1234-5678</small>
+                </div>
+                <div class="reserve-field">
+                  <label for="email"><span data-i18n="reserve.email">メールアドレス</span><span class="reserve-required" style="color:var(--muted)" data-i18n="reserve.optional">任意</span></label>
+                  <input id="email" type="email" maxlength="120" autocomplete="email" data-i18n-placeholder="reserve.emailPlaceholder" placeholder="example@example.com">
+                </div>
+                <div class="reserve-field">
+                  <label for="note"><span data-i18n="reserve.note">備考</span><span class="reserve-required" style="color:var(--muted)" data-i18n="reserve.optional">任意</span></label>
+                  <textarea id="note" rows="4" maxlength="500" data-i18n-placeholder="reserve.notePlaceholder" placeholder="症状やご要望があればご記入ください"></textarea>
+                </div>
+              </div>
+              <button class="reserve-submit" type="submit" data-i18n="reserve.submit">この内容で予約する</button>
+              <p class="reserve-privacy" data-i18n="reserve.privacy">入力内容をご確認のうえ、予約を確定してください。</p>
+            </form>
+          </section>
+        </div>
+
+        <div id="success" class="reserve-success">
+          <div class="reserve-success-icon">✓</div>
+          <h2 data-i18n="reserve.successTitle">予約を受け付けました</h2>
+          <p class="reserve-success-main" data-i18n="reserve.successMain">ご予約ありがとうございます。</p>
+          <div id="successText" class="reserve-success-time"></div>
+          <br>
+          <a class="reserve-home" href="index.html" data-i18n="reserve.home">トップへ戻る</a>
+        </div>
+      </div>
+
+      <div class="reserve-footer">
+        <span data-i18n="reserve.footer">ご不明な点がありましたら、お電話でお問い合わせください。</span><br>
+        <a href="tel:0353801963">03-5380-1963</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="lang.js"></script>
+  <script>
+    const reserveI18n = {
+      ja: {
+        siteName:'上高田整骨院', back:'← トップへ戻る', title:'Web予約', subtitle:'ご希望の日付と開始時間を選択してください。', dateTitle:'予約日・時間', hoursLabel:'営業時間', receptionLabel:'予約受付', receptionValue:'本日から14日先まで', dateHelp:'14日先まで予約できます', timeLabel:'予約時間', duration:'施術時間 30分', timeHelp:'開始時間を1分単位で選択してください。予約枠は30分です。', rulesTitle:'ご予約について', rule1:'予約済み・不可予約時間と重なる時間は選択できません。', rule2:'予約時間から5分経過してもご来院がない場合、スタッフの判断により予約をキャンセルする場合があります。', infoTitle:'お客様情報', name:'お名前', required:'必須', optional:'任意', namePlaceholder:'お名前を入力してください', phone:'電話番号', phonePlaceholder:'090-1234-5678', phoneHelp:'例：090-1234-5678', email:'メールアドレス', emailPlaceholder:'example@example.com', note:'備考', notePlaceholder:'症状やご要望があればご記入ください', submit:'この内容で予約する', privacy:'入力内容をご確認のうえ、予約を確定してください。', successTitle:'予約を受け付けました', successMain:'ご予約ありがとうございます。', home:'トップへ戻る', footer:'ご不明な点がありましたら、お電話でお問い合わせください。', unavailable:'予約できない時間', holiday:'この日は休診です。', noReception:'この日は予約を受け付けていません。', past:'過去の日付は予約できません。', loadError:'予約枠を取得できませんでした。しばらくしてから再度お試しください。', selectTime:'時間を選択してください。', booked:'その時間は予約済みです。', notAvailable:'その時間は予約できません。', phoneError:'電話番号の形式が正しくありません。例：090-1234-5678', reserveError:'予約できませんでした。', dateFormat:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日月火水木金土'[d.getDay()]}）`, successFormat:(date,time)=>`${date} ${time} の予約を受け付けました。`},
+      zh: {
+        siteName:'上高田整骨院', back:'← 返回首页', title:'网上预约', subtitle:'请选择您希望的日期和开始时间。', dateTitle:'预约日期与时间', hoursLabel:'营业时间', receptionLabel:'预约范围', receptionValue:'今天起14天内', dateHelp:'最多可预约未来14天', timeLabel:'预约时间', duration:'治疗时间 30分钟', timeHelp:'开始时间可按分钟自由选择，每次治疗30分钟。', rulesTitle:'预约须知', rule1:'已预约或不可预约的时间段无法选择。', rule2:'预约时间超过5分钟仍未到院时，工作人员可能会根据情况取消预约。', infoTitle:'您的信息', name:'姓名', required:'必填', optional:'选填', namePlaceholder:'请输入姓名', phone:'电话号码', phonePlaceholder:'090-1234-5678', phoneHelp:'例：090-1234-5678', email:'邮箱地址', emailPlaceholder:'example@example.com', note:'备注', notePlaceholder:'如有症状或其他要求，请填写。', submit:'确认并预约', privacy:'请确认输入内容后提交预约。', successTitle:'预约成功', successMain:'感谢您的预约。', home:'返回首页', footer:'如有疑问，请通过电话联系我们。', unavailable:'不可预约时间', holiday:'当天休诊。', noReception:'当天不接受预约。', past:'过去的日期无法预约。', loadError:'无法获取预约时间，请稍后再试。', selectTime:'请选择时间。', booked:'该时间已被预约。', notAvailable:'该时间无法预约。', phoneError:'电话号码格式不正确。例：090-1234-5678', reserveError:'预约失败，请稍后再试。', dateFormat:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`, successFormat:(date,time)=>`已接受 ${date} ${time} 的预约。`},
+      en: {
+        siteName:'Kamitakada Seikotsuin', back:'← Back to home', title:'Web Reservation', subtitle:'Please select your preferred date and start time.', dateTitle:'Date & Time', hoursLabel:'Hours', receptionLabel:'Booking window', receptionValue:'Up to 14 days ahead', dateHelp:'Reservations are available up to 14 days ahead', timeLabel:'Appointment time', duration:'Treatment: 30 min', timeHelp:'Choose any start time by the minute. Each treatment takes 30 minutes.', rulesTitle:'Reservation information', rule1:'Times that overlap with an existing booking or unavailable period cannot be selected.', rule2:'If you have not arrived within 5 minutes after your appointment time, staff may cancel the reservation at their discretion.', infoTitle:'Your information', name:'Name', required:'Required', optional:'Optional', namePlaceholder:'Enter your name', phone:'Phone number', phonePlaceholder:'090-1234-5678', phoneHelp:'Example: 090-1234-5678', email:'Email address', emailPlaceholder:'example@example.com', note:'Notes', notePlaceholder:'Tell us about any symptoms or requests.', submit:'Confirm reservation', privacy:'Please review your information before confirming.', successTitle:'Reservation confirmed', successMain:'Thank you for your reservation.', home:'Back to home', footer:'If you have any questions, please call us.', unavailable:'Unavailable times', holiday:'The clinic is closed on this date.', noReception:'Reservations are not available on this date.', past:'Past dates cannot be booked.', loadError:'Unable to load available times. Please try again later.', selectTime:'Please select a time.', booked:'That time has already been booked.', notAvailable:'That time is not available.', phoneError:'Please enter a valid Japanese phone number. Example: 090-1234-5678', reserveError:'The reservation could not be completed.', dateFormat:(d)=>`${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`, successFormat:(date,time)=>`Your reservation for ${date} at ${time} has been accepted.`}
+    };
+
+    let currentLang = localStorage.getItem('language');
+    if (!['ja','zh','en'].includes(currentLang)) currentLang = getPreferredLanguage();
+    const langSelect = document.getElementById('language');
+    langSelect.value = currentLang;
+
+    function t(key){return reserveI18n[currentLang][key] ?? reserveI18n.ja[key] ?? key;}
+    function applyReserveLanguage(lang){
+      currentLang = ['ja','zh','en'].includes(lang) ? lang : 'ja';
+      localStorage.setItem('language', currentLang);
+      langSelect.value = currentLang;
+      document.documentElement.lang = currentLang;
+      setLanguage(currentLang);
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+        const key=el.dataset.i18nPlaceholder;
+        if(reserveI18n[currentLang][key]) el.placeholder=reserveI18n[currentLang][key];
+      });
+      renderDateLabel();
+      renderCurrentUnavailable();
+    }
+    langSelect.addEventListener('change',()=>applyReserveLanguage(langSelect.value));
+
+    const pad=n=>String(n).padStart(2,'0');
+    const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+    const maxDate=()=>addDays(new Date(`${tokyoDate()}T12:00:00`),14);
+    const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    const tokyoDate=()=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const v=Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));return `${v.year}-${v.month}-${v.day}`};
+    let date=new Date(`${tokyoDate()}T12:00:00`);
+    let selected='';
+    let currentUnavailable=[];
+    let currentHoliday=false;
+    function renderDateLabel(){document.getElementById('dateLabel').textContent=t('dateFormat')(date);}
+    function renderCurrentUnavailable(){
+      const info=document.getElementById('unavailableInfo');
+      if(currentHoliday){info.style.display='block';info.innerHTML=`<strong>${t('holiday')}</strong>`;return;}
+      if(!currentUnavailable.length){info.style.display='none';info.textContent='';return;}
+      info.style.display='block';
+      info.innerHTML=`<strong>${t('unavailable')}</strong><br>`+currentUnavailable.map(x=>`${x.startTime} ～ ${x.endTime}`).join('<br>');
+    }
+
+    function renderSlots(list, unavailable, settings, holiday){
+      const input=document.getElementById('reserveTime');
+      input.min='10:00';
+      input.max='18:30';
+      if(iso(date)===tokyoDate()){
+        const now=new Date();
+        const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(now);
+        const nv=Object.fromEntries(parts.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+        const nowMin=Number(nv.hour)*60+Number(nv.minute);
+        if(nowMin>600) input.min=`${pad(Math.floor(nowMin/60))}:${pad(nowMin%60)}`;
+      }
+      currentUnavailable=unavailable||[];
+      currentHoliday=!!holiday;
+      selected='';
+      input.value='';
+      input.disabled=false;
+      input.dataset.validSlots=JSON.stringify(list||[]);
+      renderCurrentUnavailable();
+      if(holiday || !list.length){
+        input.disabled=true;
+        input.value='';
+        if(!holiday){
+          const info=document.getElementById('unavailableInfo');
+          info.style.display='block';
+          info.innerHTML=`<strong>${t('noReception')}</strong>`;
+        }
+        return;
+      }
+      input.onchange=()=>{selected=input.value};
+      input.oninput=()=>{selected=input.value};
+    }
+
+    async function load(){
+      renderDateLabel();
+      const today=new Date(`${tokyoDate()}T12:00:00`);
+      document.getElementById('prev').disabled=iso(date)<=iso(today);
+      document.getElementById('next').disabled=iso(date)>=iso(maxDate());
+      selected='';
+      currentUnavailable=[];
+      currentHoliday=false;
+      document.getElementById('form').reset();
+      document.getElementById('reserveTime').dataset.validSlots='[]';
+      try{
+        const r=await fetch(`/api/availability?date=${iso(date)}`);
+        const j=await r.json();
+        if(!r.ok)throw new Error(j.error||'load');
+        if(j.past){
+          const input=document.getElementById('reserveTime');
+          input.disabled=true;input.value='';
+          const info=document.getElementById('unavailableInfo');
+          info.style.display='block';info.innerHTML=`<strong>${t('past')}</strong>`;
+          return;
+        }
+        renderSlots(j.slots||[],j.unavailable||[],j.settings,j.holiday);
+      }catch(e){
+        document.getElementById('reserveTime').disabled=true;
+        const info=document.getElementById('unavailableInfo');
+        info.style.display='block';info.innerHTML=`<strong>${t('loadError')}</strong>`;
+      }
+    }
+
+    document.getElementById('prev').onclick=()=>{if(iso(date)>tokyoDate()){date.setDate(date.getDate()-1);load()}};
+    document.getElementById('next').onclick=()=>{if(iso(date)<iso(maxDate())){date.setDate(date.getDate()+1);load()}};
+
+    document.getElementById('form').onsubmit=async e=>{
+      e.preventDefault();
+      const timeInput=document.getElementById('reserveTime');
+      const time=timeInput.value;
+      if(!time)return alert(t('selectTime'));
+      const slots=JSON.parse(timeInput.dataset.validSlots||'[]');
+      const matched=slots.find(x=>x.time===time);
+      if(!matched || matched.status!=='available'){
+        return alert(matched?.status==='booked'?t('booked'):t('notAvailable'));
+      }
+      selected=time;
+      const phone=document.getElementById('phone').value.trim().replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xfee0)).replace(/[\s\-ー−―]/g,'');
+      if(!/^0\d{9,10}$/.test(phone))return alert(t('phoneError'));
+      const data={name:document.getElementById('name').value,phone:document.getElementById('phone').value,email:document.getElementById('email').value,note:document.getElementById('note').value,date:iso(date),time:selected};
+      const submit=document.querySelector('.reserve-submit');
+      submit.disabled=true;
+      try{
+        const r=await fetch('/api/reserve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+        const j=await r.json();
+        if(!r.ok||!j.ok)throw new Error(j.error||t('reserveError'));
+        document.getElementById('app').style.display='none';
+        document.getElementById('success').style.display='block';
+        document.getElementById('successText').textContent=t('successFormat')(j.date,j.time);
+        window.scrollTo({top:0,behavior:'smooth'});
+      }catch(err){
+        alert(err.message||t('reserveError'));
+        await load();
+      }finally{submit.disabled=false}
+    };
+
+    applyReserveLanguage(currentLang);
+    load();
+  </script>
+</body>
+</html>
