@@ -30,17 +30,29 @@
       margin-bottom: 20px;
     }
 
-    .admin-dashboard-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(300px, .9fr);
-      gap: 20px;
-      align-items: start;
-    }
     .panel-heading-row {
       display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:14px;
     }
     .panel-heading-row h2 { margin-bottom:4px; }
-    .extension-panel { min-height: 100%; box-sizing:border-box; }
+    .extension-actions-inline {
+      display:flex; gap:8px; align-items:center; margin-left:auto;
+    }
+    .extension-actions-inline .primary {
+      min-height:42px; font-weight:800; padding:8px 14px;
+    }
+    .schedule-list { margin-top: 8px; }
+    .schedule-row {
+      display:grid; grid-template-columns:72px minmax(0,1fr) auto;
+      gap:14px; align-items:center;
+      padding:14px 0; border-bottom:1px solid #eee;
+    }
+    .schedule-row:last-child { border-bottom:0; }
+    .schedule-time { font-weight:800; font-size:1.05rem; }
+    .schedule-tag {
+      display:inline-block; margin-right:8px; font-size:.82rem; font-weight:800;
+      padding:3px 8px; border-radius:999px; background:#eef7f5;
+    }
+    .schedule-tag.stop { background:#f3f3f3; }
     .extension-actions {
       display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:18px;
     }
@@ -212,12 +224,25 @@
     }
 
     @media (max-width: 700px) {
-      .admin-dashboard-grid, .grid2 {
+      .grid2 {
         grid-template-columns: 1fr;
       }
       .panel-heading-row { align-items:flex-start; flex-direction:column; }
       .panel-heading-row .phone-reserve-btn { width:100%; }
-      .extension-actions { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .extension-actions-inline {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .extension-actions-inline .primary {
+        flex: 1 1 70px;
+      }
+      .schedule-row {
+        grid-template-columns: 1fr auto;
+      }
+      .schedule-time {
+        grid-column: 1 / -1;
+      }
+
 
       .appt {
         grid-template-columns: 60px 1fr;
@@ -294,66 +319,36 @@
     </div>
 
 
-    <!-- 日期 -->
+    <!-- 日期・快捷操作 -->
     <div class="panel">
       <div class="calendar" style="justify-content:space-between;">
         <div class="calendar-controls" style="display:flex;gap:10px;align-items:center;">
-          <button
-            class="secondary"
-            type="button"
-            onclick="change(-1)"
-          >
-            ←
-          </button>
-
-          <input id="date" type="date">
-
-          <button
-            class="secondary"
-            type="button"
-            onclick="change(1)"
-          >
-            →
-          </button>
+          <button class="secondary" type="button" onclick="change(-1)" aria-label="前の日">←</button>
+          <input id="date" type="date" aria-label="予約日">
+          <button class="secondary" type="button" onclick="change(1)" aria-label="次の日">→</button>
         </div>
 
-        <button
-          class="phone-reserve-btn"
-          type="button"
-          onclick="openPhoneModal()"
-        >
-          ＋ 手動予約
-        </button>
-      </div>
-    </div>
-
-
-    <!-- 本日の予約・手動予約・予約停止 -->
-    <div class="admin-dashboard-grid">
-
-      <section class="panel appointments-panel">
-        <div class="panel-heading-row">
-          <div>
-            <h2>今日预约</h2>
-            <p class="muted">当天的预约按开始时间排列。</p>
-          </div>
-        </div>
-        <div id="appts"></div>
-      </section>
-
-      <section class="panel extension-panel">
-        <h2>本日の予約停止</h2>
-        <p class="muted">患者加时或无预约到店时，从现在开始停止接受新的预约。</p>
-        <div id="unavailableToday"></div>
-        <div class="extension-actions">
+        <div class="extension-actions-inline">
           <button class="primary" type="button" onclick="extendToday(30)">＋30分</button>
           <button class="primary" type="button" onclick="extendToday(40)">＋40分</button>
           <button class="primary" type="button" onclick="extendToday(50)">＋50分</button>
           <button class="primary" type="button" onclick="extendToday(60)">＋60分</button>
+          <button class="phone-reserve-btn" type="button" onclick="openPhoneModal()">＋ 手動予約</button>
         </div>
-      </section>
-
+      </div>
     </div>
+
+    <!-- 当日の予約と予約停止を統合表示 -->
+    <section class="panel">
+      <div class="panel-heading-row">
+        <div>
+          <div class="section-kicker">TODAY</div>
+          <h2>今日の予定</h2>
+          <p class="muted">予約と予約停止時間を開始時刻順にまとめて表示します。</p>
+        </div>
+      </div>
+      <div id="schedule" class="schedule-list"></div>
+    </section>
 
 
     <!-- 低頻度设置 -->
@@ -704,54 +699,68 @@
 
     D = await api('/api/admin/data');
 
-    renderAppts();
+    renderSchedule();
     renderBreaks();
-    renderUnavailableToday();
     renderHolidays();
     renderHours();
   }
 
 
-  function renderAppts() {
+  function renderSchedule() {
+    const box = document.getElementById('schedule');
+    const selectedDate = date.value;
+    const items = [];
 
-    const a = D.appointments
-      .filter(x => x.date === date.value)
-      .sort((a, b) =>
-        a.time.localeCompare(b.time)
-      );
+    D.appointments
+      .filter(x => x.date === selectedDate)
+      .sort((a, b) => a.time.localeCompare(b.time))
+      .forEach(x => {
+        const occupied = Number(x.duration_minutes) || 30;
+        const treatment = Math.max(25, occupied - 5);
+        items.push({
+          start: toMinutes(x.time),
+          end: toMinutes(x.time) + occupied,
+          type: 'appointment',
+          time: x.time,
+          name: esc(x.name),
+          detail: occupied === 30
+            ? '基本施術 25分 / 確保 30分'
+            : `施術 ${treatment}分 / 確保 ${occupied}分`,
+          contact: `${esc(x.phone)}${x.note ? ' · ' + esc(x.note) : ''}`,
+          action: `<button class="danger" type="button" onclick="cancelA('${x.id}')">${x.status === 'cancelled' ? '削除' : '取消'}</button>`
+        });
+      });
 
-    document.getElementById('appts').innerHTML =
-      a.length
-        ? a.map(x => `
-          <div class="appt">
+    D.breaks
+      .filter(x => x.date === selectedDate)
+      .forEach(x => {
+        items.push({
+          start: toMinutes(x.startTime),
+          end: toMinutes(x.endTime),
+          type: 'stop',
+          time: `${x.startTime} ～ ${x.endTime}`,
+          name: '予約停止',
+          detail: 'この時間帯は新しい予約を受け付けません。',
+          contact: '',
+          action: `<button class="danger" type="button" onclick="delBreak('${x.id}')">削除</button>`
+        });
+      });
 
-            <strong>${x.time}</strong>
+    items.sort((a, b) => a.start - b.start || a.end - b.end);
 
+    box.innerHTML = items.length
+      ? items.map(x => `
+          <div class="schedule-row">
+            <div class="schedule-time">${x.time}</div>
             <div>
-              <strong>${esc(x.name)}</strong>
-
-              <div class="muted">
-                ${x.duration_minutes ? (Number(x.duration_minutes) - 30 ? `施術 ${Number(x.duration_minutes)-5}分 / 確保 ${Number(x.duration_minutes)}分` : '基本施術 25分 / 確保 30分') : '基本施術 25分 / 確保 30分'}
-              </div>
-
-              <div class="muted">
-                ${esc(x.phone)}
-                ${x.note ? ' · ' + esc(x.note) : ''}
-              </div>
+              <div><span class="schedule-tag ${x.type === 'stop' ? 'stop' : ''}">${x.type === 'stop' ? '停止' : '予約'}</span><strong>${x.name}</strong></div>
+              <div class="muted">${x.detail}</div>
+              ${x.contact ? `<div class="muted">${x.contact}</div>` : ''}
             </div>
-
-            <button
-              class="danger"
-              type="button"
-              onclick="cancelA('${x.id}')"
-            >
-              ${x.status === 'cancelled' ? '删除' : '取消'}
-            </button>
-
+            <div>${x.action}</div>
           </div>
         `).join('')
-
-        : '<p class="muted">この日の予約はありません。</p>';
+      : '<p class="muted">この日の予約・予約停止はありません。</p>';
   }
 
 
@@ -783,54 +792,6 @@
         `).join('')
 
         : '<p class="muted">なし</p>';
-  }
-
-
-  function renderUnavailableToday() {
-    const box = document.getElementById('unavailableToday');
-    const todayValue = today();
-
-    const intervals = [];
-
-    D.appointments
-      .filter(x => x.date === todayValue && x.status === 'confirmed')
-      .forEach(x => {
-        intervals.push({
-          start: toMinutes(x.time),
-          end: toMinutes(x.time) + 30,
-          label: '预约'
-        });
-      });
-
-    D.breaks
-      .filter(x => x.date === todayValue)
-      .forEach(x => {
-        intervals.push({
-          start: toMinutes(x.startTime),
-          end: toMinutes(x.endTime),
-          label: '停止'
-        });
-      });
-
-    intervals.sort((x, y) => x.start - y.start);
-
-    const merged = [];
-    intervals.forEach(x => {
-      const last = merged[merged.length - 1];
-      if (!last || x.start > last.end) {
-        merged.push({ start: x.start, end: x.end });
-      } else {
-        last.end = Math.max(last.end, x.end);
-      }
-    });
-
-    box.innerHTML = merged.length
-      ? merged.map(x => `
-          <div style="padding:10px 0;border-bottom:1px solid #eee">
-            <strong>${timeText(x.start)} ～ ${timeText(x.end)}</strong>
-          </div>
-        `).join('')
-      : '<p class="muted">現在予約停止時間はありません。</p>';
   }
 
 
