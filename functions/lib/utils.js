@@ -155,7 +155,7 @@ function mergeIntervals(intervals) {
   return merged;
 }
 
-export async function buildSlots(env, date, currentTime = new Date()) {
+export async function buildSlots(env, date, currentTime = new Date(), requestedDuration = 30) {
   const s = await settings(env);
   const now = tokyoNow(currentTime);
 
@@ -184,7 +184,7 @@ export async function buildSlots(env, date, currentTime = new Date()) {
     .all();
 
   const bookedResult = await env.DB
-    .prepare("SELECT id,time,name FROM appointments WHERE date = ? AND status = 'confirmed' ORDER BY time")
+    .prepare("SELECT id,time,name,duration_minutes FROM appointments WHERE date = ? AND status = 'confirmed' ORDER BY time")
     .bind(date)
     .all();
 
@@ -207,12 +207,12 @@ export async function buildSlots(env, date, currentTime = new Date()) {
   const businessStart = minutesOf(start);
   const businessEnd = minutesOf(end);
 
-  // 每个预约固定占用 30 分钟；开始时间按 1 分钟自由选择。
-  const appointmentDuration = 30;
+  // 基本预约占用30分钟；延长预约可占用40/50/60分钟。
+  const appointmentDuration = [30, 40, 50, 60].includes(Number(requestedDuration)) ? Number(requestedDuration) : 30;
 
   const bookedIntervals = booked.map(x => ({
     start: minutesOf(x.time),
-    end: minutesOf(x.time) + appointmentDuration,
+    end: minutesOf(x.time) + (Number(x.duration_minutes) || 30),
     type: 'booked'
   }));
 

@@ -39,6 +39,12 @@ export async function onRequest(context) {
   const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
   const email = typeof body.email === 'string' ? body.email.trim() : '';
   const note = typeof body.note === 'string' ? body.note.trim() : '';
+  const extensionMinutes = Number(body.extensionMinutes || 0);
+  const allowedExtensions = [0, 10, 20, 30];
+  if (!allowedExtensions.includes(extensionMinutes)) {
+    return withCors(json({ ok:false, code:'invalid_extension', error:'延長時間が正しくありません。' },400),context.request);
+  }
+  const occupiedMinutes = 30 + extensionMinutes;
 
   if (!isValidDate(date)) {
     return withCors(
@@ -122,7 +128,7 @@ export async function onRequest(context) {
     );
   }
 
-  const availability = await buildSlots(context.env, date);
+  const availability = await buildSlots(context.env, date, new Date(), occupiedMinutes);
   const slot = availability.slots.find(function (s) {
     return s.time === time;
   });
@@ -160,15 +166,16 @@ export async function onRequest(context) {
   }
 
   const requestedStart = minutesOf(time);
-  const requestedEnd = requestedStart + 30;
+  const requestedEnd = requestedStart + occupiedMinutes;
 
   const existing = await context.env.DB.prepare(
-    "SELECT time FROM appointments WHERE date = ? AND status = 'confirmed'"
+    "SELECT time,duration_minutes FROM appointments WHERE date = ? AND status = 'confirmed'"
   ).bind(date).all();
 
   const overlap = (existing.results || []).some(function (x) {
     const start = minutesOf(x.time);
-    return requestedStart < start + 30 && requestedEnd > start;
+    const occupied = Number(x.duration_minutes) || 30;
+    return requestedStart < start + occupied && requestedEnd > start;
   });
 
   if (overlap) {
@@ -192,8 +199,8 @@ export async function onRequest(context) {
     await context.env.DB
       .prepare(
         'INSERT INTO appointments ' +
-        '(id,date,time,name,phone,email,note,status,created_at) ' +
-        'VALUES (?,?,?,?,?,?,?,?,?)'
+        '(id,date,time,name,phone,email,note,status,created_at,duration_minutes) ' +
+        'VALUES (?,?,?,?,?,?,?,?,?,?)'
       )
       .bind(
         id,
@@ -204,7 +211,8 @@ export async function onRequest(context) {
         email || null,
         finalNote,
         'confirmed',
-        createdAt
+        createdAt,
+        occupiedMinutes
       )
       .run();
   } catch (error) {
@@ -248,7 +256,9 @@ export async function onRequest(context) {
         email: email || null,
         note: finalNote,
         status: 'confirmed',
-        created_at: createdAt
+        created_at: createdAt,
+        extension_minutes: extensionMinutes,
+        duration_minutes: occupiedMinutes
       }
     }),
     context.request

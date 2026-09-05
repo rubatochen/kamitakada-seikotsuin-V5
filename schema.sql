@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS appointments (
   email TEXT,
   note TEXT,
   status TEXT NOT NULL DEFAULT 'confirmed',
-  created_at TEXT NOT NULL
+  created_at TEXT NOT NULL,
+  duration_minutes INTEGER NOT NULL DEFAULT 30
 );
 CREATE INDEX IF NOT EXISTS idx_appointments_date ON appointments(date);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_active_slot ON appointments(date, time) WHERE status = 'confirmed';

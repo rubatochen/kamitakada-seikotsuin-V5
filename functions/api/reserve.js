@@ -23,6 +23,12 @@ export async function onRequest(context) {
 
   const name = String(body.name||'').trim();
   const phone = String(body.phone||'').trim();
+  const extension = Number(body.extensionMinutes || 0);
+  const allowedExtensions = [0, 10, 20, 30];
+  if (!allowedExtensions.includes(extension)) {
+    return withCors(json({error:'延長時間が正しくありません。'},400),context.request);
+  }
+  const occupiedMinutes = 30 + extension;
 
   if (!name || !phone) {
     return withCors(json({error:'お名前と電話番号を入力してください。'},400),context.request);
@@ -49,7 +55,7 @@ export async function onRequest(context) {
     return withCors(json({error:'開始済みまたは過去の時間は予約できません。'},400),context.request);
   }
 
-  const availability = await buildSlots(context.env, body.date);
+  const availability = await buildSlots(context.env, body.date, new Date(), occupiedMinutes);
   const slot = availability.slots.find(s=>s.time===body.time);
 
   if (!slot || slot.status !== 'available') {
@@ -59,15 +65,16 @@ export async function onRequest(context) {
   // 1 分単位の開始時刻でも、予約全体 30 分が他の予約と重ならないことを
   // サーバー側でも再確認する。
   const requestedStart = minutesOf(body.time);
-  const requestedEnd = requestedStart + 30;
+  const requestedEnd = requestedStart + occupiedMinutes;
 
   const existing = await context.env.DB.prepare(
-    "SELECT time FROM appointments WHERE date = ? AND status = 'confirmed'"
+    "SELECT time,duration_minutes FROM appointments WHERE date = ? AND status = 'confirmed'"
   ).bind(body.date).all();
 
   const overlap = (existing.results || []).some(x => {
     const start = minutesOf(x.time);
-    return requestedStart < start + 30 && requestedEnd > start;
+    const occupied = Number(x.duration_minutes) || 30;
+    return requestedStart < start + occupied && requestedEnd > start;
   });
 
   if (overlap) {
@@ -76,7 +83,7 @@ export async function onRequest(context) {
 
   try {
     await context.env.DB.prepare(
-      'INSERT INTO appointments(id,date,time,name,phone,email,note,status,created_at) VALUES(?,?,?,?,?,?,?,?,?)'
+      'INSERT INTO appointments(id,date,time,name,phone,email,note,status,created_at,duration_minutes) VALUES(?,?,?,?,?,?,?,?,?,?)'
     )
       .bind(
         randomId(),
@@ -87,7 +94,8 @@ export async function onRequest(context) {
         String(body.email||'').trim(),
         String(body.note||'').trim(),
         'confirmed',
-        new Date().toISOString()
+        new Date().toISOString(),
+        occupiedMinutes
       )
       .run();
   } catch (e) {
@@ -97,5 +105,5 @@ export async function onRequest(context) {
     );
   }
 
-  return withCors(json({ok:true,date:body.date,time:body.time}),context.request);
+  return withCors(json({ok:true,date:body.date,time:body.time,extensionMinutes:extension,occupiedMinutes}),context.request);
 }
