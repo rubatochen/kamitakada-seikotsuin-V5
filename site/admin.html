@@ -9,9 +9,9 @@
 
   <style>
     .admin {
-      max-width: 1100px;
+      max-width: 1180px;
       margin: auto;
-      padding: 45px 20px;
+      padding: 28px 18px 50px;
     }
 
     .top {
@@ -19,45 +19,52 @@
       justify-content: space-between;
       align-items: center;
       gap: 15px;
-      margin-bottom: 25px;
+      margin-bottom: 16px;
     }
 
     .panel {
       background: #fff;
       border-radius: 12px;
       box-shadow: var(--shadow);
-      padding: 24px;
-      margin-bottom: 20px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
     }
 
     .panel-heading-row {
-      display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:14px;
+      display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:10px;
     }
-    .panel-heading-row h2 { margin-bottom:4px; }
+    .panel-heading-row h2 { margin:0 0 3px; }
     .extension-actions-inline {
       display:flex; gap:8px; align-items:center; margin-left:auto;
     }
     .extension-actions-inline .primary {
       min-height:42px; font-weight:800; padding:8px 14px;
     }
-    .schedule-list { margin-top: 8px; }
+    .schedule-list { margin-top: 4px; border-top:1px solid #edf1ef; }
     .schedule-row {
-      display:grid; grid-template-columns:72px minmax(0,1fr) auto;
-      gap:14px; align-items:center;
-      padding:14px 0; border-bottom:1px solid #eee;
+      display:grid; grid-template-columns:82px 58px minmax(180px, 1fr) auto;
+      gap:10px; align-items:center;
+      min-height:52px; padding:7px 0; border-bottom:1px solid #edf1ef;
     }
     .schedule-row:last-child { border-bottom:0; }
-    .schedule-time { font-weight:800; font-size:1.05rem; }
+    .schedule-time { font-weight:900; font-size:1rem; color:var(--green-dark); white-space:nowrap; }
     .schedule-tag {
-      display:inline-block; margin-right:8px; font-size:.82rem; font-weight:800;
-      padding:3px 8px; border-radius:999px; background:#eef7f5;
+      display:inline-flex; align-items:center; justify-content:center; width:52px;
+      font-size:.76rem; font-weight:900; padding:4px 6px; border-radius:7px;
+      background:#eef7f5; color:var(--green-dark); box-sizing:border-box;
     }
-    .schedule-tag.stop { background:#f3f3f3; }
+    .schedule-tag.stop { background:#f1f2f2; color:#69716e; }
+    .schedule-main { min-width:0; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .schedule-name { font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:220px; }
+    .schedule-detail, .schedule-contact { color:#777; font-size:.84rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .schedule-action { justify-self:end; }
+    .schedule-action .danger { padding:6px 10px; min-height:34px; }
     .extension-actions {
       display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:18px;
     }
     .extension-actions .primary { min-height:48px; font-weight:800; }
     .secondary-tools { margin-top:0; }
+    .schedule-empty { padding:18px 0 10px; }
 
     .login {
       max-width: 420px;
@@ -69,6 +76,13 @@
       box-sizing: border-box;
       margin: 12px 0;
     }
+
+    .compact-toolbar {
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+    }
+    .calendar-controls { display:flex; gap:8px; align-items:center; }
+    .calendar-controls button { min-width:38px; min-height:38px; padding:7px 10px; }
+    .calendar-controls input { min-height:38px; }
 
     .calendar {
       display: flex;
@@ -236,12 +250,18 @@
       .extension-actions-inline .primary {
         flex: 1 1 70px;
       }
+      .compact-toolbar {
+        display:block;
+      }
+      .extension-actions-inline {
+        margin-top:10px;
+        width:100%;
+      }
       .schedule-row {
-        grid-template-columns: 1fr auto;
+        grid-template-columns:72px 48px minmax(0,1fr) auto;
+        gap:8px;
       }
-      .schedule-time {
-        grid-column: 1 / -1;
-      }
+      .schedule-name { max-width:160px; }
 
 
       .appt {
@@ -320,21 +340,19 @@
 
 
     <!-- 日期・快捷操作 -->
-    <div class="panel">
-      <div class="calendar" style="justify-content:space-between;">
-        <div class="calendar-controls" style="display:flex;gap:10px;align-items:center;">
-          <button class="secondary" type="button" onclick="change(-1)" aria-label="前の日">←</button>
-          <input id="date" type="date" aria-label="予約日">
-          <button class="secondary" type="button" onclick="change(1)" aria-label="次の日">→</button>
-        </div>
+    <div class="panel compact-toolbar">
+      <div class="calendar-controls">
+        <button class="secondary" type="button" onclick="change(-1)" aria-label="前の日">←</button>
+        <input id="date" type="date" aria-label="予約日">
+        <button class="secondary" type="button" onclick="change(1)" aria-label="次の日">→</button>
+      </div>
 
-        <div class="extension-actions-inline">
-          <button class="primary" type="button" onclick="extendToday(30)">＋30分</button>
-          <button class="primary" type="button" onclick="extendToday(40)">＋40分</button>
-          <button class="primary" type="button" onclick="extendToday(50)">＋50分</button>
-          <button class="primary" type="button" onclick="extendToday(60)">＋60分</button>
-          <button class="phone-reserve-btn" type="button" onclick="openPhoneModal()">＋ 手動予約</button>
-        </div>
+      <div class="extension-actions-inline">
+        <button class="primary" type="button" onclick="extendToday(30)">＋30分</button>
+        <button class="primary" type="button" onclick="extendToday(40)">＋40分</button>
+        <button class="primary" type="button" onclick="extendToday(50)">＋50分</button>
+        <button class="primary" type="button" onclick="extendToday(60)">＋60分</button>
+        <button class="phone-reserve-btn" type="button" onclick="openPhoneModal()">＋ 手動予約</button>
       </div>
     </div>
 
@@ -344,7 +362,7 @@
         <div>
           <div class="section-kicker">TODAY</div>
           <h2>今日の予定</h2>
-          <p class="muted">予約と予約停止時間を開始時刻順にまとめて表示します。</p>
+          <p class="muted">予約・予約停止を時刻順にまとめて表示します。</p>
         </div>
       </div>
       <div id="schedule" class="schedule-list"></div>
@@ -713,7 +731,6 @@
 
     D.appointments
       .filter(x => x.date === selectedDate)
-      .sort((a, b) => a.time.localeCompare(b.time))
       .forEach(x => {
         const occupied = Number(x.duration_minutes) || 30;
         const treatment = Math.max(25, occupied - 5);
@@ -724,8 +741,8 @@
           time: x.time,
           name: esc(x.name),
           detail: occupied === 30
-            ? '基本施術 25分 / 確保 30分'
-            : `施術 ${treatment}分 / 確保 ${occupied}分`,
+            ? '施術25分 / 確保30分'
+            : `施術${treatment}分 / 確保${occupied}分`,
           contact: `${esc(x.phone)}${x.note ? ' · ' + esc(x.note) : ''}`,
           action: `<button class="danger" type="button" onclick="cancelA('${x.id}')">${x.status === 'cancelled' ? '削除' : '取消'}</button>`
         });
@@ -740,7 +757,7 @@
           type: 'stop',
           time: `${x.startTime} ～ ${x.endTime}`,
           name: '予約停止',
-          detail: 'この時間帯は新しい予約を受け付けません。',
+          detail: '',
           contact: '',
           action: `<button class="danger" type="button" onclick="delBreak('${x.id}')">削除</button>`
         });
@@ -752,17 +769,17 @@
       ? items.map(x => `
           <div class="schedule-row">
             <div class="schedule-time">${x.time}</div>
-            <div>
-              <div><span class="schedule-tag ${x.type === 'stop' ? 'stop' : ''}">${x.type === 'stop' ? '停止' : '予約'}</span><strong>${x.name}</strong></div>
-              <div class="muted">${x.detail}</div>
-              ${x.contact ? `<div class="muted">${x.contact}</div>` : ''}
+            <div><span class="schedule-tag ${x.type === 'stop' ? 'stop' : ''}">${x.type === 'stop' ? '停止' : '予約'}</span></div>
+            <div class="schedule-main">
+              <strong class="schedule-name">${x.name}</strong>
+              ${x.detail ? `<span class="schedule-detail">${x.detail}</span>` : ''}
+              ${x.contact ? `<span class="schedule-contact">${x.contact}</span>` : ''}
             </div>
-            <div>${x.action}</div>
+            <div class="schedule-action">${x.action}</div>
           </div>
         `).join('')
-      : '<p class="muted">この日の予約・予約停止はありません。</p>';
+      : '<div class="schedule-empty muted">この日の予約・予約停止はありません。</div>';
   }
-
 
   function renderBreaks() {
 
