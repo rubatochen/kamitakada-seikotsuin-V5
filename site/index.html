@@ -36,7 +36,7 @@
 
   <main id="top">
     <section class="hero">
-      <img class="hero-bg" src="images/banner.png" alt="上高田整骨院の院内">
+      <img id="heroBg" class="hero-bg" src="images/banner.png" alt="上高田整骨院の院内">
       <div class="hero-content">
         <p class="eyebrow" data-i18n="hero.eyebrow">新井薬師前駅近く・予約優先</p>
         <h1 data-i18n="hero.title">地域の皆さまの健康を支える整骨院</h1>
@@ -214,5 +214,50 @@
 
   <script src="lang.js"></script>
   <script src="script.js"></script>
+  <script>
+    (function(){
+      const heroBg=document.getElementById('heroBg');
+      const NIGHT_IMAGE='images/night-clinic.jpg';
+      const DAY_IMAGE='images/banner.png';
+
+      function tokyoParts(){
+        const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+        return Object.fromEntries(parts.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+      }
+
+      function clinicIsOpenNow(data){
+        const p=tokyoParts();
+        const weekday=new Date(`${p.year}-${p.month}-${p.day}T12:00:00Z`).getUTCDay();
+        if(data?.holiday || !data?.businessHours?.[String(weekday)]) return false;
+        const hours=data.businessHours[String(weekday)];
+        const nowMin=Number(p.hour)*60+Number(p.minute);
+        const start=Number(hours[0].slice(0,2))*60+Number(hours[0].slice(3));
+        const end=Number(hours[1].slice(0,2))*60+Number(hours[1].slice(3));
+        return nowMin>=start && nowMin<end;
+      }
+
+      function setClinicMode(isOpen){
+        document.body.classList.toggle('night-mode',!isOpen);
+        if(heroBg) heroBg.src=isOpen ? DAY_IMAGE : NIGHT_IMAGE;
+      }
+
+      async function updateClinicMode(){
+        try{
+          const p=tokyoParts();
+          const date=`${p.year}-${p.month}-${p.day}`;
+          const r=await fetch(`/api/availability?date=${date}&extension=0`,{cache:'no-store'});
+          const data=await r.json();
+          if(!r.ok) throw new Error('availability');
+          setClinicMode(clinicIsOpenNow(data));
+        }catch(e){
+          // If status cannot be checked, keep the normal daytime design.
+          setClinicMode(true);
+        }
+      }
+
+      updateClinicMode();
+      setInterval(updateClinicMode,60000);
+    })();
+  </script>
 </body>
 </html>

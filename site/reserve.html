@@ -87,6 +87,37 @@
     .reserve-footer{text-align:center;margin-top:20px;color:var(--muted);font-size:12px}
     .reserve-footer a{color:var(--green-dark);font-weight:700}
 
+    /* Automatic closed-hours / holiday theme */
+    body.reserve-page{transition:background-color .35s ease,color .35s ease}
+    body.reserve-page.night-mode{
+      --ink:#eef4f1;--muted:#aab8b2;--soft:#17211e;--paper:#101614;--edge:#2b3934;
+      background:#0c1110;color:#eef4f1
+    }
+    body.reserve-page.night-mode .reserve-header{background:rgba(13,19,17,.96);border-bottom-color:#2b3934}
+    body.reserve-page.night-mode .reserve-brand{color:#63b59e}
+    body.reserve-page.night-mode .reserve-back{color:#aab8b2}
+    body.reserve-page.night-mode .reserve-language{background:#18211e;color:#eef4f1;border-color:#34443e}
+    body.reserve-page.night-mode .reserve-hero h1{color:#eef4f1}
+    body.reserve-page.night-mode .reserve-hero p,.reserve-page.night-mode .reserve-footer{color:#aab8b2}
+    body.reserve-page.night-mode .reserve-card{background:#111816;border-color:#2b3934;box-shadow:0 18px 45px rgba(0,0,0,.28)}
+    body.reserve-page.night-mode .reserve-card-section{border-bottom-color:#26332f}
+    body.reserve-page.night-mode .reserve-info-item,
+    body.reserve-page.night-mode .reserve-time-box,
+    body.reserve-page.night-mode .reserve-time-input,
+    body.reserve-page.night-mode .reserve-field input,
+    body.reserve-page.night-mode .reserve-field textarea,
+    body.reserve-page.night-mode .reserve-extension-options label{background:#17201d;color:#eef4f1;border-color:#30403a}
+    body.reserve-page.night-mode .reserve-info-item strong,
+    body.reserve-page.night-mode .reserve-field-help,
+    body.reserve-page.night-mode .reserve-date-help{color:#aab8b2}
+    body.reserve-page.night-mode .reserve-date-btn{background:#17201d;color:#83c4b0;border-color:#30403a}
+    body.reserve-page.night-mode .reserve-date-btn:hover:not(:disabled){background:#1e2b27}
+    body.reserve-page.night-mode .reserve-extension-options label:has(input:checked){background:#17372f;border-color:#3d9c84;color:#9be0cb}
+    body.reserve-page.night-mode .reserve-notice{background:#18211e;border-color:#30403a;color:#b6c3be}
+    body.reserve-page.night-mode .reserve-notice strong{color:#eef4f1}
+    body.reserve-page.night-mode .reserve-success-time{background:#18211e;color:#eef4f1}
+    body.reserve-page.night-mode .reserve-home{background:#1d2925;color:#eef4f1}
+
     @media(max-width:600px){
       .reserve-header-inner{min-height:60px}
       .reserve-brand{font-size:17px}
@@ -269,6 +300,40 @@
     let selected='';
     let currentUnavailable=[];
     let currentHoliday=false;
+
+    function tokyoNowParts(){
+      const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+      return Object.fromEntries(parts.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+    }
+
+    function clinicOpenNow(settings, holiday){
+      const p=tokyoNowParts();
+      const weekday=new Date(`${p.year}-${p.month}-${p.day}T12:00:00Z`).getUTCDay();
+      if(holiday || !settings?.businessHours?.[String(weekday)]) return false;
+      const hours=settings.businessHours[String(weekday)];
+      const nowMin=Number(p.hour)*60+Number(p.minute);
+      const start=Number(hours[0].slice(0,2))*60+Number(hours[0].slice(3));
+      const end=Number(hours[1].slice(0,2))*60+Number(hours[1].slice(3));
+      return nowMin>=start && nowMin<end;
+    }
+
+    function applyReserveTheme(settings, holidayForSelectedDate){
+      const p=tokyoNowParts();
+      const todayKey=`${p.year}-${p.month}-${p.day}`;
+      const selectedKey=iso(date);
+      const selectedClosed=!!holidayForSelectedDate || !settings?.businessHours?.[String(new Date(`${selectedKey}T12:00:00Z`).getUTCDay())];
+      const night = selectedClosed || (todayKey===selectedKey && !clinicOpenNow(settings,false)) || (todayKey!==selectedKey && !clinicOpenNow(settings, false));
+      document.body.classList.toggle('night-mode',night);
+    }
+
+    async function refreshReserveTheme(){
+      try{
+        const key=iso(date);
+        const r=await fetch(`/api/availability?date=${key}&extension=0`,{cache:'no-store'});
+        const j=await r.json();
+        if(r.ok) applyReserveTheme(j.settings,j.holiday);
+      }catch(e){}
+    }
     function renderDateLabel(){document.getElementById('dateLabel').textContent=t('dateFormat')(date);}
     function renderCurrentUnavailable(){
       const info=document.getElementById('unavailableInfo');
@@ -299,6 +364,7 @@
         const j=await r.json();
         if(!r.ok) throw new Error(j.error||'load');
         renderSlots(j.slots||[],j.unavailable||[],j.settings,j.holiday);
+        applyReserveTheme(j.settings,j.holiday);
       }catch(e){
         input.disabled=true;
         const info=document.getElementById('unavailableInfo');
@@ -322,6 +388,7 @@
       }
       currentUnavailable=unavailable||[];
       currentHoliday=!!holiday;
+      applyReserveTheme(settings, currentHoliday);
       selected='';
       input.value='';
       input.disabled=false;
@@ -365,6 +432,7 @@
           return;
         }
         renderSlots(j.slots||[],j.unavailable||[],j.settings,j.holiday);
+        applyReserveTheme(j.settings,j.holiday);
       }catch(e){
         document.getElementById('reserveTime').disabled=true;
         const info=document.getElementById('unavailableInfo');
@@ -422,6 +490,7 @@
     document.getElementById('reserveTime').addEventListener('change',updateDurationSummary);
     applyReserveLanguage(currentLang);
     load();
+    setInterval(refreshReserveTheme,60000);
   </script>
 </body>
 </html>
