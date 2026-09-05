@@ -338,8 +338,8 @@ button, select { font: inherit; }
 .back-top {
   position: fixed;
   right: 22px;
-  bottom: 86px;
-  z-index: 18;
+  bottom: 130px;
+  z-index: 19;
   width: 48px;
   height: 48px;
   border: 0;
@@ -405,7 +405,7 @@ button, select { font: inherit; }
   .gallery-grid .gallery-large, .gallery-grid img { grid-column: auto; height: 250px; }
   .map-area iframe { height: 300px; }
   .floating-actions { left: 14px; right: 14px; bottom: 14px; width: auto; }
-  .back-top { right: 14px; bottom: 74px; }
+  .back-top { right: 14px; bottom: 130px; }
 }
 
 .btn-primary{background:var(--green);color:#fff}
