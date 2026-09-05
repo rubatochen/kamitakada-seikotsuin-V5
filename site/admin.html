@@ -283,14 +283,6 @@
         style="display:flex;gap:10px;align-items:center"
       >
         <button
-          class="phone-reserve-btn"
-          type="button"
-          onclick="openPhoneModal()"
-        >
-          ＋ 手動予約
-        </button>
-
-        <button
           class="secondary"
           type="button"
           onclick="logout()"
@@ -304,23 +296,33 @@
 
     <!-- 日期 -->
     <div class="panel">
-      <div class="calendar">
-        <button
-          class="secondary"
-          type="button"
-          onclick="change(-1)"
-        >
-          ←
-        </button>
+      <div class="calendar" style="justify-content:space-between;">
+        <div class="calendar-controls" style="display:flex;gap:10px;align-items:center;">
+          <button
+            class="secondary"
+            type="button"
+            onclick="change(-1)"
+          >
+            ←
+          </button>
 
-        <input id="date" type="date">
+          <input id="date" type="date">
+
+          <button
+            class="secondary"
+            type="button"
+            onclick="change(1)"
+          >
+            →
+          </button>
+        </div>
 
         <button
-          class="secondary"
+          class="phone-reserve-btn"
           type="button"
-          onclick="change(1)"
+          onclick="openPhoneModal()"
         >
-          →
+          ＋ 手動予約
         </button>
       </div>
     </div>
