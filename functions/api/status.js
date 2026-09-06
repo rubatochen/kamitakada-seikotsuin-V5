@@ -11,6 +11,7 @@ export async function onRequest(context) {
 
   return withCors(json({
     paused,
+    reopeningDate: paused ? reopeningDate : null,
     reopeningAt: paused ? reopeningDate : null,
   }), context.request);
 }

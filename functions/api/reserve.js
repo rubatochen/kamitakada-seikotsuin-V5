@@ -56,12 +56,8 @@ export async function onRequest(context) {
   }
 
   const availability = await buildSlots(context.env, body.date, new Date(), occupiedMinutes);
-  if (availability.paused) {
-    const reopeningAt = availability.reopeningAt || null;
-    const slotStart = `${body.date}T${body.time}`;
-    if (!reopeningAt || slotStart < reopeningAt) {
-      return withCors(json({error:'現在は臨時休業中です。',code:'temporarily_closed',reopeningAt},409), context.request);
-    }
+  if (availability.temporarilyClosed) {
+    return withCors(json({error:'現在は臨時休業中です。',code:'temporarily_closed',reopeningDate:availability.reopeningAt || null},409), context.request);
   }
   const slot = availability.slots.find(s=>s.time===body.time);
 

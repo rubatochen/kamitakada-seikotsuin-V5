@@ -159,8 +159,8 @@ function mergeIntervals(intervals) {
 export async function buildSlots(env, date, currentTime = new Date(), requestedDuration = 30) {
   const s = await settings(env);
   const now = tokyoNow(currentTime);
-  const nowKey = `${now.date}T${now.time}`;
-  const pauseActive = !!s.temporaryPauseUntil && s.temporaryPauseUntil > nowKey;
+  const reopeningDate = s.temporaryPauseUntil || '';
+  const pauseActive = !!reopeningDate && reopeningDate > now.date;
 
   if (date < now.date) {
     return {
@@ -172,7 +172,22 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
       unavailable: [],
       settings: s,
       paused: pauseActive,
-      reopeningAt: pauseActive ? s.temporaryPauseUntil : null
+      reopeningAt: pauseActive ? reopeningDate : null
+    };
+  }
+
+  if (pauseActive && date < reopeningDate) {
+    return {
+      slots: [],
+      holiday: false,
+      past: false,
+      breaks: [],
+      booked: [],
+      unavailable: [],
+      settings: s,
+      paused: true,
+      reopeningAt: reopeningDate,
+      temporarilyClosed: true
     };
   }
 
@@ -206,7 +221,7 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
       unavailable: [],
       settings: s,
       paused: pauseActive,
-      reopeningAt: pauseActive ? s.temporaryPauseUntil : null
+      reopeningAt: pauseActive ? reopeningDate : null
     };
   }
 
@@ -243,12 +258,6 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
 
     if (date === now.date && t <= minutesOf(now.time)) {
       status = "past";
-    } else if (pauseActive) {
-      const slotStart = `${date}T${time}`;
-      const slotEndDate = `${date}T${timeString(t + appointmentDuration)}`;
-      if (slotStart < s.temporaryPauseUntil && slotEndDate > `${now.date}T${now.time}` && s.temporaryPauseUntil > nowKey) {
-        status = "paused";
-      }
     } else if (
       bookedIntervals.some(x => t < x.end && t + appointmentDuration > x.start)
     ) {
@@ -274,6 +283,6 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
     })),
     settings: s,
     paused: pauseActive,
-    reopeningAt: pauseActive ? s.temporaryPauseUntil : null
+    reopeningAt: pauseActive ? reopeningDate : null
   };
 }
