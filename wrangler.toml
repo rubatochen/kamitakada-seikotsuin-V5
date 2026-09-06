@@ -10,3 +10,6 @@ directory = "./site"
 binding = "DB"
 database_name = "kamitakada-reservation"
 database_id = "311aa743-57d1-45cc-b222-61644496ef32"
+
+[triggers]
+crons = ["0 18 * * *"]
