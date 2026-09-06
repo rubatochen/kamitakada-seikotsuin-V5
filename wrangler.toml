@@ -5,6 +5,7 @@ main = "./dist/worker/index.js"
 
 [assets]
 directory = "./site"
+binding = "ASSETS"
 
 [[d1_databases]]
 binding = "DB"
