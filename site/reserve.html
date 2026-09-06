@@ -311,33 +311,20 @@
       return Object.fromEntries(parts.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
     }
 
-    function clinicOpenNow(settings, holiday){
+    function isDaytime(){
       const p=tokyoNowParts();
-      const weekday=new Date(`${p.year}-${p.month}-${p.day}T12:00:00Z`).getUTCDay();
-      if(holiday || !settings?.businessHours?.[String(weekday)]) return false;
-      const hours=settings.businessHours[String(weekday)];
       const nowMin=Number(p.hour)*60+Number(p.minute);
-      const start=Number(hours[0].slice(0,2))*60+Number(hours[0].slice(3));
-      const end=Number(hours[1].slice(0,2))*60+Number(hours[1].slice(3));
-      return nowMin>=start && nowMin<end;
+      // Day theme: 09:00 inclusive through 18:59. Night theme starts at 19:00.
+      return nowMin>=9*60 && nowMin<19*60;
     }
 
-    function applyReserveTheme(settings, holidayForSelectedDate){
-      const p=tokyoNowParts();
-      const todayKey=`${p.year}-${p.month}-${p.day}`;
-      const selectedKey=iso(date);
-      const selectedClosed=!!holidayForSelectedDate || !settings?.businessHours?.[String(new Date(`${selectedKey}T12:00:00Z`).getUTCDay())];
-      const night = selectedClosed || (todayKey===selectedKey && !clinicOpenNow(settings,false)) || (todayKey!==selectedKey && !clinicOpenNow(settings, false));
-      document.body.classList.toggle('night-mode',night);
+    function applyReserveTheme(){
+      document.body.classList.toggle('night-mode',!isDaytime());
     }
 
-    async function refreshReserveTheme(){
-      try{
-        const key=iso(date);
-        const r=await fetch(`/api/availability?date=${key}&extension=0`,{cache:'no-store'});
-        const j=await r.json();
-        if(r.ok) applyReserveTheme(j.settings,j.holiday);
-      }catch(e){}
+
+    function refreshReserveTheme(){
+      applyReserveTheme();
     }
     function renderDateLabel(){document.getElementById('dateLabel').textContent=t('dateFormat')(date);}
     function renderCurrentUnavailable(){
@@ -369,7 +356,7 @@
         const j=await r.json();
         if(!r.ok) throw new Error(j.error||'load');
         renderSlots(j.slots||[],j.unavailable||[],j.settings,j.holiday);
-        applyReserveTheme(j.settings,j.holiday);
+        applyReserveTheme();
       }catch(e){
         input.disabled=true;
         const info=document.getElementById('unavailableInfo');
@@ -437,7 +424,7 @@
           return;
         }
         renderSlots(j.slots||[],j.unavailable||[],j.settings,j.holiday);
-        applyReserveTheme(j.settings,j.holiday);
+        applyReserveTheme();
       }catch(e){
         document.getElementById('reserveTime').disabled=true;
         const info=document.getElementById('unavailableInfo');
