@@ -88,6 +88,19 @@
     .reserve-footer a{color:var(--green-dark);font-weight:700}
 
     /* Automatic closed-hours / holiday theme */
+
+    /* Traditional pattern shared with the main site. */
+    body.reserve-page::before{
+      content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.075;
+      background-repeat:repeat;background-size:72px 72px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23b87935' stroke-width='1.15' stroke-opacity='.9'%3E%3Cpath d='M36 0 54 10 54 31 36 41 18 31 18 10Z M36 41 54 51 54 72 M18 31 0 41 0 62 18 72 M18 10 0 0 M54 10 72 0 M54 31 72 41 72 62'/%3E%3Cpath d='M36 0 36 41 M18 10 54 31 M54 10 18 31 M18 31 36 41 54 31'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    body.reserve-page > *{position:relative;z-index:1}
+    body.reserve-page.night-mode::before{
+      opacity:.12;background-size:96px 48px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='48' viewBox='0 0 96 48'%3E%3Cg fill='none' stroke='%232d8066' stroke-width='1.1' stroke-opacity='.9'%3E%3Cpath d='M0 48Q24 0 48 48T96 48 M0 36Q24-12 48 36T96 36 M0 24Q24-24 48 24T96 24'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
     body.reserve-page{transition:background-color .35s ease,color .35s ease}
     body.reserve-page.night-mode{
       --green:#4aa88c;--green-dark:#226b58;--accent:#d6b45d;
