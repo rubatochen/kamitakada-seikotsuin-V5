@@ -132,7 +132,7 @@ export async function settings(env) {
   return {
     businessHours: JSON.parse(out.business_hours || '{}'),
     slotMinutes: Number(out.slot_minutes || 30),
-    temporaryPauseUntil: String(out.temporary_pause_until || ''),
+    temporaryPausePeriods: (() => { try { const v = JSON.parse(out.temporary_pause_periods || '[]'); return Array.isArray(v) ? v : []; } catch { return []; } })(),
   };
 }
 
@@ -159,8 +159,9 @@ function mergeIntervals(intervals) {
 export async function buildSlots(env, date, currentTime = new Date(), requestedDuration = 30) {
   const s = await settings(env);
   const now = tokyoNow(currentTime);
-  const reopeningDate = s.temporaryPauseUntil || '';
-  const pauseActive = !!reopeningDate && reopeningDate > now.date;
+  const pausePeriods = Array.isArray(s.temporaryPausePeriods) ? s.temporaryPausePeriods : [];
+  const pausePeriod = pausePeriods.find(p => date >= String(p.startDate || '') && date < String(p.reopeningDate || ''));
+  const pauseActive = !!pausePeriod;
 
   if (date < now.date) {
     return {
@@ -172,11 +173,11 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
       unavailable: [],
       settings: s,
       paused: pauseActive,
-      reopeningAt: pauseActive ? reopeningDate : null
+      reopeningAt: pauseActive ? pausePeriod.reopeningDate : null
     };
   }
 
-  if (pauseActive && date < reopeningDate) {
+  if (pauseActive) {
     return {
       slots: [],
       holiday: false,
@@ -186,17 +187,12 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
       unavailable: [],
       settings: s,
       paused: true,
-      reopeningAt: reopeningDate,
+      reopeningAt: pausePeriod.reopeningDate,
       temporarilyClosed: true
     };
   }
 
   const weekday = new Date(`${date}T12:00:00Z`).getUTCDay();
-
-  const holiday = await env.DB
-    .prepare("SELECT date FROM holidays WHERE date = ?")
-    .bind(date)
-    .first();
 
   const breaksResult = await env.DB
     .prepare("SELECT id,start_time,end_time FROM breaks WHERE date = ? ORDER BY start_time")
@@ -211,17 +207,17 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
   const breaks = breaksResult.results || [];
   const booked = bookedResult.results || [];
 
-  if (holiday || !s.businessHours[String(weekday)]) {
+  if (!s.businessHours[String(weekday)]) {
     return {
       slots: [],
-      holiday: true,
+      holiday: false,
       past: false,
       breaks,
       booked,
       unavailable: [],
       settings: s,
       paused: pauseActive,
-      reopeningAt: pauseActive ? reopeningDate : null
+      reopeningAt: pauseActive ? pausePeriod.reopeningDate : null
     };
   }
 
@@ -283,6 +279,6 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
     })),
     settings: s,
     paused: pauseActive,
-    reopeningAt: pauseActive ? reopeningDate : null
+    reopeningAt: pauseActive ? pausePeriod.reopeningDate : null
   };
 }

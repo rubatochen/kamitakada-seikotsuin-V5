@@ -7,7 +7,7 @@
   <title>予約管理 | 上高田整骨院</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .admin{max-width:1100px;margin:auto;padding:45px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}.panel{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:24px;margin-bottom:20px}.panel-heading-row{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}.panel-heading-row h2{margin-bottom:4px}.extension-actions-inline{display:flex;gap:8px;align-items:center;margin-left:auto}.extension-actions-inline .primary{min-height:42px;font-weight:800;padding:8px 14px}.schedule-list{margin-top:8px}.schedule-summary{display:flex;min-width:360px;background:linear-gradient(135deg,#f7f8f5,#f1f3ee);border-radius:12px;padding:14px 8px;text-align:center;box-sizing:border-box}.schedule-summary-item{flex:1;padding:4px 18px}.schedule-summary-item+.schedule-summary-item{border-left:1px solid #ddd}.schedule-summary-label{font-size:.9rem;font-weight:700;color:#777;margin-bottom:4px}.schedule-summary-value{font-size:2.05rem;line-height:1.1;font-weight:900;color:var(--green-dark)}.schedule-summary-unit{font-size:.95rem;font-weight:700;margin-left:4px}@media(max-width:700px){.schedule-summary{width:100%;min-width:0;margin-top:8px}.schedule-summary-item{padding:4px 8px}}.schedule-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end}.schedule-actions button{white-space:nowrap}.schedule-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #eee}.schedule-row:last-child{border-bottom:0}.schedule-time{font-weight:800;font-size:1.05rem}.schedule-tag{display:inline-block;margin-right:8px;font-size:.82rem;font-weight:800;padding:3px 8px;border-radius:999px;background:#eef7f5}.schedule-tag.stop{background:#f3f3f3}.extension-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}.extension-actions .primary{min-height:48px;font-weight:800}.secondary-tools{margin-top:0}.login{max-width:420px;margin:100px auto}.login input{width:100%;box-sizing:border-box;margin:12px 0}.calendar{display:flex;gap:10px;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button,.daybtn{border:0;border-radius:8px;padding:10px 14px;background:#eef3ef;cursor:pointer}.tabs .active,.daybtn.active{background:var(--green);color:#fff}.appt{display:grid;grid-template-columns:80px 1fr auto;gap:15px;padding:14px 0;border-bottom:1px solid #eee;align-items:center}.muted{color:#777}.danger{border:0;border-radius:7px;padding:8px 12px;cursor:pointer;background:#eee}.danger:hover{background:#ddd}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}.compact-panel{padding:20px}.compact-panel h2{margin-bottom:14px}.compact-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.break-controls{display:grid;grid-template-columns:1fr;gap:8px}.break-controls input[type="date"],.break-controls input[type="time"]{width:100%;box-sizing:border-box}.break-controls .break-range{display:grid;grid-template-columns:1fr;gap:8px}.break-time-row{display:grid;grid-template-columns:56px 1fr;gap:8px;align-items:center}.break-time-row label{font-size:13px;font-weight:700;color:#666}.break-controls .primary{width:100%}.pause-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pause-actions .pause-btn{margin-top:0}.compact-controls input[type="date"]{flex:1 1 145px;min-width:140px}.compact-controls input[type="time"]{flex:1 1 95px;min-width:90px}.compact-panel .primary{min-height:40px;padding:8px 12px}.pause-panel .pause-btn{margin-top:10px}.pause-direct-controls{display:grid;gap:8px;margin-top:14px}.pause-direct-controls input[type="date"]{width:100%;box-sizing:border-box}.pause-btn{border:0;border-radius:8px;padding:9px 13px;background:#b64d3d;color:#fff;font-weight:800;cursor:pointer}.pause-btn:hover{background:#9f3f31}.pause-btn.resume{background:var(--green)}.pause-state{margin:12px 0 0;padding:10px 12px;border-radius:9px;background:#f7ebe7;color:#8f3c30;font-size:13px;line-height:1.6}.pause-state strong{display:block;margin-bottom:2px}@media(max-width:900px){.grid3{grid-template-columns:1fr}}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid #eee}select{padding:8px}.phone-reserve-btn{border:0;border-radius:8px;padding:10px 16px;background:var(--green);color:#fff;font-weight:800;cursor:pointer}.phone-reserve-btn:hover{background:var(--green-dark)}.phone-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)}.phone-modal.open{display:flex}.phone-modal-box{width:min(480px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:12px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.25);box-sizing:border-box}.phone-modal-box h2{margin:0;color:var(--green-dark)}.phone-field{margin-bottom:14px}.phone-field label{display:block;margin-bottom:5px;font-weight:700}.phone-field input,.phone-field textarea{width:100%;padding:10px;border:1px solid var(--edge);border-radius:8px;box-sizing:border-box;font:inherit}.phone-error{color:#c0392b;margin:10px 0 0;min-height:1.5em}.phone-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.lang-switch{display:inline-flex;align-items:center;border:1px solid var(--edge);border-radius:8px;overflow:hidden;background:#fff}.lang-switch button{border:0;background:transparent;padding:9px 11px;font-weight:700;cursor:pointer;color:var(--text)}.lang-switch button.active{background:var(--green);color:#fff}.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}@media(max-width:700px){.grid2{grid-template-columns:1fr}.panel-heading-row{align-items:flex-start;flex-direction:column}.panel-heading-row .phone-reserve-btn{width:100%}.extension-actions-inline{flex-wrap:wrap;justify-content:flex-end}.extension-actions-inline .primary{flex:1 1 70px}.schedule-row{grid-template-columns:1fr auto}.schedule-time{grid-column:1/-1}.appt{grid-template-columns:60px 1fr}.appt button{grid-column:2}.top{align-items:flex-start;flex-direction:column}.top-actions{width:100%;flex-wrap:wrap}.top-actions>*{flex:0 0 auto}}
+    .admin{max-width:1100px;margin:auto;padding:45px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}.panel{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:24px;margin-bottom:20px}.panel-heading-row{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}.panel-heading-row h2{margin-bottom:4px}.extension-actions-inline{display:flex;gap:8px;align-items:center;margin-left:auto}.extension-actions-inline .primary{min-height:42px;font-weight:800;padding:8px 14px}.schedule-list{margin-top:8px}.schedule-summary{display:flex;min-width:360px;background:linear-gradient(135deg,#f7f8f5,#f1f3ee);border-radius:12px;padding:14px 8px;text-align:center;box-sizing:border-box}.schedule-summary-item{flex:1;padding:4px 18px}.schedule-summary-item+.schedule-summary-item{border-left:1px solid #ddd}.schedule-summary-label{font-size:.9rem;font-weight:700;color:#777;margin-bottom:4px}.schedule-summary-value{font-size:2.05rem;line-height:1.1;font-weight:900;color:var(--green-dark)}.schedule-summary-unit{font-size:.95rem;font-weight:700;margin-left:4px}@media(max-width:700px){.schedule-summary{width:100%;min-width:0;margin-top:8px}.schedule-summary-item{padding:4px 8px}}.schedule-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end}.schedule-actions button{white-space:nowrap}.schedule-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #eee}.schedule-row:last-child{border-bottom:0}.schedule-time{font-weight:800;font-size:1.05rem}.schedule-tag{display:inline-block;margin-right:8px;font-size:.82rem;font-weight:800;padding:3px 8px;border-radius:999px;background:#eef7f5}.schedule-tag.stop{background:#f3f3f3}.extension-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}.extension-actions .primary{min-height:48px;font-weight:800}.secondary-tools{margin-top:0}.login{max-width:420px;margin:100px auto}.login input{width:100%;box-sizing:border-box;margin:12px 0}.calendar{display:flex;gap:10px;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button,.daybtn{border:0;border-radius:8px;padding:10px 14px;background:#eef3ef;cursor:pointer}.tabs .active,.daybtn.active{background:var(--green);color:#fff}.appt{display:grid;grid-template-columns:80px 1fr auto;gap:15px;padding:14px 0;border-bottom:1px solid #eee;align-items:center}.muted{color:#777}.danger{border:0;border-radius:7px;padding:8px 12px;cursor:pointer;background:#eee}.danger:hover{background:#ddd}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}.compact-panel{padding:20px}.compact-panel h2{margin-bottom:14px}.compact-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.break-controls{display:grid;grid-template-columns:1fr;gap:8px}.break-controls input[type="date"],.break-controls input[type="time"]{width:100%;box-sizing:border-box}.break-controls .break-range{display:grid;grid-template-columns:1fr;gap:8px}.break-time-row{display:grid;grid-template-columns:56px 1fr;gap:8px;align-items:center}.break-time-row label{font-size:13px;font-weight:700;color:#666}.break-controls .primary{width:100%}.pause-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pause-actions .pause-btn{margin-top:0}.compact-controls input[type="date"]{flex:1 1 145px;min-width:140px}.compact-controls input[type="time"]{flex:1 1 95px;min-width:90px}.compact-panel .primary{min-height:40px;padding:8px 12px}.pause-panel .pause-btn{margin-top:10px}.pause-direct-controls{display:grid;gap:8px;margin-top:14px}.pause-direct-controls input[type="date"]{width:100%;box-sizing:border-box}.pause-btn{border:0;border-radius:8px;padding:9px 13px;background:#b64d3d;color:#fff;font-weight:800;cursor:pointer}.pause-btn:hover{background:#9f3f31}.pause-btn.resume{background:var(--green)}.pause-state{margin:12px 0 0;padding:10px 12px;border-radius:9px;background:#f7ebe7;color:#8f3c30;font-size:13px;line-height:1.6}.pause-state strong{display:block;margin-bottom:2px}.pause-periods{margin-top:14px}.pause-period{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:9px 0;border-top:1px solid #eee}.pause-period-dates{font-weight:700}.pause-period-actions{display:flex;gap:6px}.pause-period-actions button{white-space:nowrap}.pause-btn:disabled{opacity:.5;cursor:not-allowed}@media(max-width:900px){.grid3{grid-template-columns:1fr}}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid #eee}select{padding:8px}.phone-reserve-btn{border:0;border-radius:8px;padding:10px 16px;background:var(--green);color:#fff;font-weight:800;cursor:pointer}.phone-reserve-btn:hover{background:var(--green-dark)}.phone-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)}.phone-modal.open{display:flex}.phone-modal-box{width:min(480px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:12px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.25);box-sizing:border-box}.phone-modal-box h2{margin:0;color:var(--green-dark)}.phone-field{margin-bottom:14px}.phone-field label{display:block;margin-bottom:5px;font-weight:700}.phone-field input,.phone-field textarea{width:100%;padding:10px;border:1px solid var(--edge);border-radius:8px;box-sizing:border-box;font:inherit}.phone-error{color:#c0392b;margin:10px 0 0;min-height:1.5em}.phone-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.lang-switch{display:inline-flex;align-items:center;border:1px solid var(--edge);border-radius:8px;overflow:hidden;background:#fff}.lang-switch button{border:0;background:transparent;padding:9px 11px;font-weight:700;cursor:pointer;color:var(--text)}.lang-switch button.active{background:var(--green);color:#fff}.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}@media(max-width:700px){.grid2{grid-template-columns:1fr}.panel-heading-row{align-items:flex-start;flex-direction:column}.panel-heading-row .phone-reserve-btn{width:100%}.extension-actions-inline{flex-wrap:wrap;justify-content:flex-end}.extension-actions-inline .primary{flex:1 1 70px}.schedule-row{grid-template-columns:1fr auto}.schedule-time{grid-column:1/-1}.appt{grid-template-columns:60px 1fr}.appt button{grid-column:2}.top{align-items:flex-start;flex-direction:column}.top-actions{width:100%;flex-wrap:wrap}.top-actions>*{flex:0 0 auto}}
   </style>
 </head>
 <body>
@@ -78,26 +78,17 @@
         </div>
         <div id="breaks" style="margin-top:12px"></div>
       </section>
-      <section class="panel compact-panel">
-        <h2 data-i18n="holiday">休诊日</h2>
-        <div class="compact-controls">
-          <input id="holidayDate" type="date" data-i18n-aria-label="date">
-          <button class="primary" type="button" onclick="addHoliday()" data-i18n="setHoliday">设为休诊</button>
-        </div>
-        <div id="holidays" style="margin-top:12px"></div>
-      </section>
-      <section class="panel compact-panel pause-panel">
+<section class="panel compact-panel pause-panel">
         <h2 data-i18n="pauseClinic">暂停营业</h2>
-        <p class="muted" data-i18n="pauseHint">暂停后前台将显示预计开业日期，并停止新的预约。</p>
-        <div id="pauseState" class="pause-state" style="display:none"></div>
-        <div id="pauseDirectControls" class="pause-direct-controls">
-          <label for="pauseReopeningDate" data-i18n="reopeningDate">预计开业日期</label>
+        <p class="muted" data-i18n="pauseHint">设置临时歇业的开始日期和再开日期。歇业期间将停止新的预约。</p>
+        <div class="pause-direct-controls">
+          <label for="pauseStartDate" data-i18n="pauseStartDate">开始日期</label>
+          <input id="pauseStartDate" type="date">
+          <label for="pauseReopeningDate" data-i18n="reopeningDate">再开日期</label>
           <input id="pauseReopeningDate" type="date">
-          <div class="pause-actions">
-            <button id="pauseButton" class="pause-btn" type="button" onclick="pauseClinic()" data-i18n="pauseClinic">暂停营业</button>
-            <button id="resumeButton" class="pause-btn resume" type="button" onclick="resumeClinic()" data-i18n="resumeClinic">取消暂停营业</button>
-          </div>
+          <button id="pauseSaveButton" class="pause-btn" type="button" onclick="savePausePeriod()" data-i18n="pauseClinic">暂停营业</button>
         </div>
+        <div id="pausePeriods" class="pause-periods"></div>
       </section>
     </div>
 
@@ -134,23 +125,23 @@
 
   const I18N = {
     zh: {
-      adminTitle:'预约管理', adminPassword:'管理员密码', login:'登录', logout:'退出登录', pauseClinic:'暂停营业', pauseHint:'暂停后前台将显示预计开业日期，并停止新的预约。', reopeningDate:'预计开业日期', resumeClinic:'取消暂停营业', pausedUntil:'预计开业日期', pauseActive:'当前暂停营业中。', pauseInvalid:'请选择有效的预计开业日期。', pauseFailed:'暂停营业设置失败。', resumeFailed:'恢复营业失败。', prevDay:'前一天', nextDay:'后一天', reservationDate:'预约日期', manualReservation:'＋ 手动预约',
-      todaySchedule:'今日安排', reservationCount:'预约人数', peopleUnit:'人', reservationTotalTime:'预约总时间', hoursUnit:'小时', minutesUnit:'分', startTime:'开始', endTime:'结束', todayScheduleDesc:'按开始时间顺序显示预约和预约停止时间。', temporaryBreak:'临时休息', date:'日期', addBreak:'添加休息时间', holiday:'休诊日', setHoliday:'设为休诊', businessHours:'营业时间', businessHoursDesc:'设置每周营业时间和预约间隔。', saveBusinessHours:'保存营业时间',
+      adminTitle:'预约管理', adminPassword:'管理员密码', login:'登录', logout:'退出登录', pauseClinic:'暂停营业', pauseHint:'设置临时歇业的开始日期和再开日期。歇业期间将停止新的预约。', pauseStartDate:'开始日期', reopeningDate:'再开日期', pauseInvalid:'请选择有效的开始日期和再开日期。', pauseFailed:'暂停营业设置失败。', pauseSaved:'临时歇业已保存。', pauseDeleted:'临时歇业已取消。', pauseEdit:'修改', pauseDelete:'取消', pauseNoItems:'没有设置临时歇业。', prevDay:'前一天', nextDay:'后一天', reservationDate:'预约日期', manualReservation:'＋ 手动预约',
+      todaySchedule:'今日安排', reservationCount:'预约人数', peopleUnit:'人', reservationTotalTime:'预约总时间', hoursUnit:'小时', minutesUnit:'分', startTime:'开始', endTime:'结束', todayScheduleDesc:'按开始时间顺序显示预约和预约停止时间。', temporaryBreak:'临时休息', date:'日期', addBreak:'添加休息时间', businessHours:'营业时间', businessHoursDesc:'设置每周营业时间和预约间隔。', saveBusinessHours:'保存营业时间',
       reservationDateLabel:'预约日期', reservationTimeLabel:'预约时间', extensionTreatment:'延长施术', extension0:'无（25分钟施术 / 30分钟占用）', extension10:'延长10分钟（35分钟施术 / 40分钟占用）＋800日元', extension20:'延长20分钟（45分钟施术 / 50分钟占用）＋1,600日元', extension30:'延长30分钟（55分钟施术 / 60分钟占用）＋2,400日元', name:'姓名', phoneNumber:'电话号码', notes:'备注', patientName:'患者姓名', phoneNumberPlaceholder:'电话号码', notesPlaceholder:'备注（可选）', cancel:'取消', registerManual:'登记手动预约', saveChanges:'保存修改',
       noSchedule:'当天没有预约或预约停止时间。', appointment:'预约', stop:'停止', delete:'删除', edit:'修改', cancelled:'已取消', basicTreatment:'基本施术 25分钟 / 占用 30分钟', treatmentHold:(t,o)=>`施术 ${t}分钟 / 占用 ${o}分钟`, stopDetail:'该时间段不接受新的预约。', noItems:'无', extendSuccess:m=>`已将预约停止时间延长 ${m} 分钟。`, extendFailed:'无法延长预约停止时间。', saveSuccess:'已保存。',
       loginPasswordNotConfigured:'管理员登录尚未配置。', sessionCreationFailed:'无法创建登录会话。', invalidPassword:'密码不正确。', loginFailed:'登录失败。', sessionInvalid:'登录会话已失效，请重新登录。', dataLoadFailed:'无法加载管理员数据。', dataGetFailed:'无法获取管理员数据。',
       notFound:'找不到该预约，请刷新页面。', notEditable:'已取消的预约无法修改。', invalidExtension:'延长时间不正确。', alreadyBooked:'该时间已经被预约。', pastTime:'不能预约过去的时间。', breakTime:'该时间属于休息时间，无法预约。', unavailable:'该时间无法预约。', invalidDate:'预约日期不正确。', invalidTime:'预约时间不正确。', invalidName:'请输入姓名。', invalidPhone:'请输入电话号码。', sessionExpired:'登录会话已过期。', editFailed:'预约修改失败。', manualFailed:'手动预约登记失败。',
-      manualRegistered:'手动预约已登记。', reservationUpdated:'预约已修改。', reservationCancelled:'预约已取消。', reservationDeleted:'预约已删除。', breakAdded:'休息时间已添加。', breakDeleted:'休息时间已删除。', holidayAdded:'已设为休诊日。', holidayRemoved:'已取消休诊日。', businessHoursSaved:'营业时间已保存。',
+      manualRegistered:'手动预约已登记。', reservationUpdated:'预约已修改。', reservationCancelled:'预约已取消。', reservationDeleted:'预约已删除。', breakAdded:'休息时间已添加。', breakDeleted:'休息时间已删除。', businessHoursSaved:'营业时间已保存。',
       weekdays:['周日','周一','周二','周三','周四','周五','周六']
     },
     ja: {
-      adminTitle:'予約管理', adminPassword:'管理者パスワード', login:'ログイン', logout:'ログアウト', pauseClinic:'臨時休業', pauseHint:'休業中はトップページに再開予定日を表示し、新しい予約を停止します。', reopeningDate:'再開予定日', resumeClinic:'臨時休業を解除', pausedUntil:'再開予定日', pauseActive:'現在、臨時休業中です。', pauseInvalid:'有効な再開予定日を選択してください。', pauseFailed:'休業の設定に失敗しました。', resumeFailed:'営業の再開に失敗しました。', prevDay:'前の日', nextDay:'次の日', reservationDate:'予約日', manualReservation:'＋ 手動予約',
-      todaySchedule:'今日の予定', reservationCount:'予約人数', peopleUnit:'名', reservationTotalTime:'予約総時間', hoursUnit:'時間', minutesUnit:'分', startTime:'開始', endTime:'終了', todayScheduleDesc:'予約と予約停止時間を開始時刻順にまとめて表示します。', temporaryBreak:'臨時休憩', date:'日付', addBreak:'休憩時間を追加', holiday:'休診日', setHoliday:'休診に設定', businessHours:'営業時間', businessHoursDesc:'毎週の営業時間と予約間隔を設定します。', saveBusinessHours:'営業時間を保存',
+      adminTitle:'予約管理', adminPassword:'管理者パスワード', login:'ログイン', logout:'ログアウト', pauseClinic:'臨時休業', pauseHint:'臨時休業の開始日と再開日を設定します。休業期間中は新しい予約を停止します。', pauseStartDate:'開始日', reopeningDate:'再開日', pauseInvalid:'開始日と再開日を正しく選択してください。', pauseFailed:'臨時休業の設定に失敗しました。', pauseSaved:'臨時休業を保存しました。', pauseDeleted:'臨時休業を解除しました。', pauseEdit:'変更', pauseDelete:'解除', pauseNoItems:'臨時休業は設定されていません。', prevDay:'前の日', nextDay:'次の日', reservationDate:'予約日', manualReservation:'＋ 手動予約',
+      todaySchedule:'今日の予定', reservationCount:'予約人数', peopleUnit:'名', reservationTotalTime:'予約総時間', hoursUnit:'時間', minutesUnit:'分', startTime:'開始', endTime:'終了', todayScheduleDesc:'予約と予約停止時間を開始時刻順にまとめて表示します。', temporaryBreak:'臨時休憩', date:'日付', addBreak:'休憩時間を追加', businessHours:'営業時間', businessHoursDesc:'毎週の営業時間と予約間隔を設定します。', saveBusinessHours:'営業時間を保存',
       reservationDateLabel:'予約日', reservationTimeLabel:'予約時間', extensionTreatment:'延長施術', extension0:'なし（25分施術 / 30分確保）', extension10:'10分延長（35分施術 / 40分確保）＋800円', extension20:'20分延長（45分施術 / 50分確保）＋1,600円', extension30:'30分延長（55分施術 / 60分確保）＋2,400円', name:'お名前', phoneNumber:'電話番号', notes:'備考', patientName:'患者様のお名前', phoneNumberPlaceholder:'電話番号', notesPlaceholder:'備考（任意）', cancel:'キャンセル', registerManual:'手動予約を登録', saveChanges:'変更を保存',
       noSchedule:'この日の予約・予約停止はありません。', appointment:'予約', stop:'停止', delete:'削除', edit:'変更', cancelled:'キャンセル済み', basicTreatment:'基本施術 25分 / 確保 30分', treatmentHold:(t,o)=>`施術 ${t}分 / 確保 ${o}分`, stopDetail:'この時間帯は新しい予約を受け付けません。', noItems:'なし', extendSuccess:m=>`予約停止時間を${m}分延長しました。`, extendFailed:'予約停止時間を延長できませんでした。', saveSuccess:'保存しました。',
       loginPasswordNotConfigured:'管理者ログインは現在設定されていません。', sessionCreationFailed:'ログインセッションを作成できませんでした。', invalidPassword:'パスワードが正しくありません。', loginFailed:'ログイン処理に失敗しました。', sessionInvalid:'セッションが無効です。もう一度ログインしてください。', dataLoadFailed:'管理者データを読み込めませんでした。', dataGetFailed:'管理者データを取得できませんでした。',
       notFound:'予約が見つかりません。画面を更新してください。', notEditable:'キャンセル済みの予約は変更できません。', invalidExtension:'延長時間が正しくありません。', alreadyBooked:'この時間はすでに予約されています。', pastTime:'過去の時間は予約できません。', breakTime:'休憩時間のため予約できません。', unavailable:'この時間は予約できません。', invalidDate:'予約日が正しくありません。', invalidTime:'予約時間が正しくありません。', invalidName:'お名前を入力してください。', invalidPhone:'電話番号を入力してください。', sessionExpired:'ログインセッションが切れています。', editFailed:'予約の変更に失敗しました。', manualFailed:'手動予約の登録に失敗しました。',
-      manualRegistered:'手動予約を登録しました。', reservationUpdated:'予約を変更しました。', reservationCancelled:'予約をキャンセルしました。', reservationDeleted:'予約を削除しました。', breakAdded:'休憩時間を追加しました。', breakDeleted:'休憩時間を削除しました。', holidayAdded:'休診日に設定しました。', holidayRemoved:'休診日を解除しました。', businessHoursSaved:'営業時間を保存しました。',
+      manualRegistered:'手動予約を登録しました。', reservationUpdated:'予約を変更しました。', reservationCancelled:'予約をキャンセルしました。', reservationDeleted:'予約を削除しました。', breakAdded:'休憩時間を追加しました。', breakDeleted:'休憩時間を削除しました。', businessHoursSaved:'営業時間を保存しました。',
       weekdays:['日','月','火','水','木','金','土']
     }
   };
@@ -164,9 +155,9 @@
     document.querySelectorAll('[data-i18n-aria-label]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel)); });
     document.getElementById('langZh').classList.toggle('active', adminLanguage === 'zh');
     document.getElementById('langJa').classList.toggle('active', adminLanguage === 'ja');
-    renderPauseState();
+    renderPausePeriods();
     document.title = `${t('adminTitle')} | 上高田整骨院`;
-    if (D) { renderSchedule(); renderBreaks(); renderHolidays(); renderHours(); }
+    if (D) { renderSchedule(); renderBreaks(); renderHours(); renderPausePeriods(); }
     if (phoneModalMode === 'edit') { document.getElementById('phoneReserveModalTitle').textContent = t('edit'); document.getElementById('phoneReserveSubmit').textContent = t('saveChanges'); }
     else { document.getElementById('phoneReserveModalTitle').textContent = t('registerManual'); document.getElementById('phoneReserveSubmit').textContent = t('registerManual'); }
   }
@@ -189,10 +180,10 @@
   async function api(path,opt={}){ const r=await fetch(path,{...opt,credentials:'same-origin'}); const j=await r.json().catch(()=>({error:'error'})); if(!r.ok){const error=new Error(j.error||'error');error.code=j.code;error.status=r.status;throw error;}return j; }
   function loginErrorMessage(e){ if(e.code==='admin_password_not_configured')return t('loginPasswordNotConfigured'); if(e.code==='session_creation_failed')return t('sessionCreationFailed'); if(e.code==='invalid_password')return t('invalidPassword'); return t('loginFailed'); }
   async function login(){ const errorBox=document.getElementById('err'); const passwordInput=document.getElementById('pw'); errorBox.textContent=''; try{await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:passwordInput.value})});}catch(e){errorBox.textContent=loginErrorMessage(e);return;} passwordInput.value=''; showApp(); }
-  function showApp(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('date').value=today();document.getElementById('holidayDate').value=today();applyAdminLanguage();render().catch(handleAdminLoadError);}
+  function showApp(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('date').value=today();applyAdminLanguage();render().catch(handleAdminLoadError);}
   function showLogin(){document.getElementById('login').style.display='block';document.getElementById('app').style.display='none';}
   function handleAdminLoadError(e){const errorBox=document.getElementById('err'); if(e.status===401||e.status===403)errorBox.textContent=t('sessionInvalid');else if(e.status>=500)errorBox.textContent=t('dataLoadFailed');else errorBox.textContent=t('dataGetFailed');showLogin();}
-  async function render(){D=await api('/api/admin/data');renderSchedule();renderBreaks();renderHolidays();renderHours();}
+  async function render(){D=await api('/api/admin/data');renderSchedule();renderBreaks();renderHours();renderPausePeriods();}
 
   function renderSchedule(){
     const box=document.getElementById('schedule');const selectedDate=document.getElementById('date').value;const items=[];
@@ -212,48 +203,41 @@
   function renderBreaks(){const list=D.breaks.filter(x=>x.date===today()).slice().sort((a,b)=>a.startTime.localeCompare(b.startTime));document.getElementById('breaks').innerHTML=list.length?list.map(x=>`<div style="padding:7px 0">${x.date} ${x.startTime}–${x.endTime} <button class="danger" type="button" onclick="delBreak('${x.id}')">${t('delete')}</button></div>`).join(''):`<p class="muted">${t('noItems')}</p>`;}
   function toMinutes(value){const parts=String(value).split(':').map(Number);return parts[0]*60+parts[1];}
   async function extendToday(minutes){const todayValue=today();if(document.getElementById('date').value!==todayValue){document.getElementById('date').value=todayValue;await render();}try{await api('/api/admin/extend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:todayValue,minutes})});await render();alert(t('extendSuccess',minutes));}catch(e){alert(e.message||t('extendFailed'));}}
-  function renderHolidays(){const list=D.holidays.slice().sort();document.getElementById('holidays').innerHTML=list.length?list.map(x=>`<div style="padding:7px 0">${x} <button class="danger" type="button" onclick="delHoliday('${x}')">${t('delete')}</button></div>`).join(''):`<p class="muted">${t('noItems')}</p>`;}
   function renderHours(){const weekdayNames=I18N[adminLanguage].weekdays;document.getElementById('hours').innerHTML='<table><tr><th>'+ (adminLanguage==='zh'?'星期':'曜日') +'</th><th>'+ (adminLanguage==='zh'?'营业':'営業') +'</th><th>'+ (adminLanguage==='zh'?'开始':'開始') +'</th><th>'+ (adminLanguage==='zh'?'结束':'終了') +'</th></tr>'+weekdayNames.map((n,i)=>{const v=D.businessHours[i];return `<tr><td>${n}</td><td><input type="checkbox" id="e${i}" ${v?'checked':''}></td><td><input id="s${i}" type="time" value="${v?v[0]:'10:00'}"></td><td><input id="t${i}" type="time" value="${v?v[1]:'19:00'}"></td></tr>`;}).join('')+'</table><p class="muted">'+(adminLanguage==='zh'?'基本施术：25分钟・系统占用：30分钟。延长10/20/30分钟分别占用40/50/60分钟。开始时间可按1分钟选择。':'基本施術：25分・システム確保：30分。延長10/20/30分はそれぞれ40/50/60分を確保します。開始時間は1分単位で選択できます。')+'</p>';}
 
   async function cancelA(id){const a=D.appointments.find(x=>x.id===id);if(!a)return;await api('/api/admin/'+(a.status==='cancelled'?'delete':'cancel'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});await render();alert(a.status==='cancelled'?t('reservationDeleted'):t('reservationCancelled'));}
   async function addBreak(){await api('/api/admin/breaks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({start:document.getElementById('bs').value,end:document.getElementById('be').value})});await render();alert(t('breakAdded'));}
   async function delBreak(id){await api('/api/admin/breaks-delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});await render();alert(t('breakDeleted'));}
-  async function addHoliday(){await api('/api/admin/holiday',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:document.getElementById('holidayDate').value})});await render();alert(t('holidayAdded'));}
-  async function delHoliday(dateValue){await api('/api/admin/holiday-delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dateValue})});await render();alert(t('holidayRemoved'));}
   function pauseTodayKey(){
     const now=new Date();
     const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
     const v=Object.fromEntries(parts.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
     return `${v.year}-${v.month}-${v.day}`;
   }
-  function isPauseActive(){return !!(D&&D.temporaryPauseUntil&&D.temporaryPauseUntil>pauseTodayKey());}
-  function renderPauseState(){
-    const pauseButton=document.getElementById('pauseButton');
-    const resumeButton=document.getElementById('resumeButton');
-    const state=document.getElementById('pauseState');
-    const input=document.getElementById('pauseReopeningDate');
-    if(!pauseButton||!resumeButton||!state||!input)return;
-    const active=isPauseActive();
-    pauseButton.disabled=active;
-    resumeButton.disabled=!active;
-    state.style.display=active?'block':'none';
-    state.innerHTML=active?`<strong>${t('pauseActive')}</strong>${t('pausedUntil')}: ${formatAdminDate(D.temporaryPauseUntil)}`:'';
-    input.value=active?(D.temporaryPauseUntil||''):'';
-    input.disabled=active;
+  function getPausePeriods(){ return Array.isArray(D?.temporaryPausePeriods) ? D.temporaryPausePeriods.slice() : []; }
+  function renderPausePeriods(){
+    const box=document.getElementById('pausePeriods'); if(!box)return;
+    const list=getPausePeriods().sort((a,b)=>String(a.startDate).localeCompare(String(b.startDate))||String(a.reopeningDate).localeCompare(String(b.reopeningDate)));
+    box.innerHTML=list.length?list.map(x=>`<div class="pause-period"><div class="pause-period-dates">${formatAdminDate(x.startDate)} ～ ${formatAdminDate(x.reopeningDate)}</div><div class="pause-period-actions"><button class="secondary" type="button" onclick="editPausePeriod('${esc(x.id)}')">${t('pauseEdit')}</button><button class="danger" type="button" onclick="deletePausePeriod('${esc(x.id)}')">${t('pauseDelete')}</button></div></div>`).join(''):`<p class="muted">${t('pauseNoItems')}</p>`;
   }
   function formatAdminDate(value){return value?String(value).replaceAll('-','/') : '';}
-  async function pauseClinic(){
-    const value=document.getElementById('pauseReopeningDate').value;
-    if(!value||value<=pauseTodayKey()){alert(t('pauseInvalid'));return;}
-    try{
-      await api('/api/admin/pause',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'pause',reopeningDate:value})});
-      await render();
-    }catch(e){alert(t('pauseFailed'));}
+  function editPausePeriod(id){
+    const p=getPausePeriods().find(x=>String(x.id)===String(id)); if(!p)return;
+    document.getElementById('pauseStartDate').value=p.startDate||'';
+    document.getElementById('pauseReopeningDate').value=p.reopeningDate||'';
+    const btn=document.getElementById('pauseSaveButton'); btn.dataset.editId=String(p.id); btn.textContent=t('pauseEdit');
+    document.getElementById('pauseStartDate').focus();
   }
-  async function resumeClinic(){
-    if(!confirm(adminLanguage==='ja'?'臨時休業を解除しますか？':'确定取消暂停营业吗？'))return;
-    try{await api('/api/admin/pause',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'resume'})});await render();}
-    catch(e){alert(t('resumeFailed'));}
+  async function savePausePeriod(){
+    const startDate=document.getElementById('pauseStartDate').value, reopeningDate=document.getElementById('pauseReopeningDate').value;
+    if(!startDate||!reopeningDate||startDate>=reopeningDate){alert(t('pauseInvalid'));return;}
+    const btn=document.getElementById('pauseSaveButton'), editId=btn.dataset.editId||'';
+    try{ await api('/api/admin/pause',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save',id:editId,startDate,reopeningDate})}); delete btn.dataset.editId; btn.textContent=t('pauseClinic'); document.getElementById('pauseStartDate').value=''; document.getElementById('pauseReopeningDate').value=''; await render(); alert(t('pauseSaved')); }
+    catch(e){alert(t('pauseFailed'));}
+  }
+  async function deletePausePeriod(id){
+    if(!confirm(adminLanguage==='ja'?'この臨時休業を解除しますか？':'确定取消这段临时歇业吗？'))return;
+    try{await api('/api/admin/pause',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',id})});await render();alert(t('pauseDeleted'));}catch(e){alert(t('pauseFailed'));}
   }
 
   async function saveHours(){const h={};for(let i=0;i<7;i++)h[i]=document.getElementById('e'+i).checked?[document.getElementById('s'+i).value,document.getElementById('t'+i).value]:null;await api('/api/admin/hours',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({businessHours:h,slotMinutes:30})});alert(t('businessHoursSaved'));await render();}
