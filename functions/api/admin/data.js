@@ -8,5 +8,5 @@ export async function onRequest(context) {
     context.env.DB.prepare("SELECT date FROM holidays ORDER BY date").all(),
     settings(context.env)
   ]);
-  return withCors(json({appointments:appointments.results||[],breaks:breaks.results||[],holidays:(holidays.results||[]).map(x=>x.date),businessHours:s.businessHours,slotMinutes:s.slotMinutes}),context.request);
+  return withCors(json({appointments:appointments.results||[],breaks:breaks.results||[],holidays:(holidays.results||[]).map(x=>x.date),businessHours:s.businessHours,slotMinutes:s.slotMinutes,temporaryPauseUntil:s.temporaryPauseUntil}),context.request);
 }

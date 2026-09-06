@@ -12,6 +12,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <script>
+    fetch('/api/status',{credentials:'same-origin'}).then(r=>r.ok?r.json():null).then(s=>{if(s?.paused){location.replace('paused.html');}}).catch(()=>{});
+  </script>
   <header class="site-header">
     <div class="topbar">
       <a class="logo" href="#top" data-i18n="site.name">上高田整骨院</a>

@@ -2,6 +2,7 @@ import { onRequest as availability } from '../../functions/api/availability.js';
 import { onRequest as login } from '../../functions/api/login.js';
 import { onRequest as logout } from '../../functions/api/logout.js';
 import { onRequest as reserve } from '../../functions/api/reserve.js';
+import { onRequest as status } from '../../functions/api/status.js';
 import { onRequest as adminBreaksDelete } from '../../functions/api/admin/breaks-delete.js';
 import { onRequest as adminBreaks } from '../../functions/api/admin/breaks.js';
 import { onRequest as adminCancel } from '../../functions/api/admin/cancel.js';
@@ -13,12 +14,14 @@ import { onRequest as adminHoliday } from '../../functions/api/admin/holiday.js'
 import { onRequest as adminHours } from '../../functions/api/admin/hours.js';
 import { onRequest as adminReserve } from '../../functions/api/admin/reserve.js';
 import { onRequest as adminUpdate } from '../../functions/api/admin/update.js';
+import { onRequest as adminPause } from '../../functions/api/admin/pause.js';
 
 const ROUTES = {
   '/api/availability': availability,
   '/api/login': login,
   '/api/logout': logout,
   '/api/reserve': reserve,
+  '/api/status': status,
   '/api/admin/breaks-delete': adminBreaksDelete,
   '/api/admin/breaks': adminBreaks,
   '/api/admin/cancel': adminCancel,
@@ -30,6 +33,7 @@ const ROUTES = {
   '/api/admin/hours': adminHours,
   '/api/admin/reserve': adminReserve,
   '/api/admin/update': adminUpdate,
+  '/api/admin/pause': adminPause,
 };
 
 function contextFor(request, env, ctx) {

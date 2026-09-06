@@ -132,6 +132,7 @@ export async function settings(env) {
   return {
     businessHours: JSON.parse(out.business_hours || '{}'),
     slotMinutes: Number(out.slot_minutes || 30),
+    temporaryPauseUntil: String(out.temporary_pause_until || ''),
   };
 }
 
@@ -158,6 +159,8 @@ function mergeIntervals(intervals) {
 export async function buildSlots(env, date, currentTime = new Date(), requestedDuration = 30) {
   const s = await settings(env);
   const now = tokyoNow(currentTime);
+  const nowKey = `${now.date}T${now.time}`;
+  const pauseActive = !!s.temporaryPauseUntil && s.temporaryPauseUntil > nowKey;
 
   if (date < now.date) {
     return {
@@ -167,7 +170,9 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
       breaks: [],
       booked: [],
       unavailable: [],
-      settings: s
+      settings: s,
+      paused: pauseActive,
+      reopeningAt: pauseActive ? s.temporaryPauseUntil : null
     };
   }
 
@@ -199,7 +204,9 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
       breaks,
       booked,
       unavailable: [],
-      settings: s
+      settings: s,
+      paused: pauseActive,
+      reopeningAt: pauseActive ? s.temporaryPauseUntil : null
     };
   }
 
@@ -236,6 +243,12 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
 
     if (date === now.date && t <= minutesOf(now.time)) {
       status = "past";
+    } else if (pauseActive) {
+      const slotStart = `${date}T${time}`;
+      const slotEndDate = `${date}T${timeString(t + appointmentDuration)}`;
+      if (slotStart < s.temporaryPauseUntil && slotEndDate > `${now.date}T${now.time}` && s.temporaryPauseUntil > nowKey) {
+        status = "paused";
+      }
     } else if (
       bookedIntervals.some(x => t < x.end && t + appointmentDuration > x.start)
     ) {
@@ -259,6 +272,8 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
       startTime: timeString(x.start),
       endTime: timeString(x.end)
     })),
-    settings: s
+    settings: s,
+    paused: pauseActive,
+    reopeningAt: pauseActive ? s.temporaryPauseUntil : null
   };
 }

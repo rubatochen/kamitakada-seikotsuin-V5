@@ -7,7 +7,7 @@
   <title>予約管理 | 上高田整骨院</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .admin{max-width:1100px;margin:auto;padding:45px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}.panel{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:24px;margin-bottom:20px}.panel-heading-row{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}.panel-heading-row h2{margin-bottom:4px}.extension-actions-inline{display:flex;gap:8px;align-items:center;margin-left:auto}.extension-actions-inline .primary{min-height:42px;font-weight:800;padding:8px 14px}.schedule-list{margin-top:8px}.schedule-summary{display:flex;min-width:360px;background:linear-gradient(135deg,#f7f8f5,#f1f3ee);border-radius:12px;padding:14px 8px;text-align:center;box-sizing:border-box}.schedule-summary-item{flex:1;padding:4px 18px}.schedule-summary-item+.schedule-summary-item{border-left:1px solid #ddd}.schedule-summary-label{font-size:.9rem;font-weight:700;color:#777;margin-bottom:4px}.schedule-summary-value{font-size:2.05rem;line-height:1.1;font-weight:900;color:var(--green-dark)}.schedule-summary-unit{font-size:.95rem;font-weight:700;margin-left:4px}@media(max-width:700px){.schedule-summary{width:100%;min-width:0;margin-top:8px}.schedule-summary-item{padding:4px 8px}}.schedule-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end}.schedule-actions button{white-space:nowrap}.schedule-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #eee}.schedule-row:last-child{border-bottom:0}.schedule-time{font-weight:800;font-size:1.05rem}.schedule-tag{display:inline-block;margin-right:8px;font-size:.82rem;font-weight:800;padding:3px 8px;border-radius:999px;background:#eef7f5}.schedule-tag.stop{background:#f3f3f3}.extension-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}.extension-actions .primary{min-height:48px;font-weight:800}.secondary-tools{margin-top:0}.login{max-width:420px;margin:100px auto}.login input{width:100%;box-sizing:border-box;margin:12px 0}.calendar{display:flex;gap:10px;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button,.daybtn{border:0;border-radius:8px;padding:10px 14px;background:#eef3ef;cursor:pointer}.tabs .active,.daybtn.active{background:var(--green);color:#fff}.appt{display:grid;grid-template-columns:80px 1fr auto;gap:15px;padding:14px 0;border-bottom:1px solid #eee;align-items:center}.muted{color:#777}.danger{border:0;border-radius:7px;padding:8px 12px;cursor:pointer;background:#eee}.danger:hover{background:#ddd}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid #eee}select{padding:8px}.phone-reserve-btn{border:0;border-radius:8px;padding:10px 16px;background:var(--green);color:#fff;font-weight:800;cursor:pointer}.phone-reserve-btn:hover{background:var(--green-dark)}.phone-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)}.phone-modal.open{display:flex}.phone-modal-box{width:min(480px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:12px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.25);box-sizing:border-box}.phone-modal-box h2{margin:0;color:var(--green-dark)}.phone-field{margin-bottom:14px}.phone-field label{display:block;margin-bottom:5px;font-weight:700}.phone-field input,.phone-field textarea{width:100%;padding:10px;border:1px solid var(--edge);border-radius:8px;box-sizing:border-box;font:inherit}.phone-error{color:#c0392b;margin:10px 0 0;min-height:1.5em}.phone-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.lang-switch{display:inline-flex;align-items:center;border:1px solid var(--edge);border-radius:8px;overflow:hidden;background:#fff}.lang-switch button{border:0;background:transparent;padding:9px 11px;font-weight:700;cursor:pointer;color:var(--text)}.lang-switch button.active{background:var(--green);color:#fff}.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}@media(max-width:700px){.grid2{grid-template-columns:1fr}.panel-heading-row{align-items:flex-start;flex-direction:column}.panel-heading-row .phone-reserve-btn{width:100%}.extension-actions-inline{flex-wrap:wrap;justify-content:flex-end}.extension-actions-inline .primary{flex:1 1 70px}.schedule-row{grid-template-columns:1fr auto}.schedule-time{grid-column:1/-1}.appt{grid-template-columns:60px 1fr}.appt button{grid-column:2}.top{align-items:flex-start;flex-direction:column}.top-actions{width:100%;flex-wrap:wrap}}
+    .admin{max-width:1100px;margin:auto;padding:45px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}.panel{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:24px;margin-bottom:20px}.panel-heading-row{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}.panel-heading-row h2{margin-bottom:4px}.extension-actions-inline{display:flex;gap:8px;align-items:center;margin-left:auto}.extension-actions-inline .primary{min-height:42px;font-weight:800;padding:8px 14px}.schedule-list{margin-top:8px}.schedule-summary{display:flex;min-width:360px;background:linear-gradient(135deg,#f7f8f5,#f1f3ee);border-radius:12px;padding:14px 8px;text-align:center;box-sizing:border-box}.schedule-summary-item{flex:1;padding:4px 18px}.schedule-summary-item+.schedule-summary-item{border-left:1px solid #ddd}.schedule-summary-label{font-size:.9rem;font-weight:700;color:#777;margin-bottom:4px}.schedule-summary-value{font-size:2.05rem;line-height:1.1;font-weight:900;color:var(--green-dark)}.schedule-summary-unit{font-size:.95rem;font-weight:700;margin-left:4px}@media(max-width:700px){.schedule-summary{width:100%;min-width:0;margin-top:8px}.schedule-summary-item{padding:4px 8px}}.schedule-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end}.schedule-actions button{white-space:nowrap}.schedule-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #eee}.schedule-row:last-child{border-bottom:0}.schedule-time{font-weight:800;font-size:1.05rem}.schedule-tag{display:inline-block;margin-right:8px;font-size:.82rem;font-weight:800;padding:3px 8px;border-radius:999px;background:#eef7f5}.schedule-tag.stop{background:#f3f3f3}.extension-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}.extension-actions .primary{min-height:48px;font-weight:800}.secondary-tools{margin-top:0}.login{max-width:420px;margin:100px auto}.login input{width:100%;box-sizing:border-box;margin:12px 0}.calendar{display:flex;gap:10px;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button,.daybtn{border:0;border-radius:8px;padding:10px 14px;background:#eef3ef;cursor:pointer}.tabs .active,.daybtn.active{background:var(--green);color:#fff}.appt{display:grid;grid-template-columns:80px 1fr auto;gap:15px;padding:14px 0;border-bottom:1px solid #eee;align-items:center}.muted{color:#777}.danger{border:0;border-radius:7px;padding:8px 12px;cursor:pointer;background:#eee}.danger:hover{background:#ddd}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}.compact-panel{padding:20px}.compact-panel h2{margin-bottom:14px}.compact-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.compact-controls input[type="date"]{flex:1 1 145px;min-width:140px}.compact-controls input[type="time"]{flex:1 1 95px;min-width:90px}.compact-panel .primary{min-height:40px;padding:8px 12px}.pause-panel .pause-btn{margin-top:10px}.pause-btn{border:0;border-radius:8px;padding:9px 13px;background:#b64d3d;color:#fff;font-weight:800;cursor:pointer}.pause-btn:hover{background:#9f3f31}.pause-btn.resume{background:var(--green)}.pause-state{margin:12px 0 0;padding:10px 12px;border-radius:9px;background:#f7ebe7;color:#8f3c30;font-size:13px;line-height:1.6}.pause-state strong{display:block;margin-bottom:2px}.pause-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)}.pause-modal.open{display:flex}.pause-modal-box{width:min(440px,100%);background:#fff;border-radius:14px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.25);box-sizing:border-box}.pause-field{margin:16px 0}.pause-field label{display:block;margin-bottom:7px;font-weight:700}.pause-field input{width:100%;box-sizing:border-box;padding:11px;border:1px solid var(--edge);border-radius:8px;font:inherit}.pause-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}@media(max-width:900px){.grid3{grid-template-columns:1fr}}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid #eee}select{padding:8px}.phone-reserve-btn{border:0;border-radius:8px;padding:10px 16px;background:var(--green);color:#fff;font-weight:800;cursor:pointer}.phone-reserve-btn:hover{background:var(--green-dark)}.phone-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)}.phone-modal.open{display:flex}.phone-modal-box{width:min(480px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:12px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.25);box-sizing:border-box}.phone-modal-box h2{margin:0;color:var(--green-dark)}.phone-field{margin-bottom:14px}.phone-field label{display:block;margin-bottom:5px;font-weight:700}.phone-field input,.phone-field textarea{width:100%;padding:10px;border:1px solid var(--edge);border-radius:8px;box-sizing:border-box;font:inherit}.phone-error{color:#c0392b;margin:10px 0 0;min-height:1.5em}.phone-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.lang-switch{display:inline-flex;align-items:center;border:1px solid var(--edge);border-radius:8px;overflow:hidden;background:#fff}.lang-switch button{border:0;background:transparent;padding:9px 11px;font-weight:700;cursor:pointer;color:var(--text)}.lang-switch button.active{background:var(--green);color:#fff}.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}@media(max-width:700px){.grid2{grid-template-columns:1fr}.panel-heading-row{align-items:flex-start;flex-direction:column}.panel-heading-row .phone-reserve-btn{width:100%}.extension-actions-inline{flex-wrap:wrap;justify-content:flex-end}.extension-actions-inline .primary{flex:1 1 70px}.schedule-row{grid-template-columns:1fr auto}.schedule-time{grid-column:1/-1}.appt{grid-template-columns:60px 1fr}.appt button{grid-column:2}.top{align-items:flex-start;flex-direction:column}.top-actions{width:100%;flex-wrap:wrap}.top-actions>*{flex:0 0 auto}}
   </style>
 </head>
 <body>
@@ -66,21 +66,31 @@
       <div id="schedule" class="schedule-list"></div>
     </section>
 
-    <div class="grid2 secondary-tools">
-      <section class="panel">
+    <div class="grid3 secondary-tools">
+      <section class="panel compact-panel">
         <h2 data-i18n="temporaryBreak">临时休息</h2>
-        <label data-i18n="date">日期</label>
-        <input id="breakDate" type="date">
-        <div style="display:flex;gap:10px;margin-top:10px"><input id="bs" type="time" value="12:00"><input id="be" type="time" value="14:00"></div>
-        <button class="primary" style="margin-top:12px" type="button" onclick="addBreak()" data-i18n="addBreak">添加休息时间</button>
-        <div id="breaks" style="margin-top:20px"></div>
+        <div class="compact-controls">
+          <input id="breakDate" type="date" data-i18n-aria-label="date">
+          <input id="bs" type="time" value="12:00" aria-label="開始時間">
+          <span>～</span>
+          <input id="be" type="time" value="14:00" aria-label="終了時間">
+          <button class="primary" type="button" onclick="addBreak()" data-i18n="addBreak">添加休息时间</button>
+        </div>
+        <div id="breaks" style="margin-top:12px"></div>
       </section>
-      <section class="panel">
+      <section class="panel compact-panel">
         <h2 data-i18n="holiday">休诊日</h2>
-        <label data-i18n="date">日期</label>
-        <input id="holidayDate" type="date">
-        <button class="primary" style="margin-top:12px" type="button" onclick="addHoliday()" data-i18n="setHoliday">设为休诊</button>
-        <div id="holidays" style="margin-top:15px"></div>
+        <div class="compact-controls">
+          <input id="holidayDate" type="date" data-i18n-aria-label="date">
+          <button class="primary" type="button" onclick="addHoliday()" data-i18n="setHoliday">设为休诊</button>
+        </div>
+        <div id="holidays" style="margin-top:12px"></div>
+      </section>
+      <section class="panel compact-panel pause-panel">
+        <h2 data-i18n="pauseClinic">暂停营业</h2>
+        <p class="muted" data-i18n="pauseHint">暂停后前台将显示预计开业时间，并停止新的预约。</p>
+        <div id="pauseState" class="pause-state" style="display:none"></div>
+        <button id="pauseButton" class="pause-btn" type="button" onclick="openPauseModal()" data-i18n="pauseClinic">暂停营业</button>
       </section>
     </div>
 
@@ -90,6 +100,16 @@
       <div id="hours"></div>
       <button class="primary" type="button" onclick="saveHours()" data-i18n="saveBusinessHours">保存营业时间</button>
     </section>
+  </div>
+
+  <div id="pauseModal" class="pause-modal">
+    <div class="pause-modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center"><h2 data-i18n="pauseClinic">暂停营业</h2><button class="danger" type="button" onclick="closePauseModal()" data-i18n-aria-label="close">×</button></div>
+      <p class="muted" style="margin-top:10px" data-i18n="pauseModalDesc">请输入预计重新开业的时间。暂停期间前台会显示该时间。</p>
+      <div class="pause-field"><label for="pauseReopeningAt" data-i18n="reopeningTime">预计开业时间</label><input id="pauseReopeningAt" type="datetime-local"></div>
+      <div id="pauseError" class="phone-error"></div>
+      <div class="pause-modal-actions"><button class="secondary" type="button" onclick="closePauseModal()" data-i18n="cancel">取消</button><button class="pause-btn" type="button" onclick="submitPause()" data-i18n="confirmPause">暂停营业</button></div>
+    </div>
   </div>
 
   <div id="phoneReserveModal" class="phone-modal">
@@ -117,7 +137,7 @@
 
   const I18N = {
     zh: {
-      adminTitle:'预约管理', adminPassword:'管理员密码', login:'登录', logout:'退出登录', prevDay:'前一天', nextDay:'后一天', reservationDate:'预约日期', manualReservation:'＋ 手动预约',
+      adminTitle:'预约管理', adminPassword:'管理员密码', login:'登录', logout:'退出登录', pauseClinic:'暂停营业', pauseHint:'暂停后前台将显示预计开业时间，并停止新的预约。', pauseModalDesc:'请输入预计重新开业的时间。暂停期间前台会显示该时间。', reopeningTime:'预计开业时间', confirmPause:'暂停营业', resumeClinic:'恢复营业', pausedUntil:'预计开业时间', pauseActive:'当前暂停营业中。', pauseInvalid:'请选择有效的预计开业时间。', pauseFailed:'暂停营业设置失败。', resumeFailed:'恢复营业失败。', prevDay:'前一天', nextDay:'后一天', reservationDate:'预约日期', manualReservation:'＋ 手动预约',
       todaySchedule:'今日安排', reservationCount:'预约人数', peopleUnit:'人', reservationTotalTime:'预约总时间', hoursUnit:'小时', minutesUnit:'分', todayScheduleDesc:'按开始时间顺序显示预约和预约停止时间。', temporaryBreak:'临时休息', date:'日期', addBreak:'添加休息时间', holiday:'休诊日', setHoliday:'设为休诊', businessHours:'营业时间', businessHoursDesc:'设置每周营业时间和预约间隔。', saveBusinessHours:'保存营业时间',
       reservationDateLabel:'预约日期', reservationTimeLabel:'预约时间', extensionTreatment:'延长施术', extension0:'无（25分钟施术 / 30分钟占用）', extension10:'延长10分钟（35分钟施术 / 40分钟占用）＋800日元', extension20:'延长20分钟（45分钟施术 / 50分钟占用）＋1,600日元', extension30:'延长30分钟（55分钟施术 / 60分钟占用）＋2,400日元', name:'姓名', phoneNumber:'电话号码', notes:'备注', patientName:'患者姓名', phoneNumberPlaceholder:'电话号码', notesPlaceholder:'备注（可选）', cancel:'取消', registerManual:'登记手动预约', saveChanges:'保存修改',
       noSchedule:'当天没有预约或预约停止时间。', appointment:'预约', stop:'停止', delete:'删除', edit:'修改', cancelled:'已取消', basicTreatment:'基本施术 25分钟 / 占用 30分钟', treatmentHold:(t,o)=>`施术 ${t}分钟 / 占用 ${o}分钟`, stopDetail:'该时间段不接受新的预约。', noItems:'无', extendSuccess:m=>`已将预约停止时间延长 ${m} 分钟。`, extendFailed:'无法延长预约停止时间。', saveSuccess:'已保存。',
@@ -127,7 +147,7 @@
       weekdays:['周日','周一','周二','周三','周四','周五','周六']
     },
     ja: {
-      adminTitle:'予約管理', adminPassword:'管理者パスワード', login:'ログイン', logout:'ログアウト', prevDay:'前の日', nextDay:'次の日', reservationDate:'予約日', manualReservation:'＋ 手動予約',
+      adminTitle:'予約管理', adminPassword:'管理者パスワード', login:'ログイン', logout:'ログアウト', pauseClinic:'臨時休業', pauseHint:'休業中はトップページに再開予定時刻を表示し、新しい予約を停止します。', pauseModalDesc:'再開予定の日時を入力してください。休業中はこの時刻を表示します。', reopeningTime:'再開予定時刻', confirmPause:'休業を開始', resumeClinic:'営業を再開', pausedUntil:'再開予定時刻', pauseActive:'現在、臨時休業中です。', pauseInvalid:'再開予定時刻を入力してください。', pauseFailed:'休業の設定に失敗しました。', resumeFailed:'営業の再開に失敗しました。', prevDay:'前の日', nextDay:'次の日', reservationDate:'予約日', manualReservation:'＋ 手動予約',
       todaySchedule:'今日の予定', reservationCount:'予約人数', peopleUnit:'名', reservationTotalTime:'予約総時間', hoursUnit:'時間', minutesUnit:'分', todayScheduleDesc:'予約と予約停止時間を開始時刻順にまとめて表示します。', temporaryBreak:'臨時休憩', date:'日付', addBreak:'休憩時間を追加', holiday:'休診日', setHoliday:'休診に設定', businessHours:'営業時間', businessHoursDesc:'毎週の営業時間と予約間隔を設定します。', saveBusinessHours:'営業時間を保存',
       reservationDateLabel:'予約日', reservationTimeLabel:'予約時間', extensionTreatment:'延長施術', extension0:'なし（25分施術 / 30分確保）', extension10:'10分延長（35分施術 / 40分確保）＋800円', extension20:'20分延長（45分施術 / 50分確保）＋1,600円', extension30:'30分延長（55分施術 / 60分確保）＋2,400円', name:'お名前', phoneNumber:'電話番号', notes:'備考', patientName:'患者様のお名前', phoneNumberPlaceholder:'電話番号', notesPlaceholder:'備考（任意）', cancel:'キャンセル', registerManual:'手動予約を登録', saveChanges:'変更を保存',
       noSchedule:'この日の予約・予約停止はありません。', appointment:'予約', stop:'停止', delete:'削除', edit:'変更', cancelled:'キャンセル済み', basicTreatment:'基本施術 25分 / 確保 30分', treatmentHold:(t,o)=>`施術 ${t}分 / 確保 ${o}分`, stopDetail:'この時間帯は新しい予約を受け付けません。', noItems:'なし', extendSuccess:m=>`予約停止時間を${m}分延長しました。`, extendFailed:'予約停止時間を延長できませんでした。', saveSuccess:'保存しました。',
@@ -147,6 +167,7 @@
     document.querySelectorAll('[data-i18n-aria-label]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel)); });
     document.getElementById('langZh').classList.toggle('active', adminLanguage === 'zh');
     document.getElementById('langJa').classList.toggle('active', adminLanguage === 'ja');
+    renderPauseState();
     document.title = `${t('adminTitle')} | 上高田整骨院`;
     if (D) { renderSchedule(); renderBreaks(); renderHolidays(); renderHours(); }
     if (phoneModalMode === 'edit') { document.getElementById('phoneReserveModalTitle').textContent = t('edit'); document.getElementById('phoneReserveSubmit').textContent = t('saveChanges'); }
@@ -202,6 +223,57 @@
   async function delBreak(id){await api('/api/admin/breaks-delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});await render();alert(t('breakDeleted'));}
   async function addHoliday(){await api('/api/admin/holiday',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:document.getElementById('holidayDate').value})});await render();alert(t('holidayAdded'));}
   async function delHoliday(dateValue){await api('/api/admin/holiday-delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dateValue})});await render();alert(t('holidayRemoved'));}
+  function pauseNowKey(){
+    const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+    const v=Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+    return `${v.year}-${v.month}-${v.day}T${v.hour}:${v.minute}`;
+  }
+  function isPauseActive(){return !!(D&&D.temporaryPauseUntil&&D.temporaryPauseUntil>pauseNowKey());}
+  function renderPauseState(){
+    const button=document.getElementById('pauseButton');
+    const state=document.getElementById('pauseState');
+    if(!button||!state)return;
+    const active=isPauseActive();
+    button.textContent=active?t('resumeClinic'):t('pauseClinic');
+    button.classList.toggle('resume',active);
+    state.style.display=active?'block':'none';
+    state.innerHTML=active?`<strong>${t('pauseActive')}</strong>${t('pausedUntil')}: ${formatAdminDateTime(D.temporaryPauseUntil)}`:'';
+  }
+  function formatAdminDateTime(value){
+    if(!value)return '';
+    const [d,time]=value.split('T');
+    if(adminLanguage==='ja')return `${d.replaceAll('-','/')} ${time}`;
+    return `${d.replaceAll('-','/')} ${time}`;
+  }
+  function openPauseModal(){
+    if(isPauseActive()){
+      if(!confirm(adminLanguage==='ja'?'営業を再開しますか？':'现在恢复营业吗？'))return;
+      resumeClinic();
+      return;
+    }
+    const input=document.getElementById('pauseReopeningAt');
+    input.value='';
+    document.getElementById('pauseError').textContent='';
+    document.getElementById('pauseModal').classList.add('open');
+    input.focus();
+  }
+  function closePauseModal(){document.getElementById('pauseModal').classList.remove('open');}
+  async function submitPause(){
+    const value=document.getElementById('pauseReopeningAt').value;
+    const errorBox=document.getElementById('pauseError');
+    errorBox.textContent='';
+    if(!value||value<=pauseNowKey()){errorBox.textContent=t('pauseInvalid');return;}
+    try{
+      await api('/api/admin/pause',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'pause',reopeningAt:value})});
+      closePauseModal();
+      await render();
+    }catch(e){errorBox.textContent=t('pauseFailed');}
+  }
+  async function resumeClinic(){
+    try{await api('/api/admin/pause',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'resume'})});await render();}
+    catch(e){alert(t('resumeFailed'));}
+  }
+
   async function saveHours(){const h={};for(let i=0;i<7;i++)h[i]=document.getElementById('e'+i).checked?[document.getElementById('s'+i).value,document.getElementById('t'+i).value]:null;await api('/api/admin/hours',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({businessHours:h,slotMinutes:30})});alert(t('businessHoursSaved'));await render();}
   async function logout(){await fetch('/api/logout',{method:'POST',credentials:'same-origin'});showLogin();}
   function esc(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
@@ -218,6 +290,7 @@
   }
 
   document.getElementById('phoneReserveModal').addEventListener('click',function(e){if(e.target===this)closePhoneModal();});
+  document.getElementById('pauseModal').addEventListener('click',function(e){if(e.target===this)closePauseModal();});
   document.getElementById('date').addEventListener('change',function(){render().catch(handleAdminLoadError);});
   document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')login();});
   applyAdminLanguage();

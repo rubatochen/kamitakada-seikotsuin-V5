@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="上高田整骨院の臨時休業のお知らせ。">
+  <title>臨時休業 | 上高田整骨院</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body.pause-page{min-height:100vh;background:#f5efe4;display:flex;flex-direction:column;transition:background-color .35s ease,color .35s ease}
+    body.pause-page::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.075;background-repeat:repeat;background-size:72px 72px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23b87935' stroke-width='1.15' stroke-opacity='.9'%3E%3Cpath d='M36 0 54 10 54 31 36 41 18 31 18 10Z M36 41 54 51 54 72 M18 31 0 41 0 62 18 72 M18 10 0 0 M54 10 72 0 M54 31 72 41 72 62'/%3E%3Cpath d='M36 0 36 41 M18 10 54 31 M54 10 18 31 M18 31 36 41 54 31'/%3E%3C/g%3E%3C/svg%3E")}
+    body.pause-page>*{position:relative;z-index:1}
+    .pause-header{padding:20px 24px}
+    .pause-header-inner{width:min(1120px,100%);margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .pause-brand{font-weight:800;font-size:20px;color:var(--green);text-decoration:none}
+    .pause-language{border:1px solid var(--edge);border-radius:8px;background:var(--paper);color:var(--ink);padding:8px 30px 8px 10px;font:inherit}
+    .pause-main{flex:1;display:grid;place-items:center;padding:35px 18px 70px}
+    .pause-shell{width:min(680px,100%);text-align:center}
+    .pause-card{background:var(--paper);border:1px solid var(--edge);border-radius:18px;box-shadow:var(--shadow);padding:clamp(32px,7vw,58px) clamp(22px,7vw,62px)}
+    .pause-mark{width:68px;height:68px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;background:#f3e7d9;color:#b64d3d;font-size:30px;font-weight:800}
+    .pause-eyebrow{margin:0 0 10px;color:#b64d3d;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+    .pause-card h1{margin:0;color:var(--ink);font-size:clamp(30px,7vw,46px);line-height:1.2}
+    .pause-copy{margin:14px auto 0;color:var(--muted);font-size:15px;line-height:1.8}
+    .pause-reopening{display:inline-block;margin-top:22px;padding:14px 22px;border-radius:12px;background:#f2e9dc;color:var(--ink);font-size:17px;font-weight:800}
+    .pause-reopening span{display:block;margin-bottom:4px;color:var(--muted);font-size:12px;font-weight:700}
+    .pause-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}
+    .pause-actions a{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:10px;color:#fff;text-decoration:none;font-weight:800}
+    .pause-phone{background:#6d655d}.pause-line{background:#2f8f6f}.pause-reserve{background:#b64d3d}
+    .pause-note{margin:20px 0 0;color:var(--muted);font-size:12px;line-height:1.7}
+    .pause-footer{text-align:center;padding:20px 18px 28px;color:var(--muted);font-size:12px}
+    body.pause-page.night-mode{--green:#4aa88c;--green-dark:#226b58;--accent:#d6b45d;--ink:#f3f5ef;--muted:#adbbb5;--soft:#17221e;--paper:#121916;--edge:#30433b;background:#0a0f0d;color:#f3f5ef;color-scheme:dark}
+    body.pause-page.night-mode::before{opacity:.12;background-size:96px 48px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='48' viewBox='0 0 96 48'%3E%3Cg fill='none' stroke='%232d8066' stroke-width='1.1' stroke-opacity='.9'%3E%3Cpath d='M0 48Q24 0 48 48T96 48 M0 36Q24-12 48 36T96 36 M0 24Q24-24 48 24T96 24'/%3E%3C/g%3E%3C/svg%3E")}
+    body.pause-page.night-mode .pause-mark{background:#2b1d1a;color:#e08a7b}
+    body.pause-page.night-mode .pause-reopening{background:#18221e}
+    body.pause-page.night-mode .pause-actions .pause-phone{background:#4a4641}
+    @media(max-width:600px){.pause-header{padding:16px}.pause-brand{font-size:17px}.pause-main{padding:24px 12px 45px}.pause-actions{grid-template-columns:1fr}.pause-card{border-radius:14px}}
+  </style>
+</head>
+<body class="pause-page">
+  <header class="pause-header">
+    <div class="pause-header-inner">
+      <a class="pause-brand" href="index.html">上高田整骨院</a>
+      <select id="language" class="pause-language" aria-label="Language">
+        <option value="ja">日本語</option>
+        <option value="zh">中文</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="pause-main">
+    <div class="pause-shell">
+      <section class="pause-card">
+        <div class="pause-mark">!</div>
+        <p class="pause-eyebrow" data-i18n="eyebrow">TEMPORARILY CLOSED</p>
+        <h1 data-i18n="title">暂停营业</h1>
+        <p class="pause-copy" data-i18n="copy">目前暂时停止营业，给您带来不便，敬请谅解。</p>
+        <div class="pause-reopening">
+          <span data-i18n="reopeningLabel">预计开业时间</span>
+          <strong id="reopeningAt">—</strong>
+        </div>
+        <div class="pause-actions">
+          <a class="pause-phone" href="tel:0353801963" data-i18n="phone">电话</a>
+          <a class="pause-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="line">官方LINE</a>
+          <a class="pause-reserve" href="reserve.html" data-i18n="reserve">预约</a>
+        </div>
+        <p class="pause-note" data-i18n="note">预计开业时间可能根据实际情况调整，敬请谅解。</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="pause-footer">© 2026 上高田整骨院</footer>
+
+  <script>
+    const texts={
+      ja:{eyebrow:'TEMPORARILY CLOSED',title:'臨時休業',copy:'現在、一時的に営業を休止しております。ご不便をおかけしますが、ご了承ください。',reopeningLabel:'再開予定時刻',phone:'電話',line:'公式LINE',reserve:'予約',note:'再開予定時刻は状況により変更となる場合があります。'},
+      zh:{eyebrow:'TEMPORARILY CLOSED',title:'暂停营业',copy:'目前暂时停止营业，给您带来不便，敬请谅解。',reopeningLabel:'预计开业时间',phone:'电话',line:'官方LINE',reserve:'预约',note:'预计开业时间可能根据实际情况调整，敬请谅解。'},
+      en:{eyebrow:'TEMPORARILY CLOSED',title:'Temporarily Closed',copy:'We are temporarily closed. We apologize for the inconvenience.',reopeningLabel:'Expected reopening',phone:'Call',line:'Official LINE',reserve:'Reservation',note:'The expected reopening time may change depending on circumstances.'}
+    };
+    let currentLang=localStorage.getItem('language');
+    if(!texts[currentLang])currentLang=navigator.language?.toLowerCase().startsWith('zh')?'zh':navigator.language?.toLowerCase().startsWith('ja')?'ja':'en';
+    const select=document.getElementById('language');
+    function applyLang(){select.value=currentLang;document.documentElement.lang=currentLang;document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=texts[currentLang][el.dataset.i18n]);}
+    select.addEventListener('change',()=>{currentLang=select.value;localStorage.setItem('language',currentLang);applyLang();});
+    function formatReopening(value){
+      if(!value)return '—';
+      const [d,time]=value.split('T');
+      const [y,m,day]=d.split('-').map(Number);
+      if(currentLang==='ja')return `${y}年${m}月${day}日 ${time}`;
+      if(currentLang==='en')return `${m}/${day}/${y} ${time}`;
+      return `${y}年${m}月${day}日 ${time}`;
+    }
+    function updateTheme(){
+      const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+      const v=Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+      const nowMin=Number(v.hour)*60+Number(v.minute);document.body.classList.toggle('night-mode',nowMin<9*60||nowMin>=19*60);
+    }
+    async function loadStatus(){
+      try{
+        const r=await fetch('/api/status',{cache:'no-store'}); const s=await r.json();
+        if(!s.paused){location.replace('index.html');return;}
+        document.getElementById('reopeningAt').textContent=formatReopening(s.reopeningAt);
+      }catch(e){}
+    }
+    applyLang();updateTheme();loadStatus();setInterval(()=>{updateTheme();loadStatus();},60000);
+  </script>
+</body>
+</html>
