@@ -12,13 +12,13 @@
   <link rel="stylesheet" href="style.css">
   <style>
     :root{--reserve-max:760px}
-    body.reserve-page{background:#f6faf8}
-    .reserve-header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);border-bottom:1px solid var(--edge);backdrop-filter:blur(14px)}
+    body.reserve-page{background:#f5efe4}
+    .reserve-header{position:sticky;top:0;z-index:30;background:rgba(255,250,240,.96);border-bottom:1px solid var(--edge);backdrop-filter:blur(14px)}
     .reserve-header-inner{width:min(1120px,calc(100% - 32px));min-height:68px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
     .reserve-brand{font-weight:800;color:var(--green);font-size:20px;white-space:nowrap}
     .reserve-header-actions{display:flex;align-items:center;gap:10px}
     .reserve-back{font-size:14px;font-weight:700;color:var(--muted)}
-    .reserve-language{border:1px solid var(--edge);border-radius:8px;background:#fff;color:var(--ink);padding:8px 30px 8px 10px;font-size:14px}
+    .reserve-language{border:1px solid var(--edge);border-radius:8px;background:var(--paper);color:var(--ink);padding:8px 30px 8px 10px;font-size:14px}
 
     .reserve-main{padding:42px 16px 72px}
     .reserve-shell{width:min(var(--reserve-max),100%);margin:0 auto}
@@ -35,27 +35,27 @@
     .reserve-section-title .num{width:28px;height:28px;display:inline-grid;place-items:center;border-radius:50%;background:var(--soft);color:var(--green-dark);font-size:13px;font-weight:800;flex:0 0 auto}
 
     .reserve-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
-    .reserve-info-item{padding:13px 14px;border-radius:10px;background:#f7faf8;border:1px solid #e5eeea}
+    .reserve-info-item{padding:13px 14px;border-radius:10px;background:#f1e7d6;border:1px solid #e5eeea}
     .reserve-info-item strong{display:block;font-size:13px;color:var(--muted);margin-bottom:2px}
     .reserve-info-item span{font-weight:800;color:var(--ink)}
-    .reserve-info-note{margin:0;padding:12px 14px;border-radius:10px;background:#fff8e8;color:#69572e;font-size:13px;line-height:1.65}
+    .reserve-info-note{margin:0;padding:12px 14px;border-radius:10px;background:#fff1cf;color:#69572e;font-size:13px;line-height:1.65}
 
     .reserve-date-row{display:grid;grid-template-columns:44px 1fr 44px;gap:10px;align-items:center}
-    .reserve-date-btn{width:44px;height:44px;border:1px solid var(--edge);border-radius:10px;background:#fff;color:var(--green-dark);font-size:20px;font-weight:700;cursor:pointer}
+    .reserve-date-btn{width:44px;height:44px;border:1px solid var(--edge);border-radius:10px;background:var(--paper);color:var(--green-dark);font-size:20px;font-weight:700;cursor:pointer}
     .reserve-date-btn:hover:not(:disabled){background:var(--soft)}
     .reserve-date-btn:disabled{opacity:.35;cursor:not-allowed}
     .reserve-date-label{text-align:center;font-weight:800;color:var(--ink);font-size:17px}
     .reserve-date-help{text-align:center;margin:8px 0 0;color:var(--muted);font-size:12px}
 
-    .reserve-time-box{padding:18px;border:1px solid var(--edge);border-radius:12px;background:#fbfdfc}
+    .reserve-time-box{padding:18px;border:1px solid var(--edge);border-radius:12px;background:#f8f1e6}
     .reserve-time-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px;font-weight:800;color:var(--ink)}
     .reserve-time-label span{font-size:12px;color:var(--muted);font-weight:600}
-    .reserve-time-input{width:100%;min-height:58px;box-sizing:border-box;border:2px solid #d9e5e0;border-radius:10px;padding:10px 14px;background:#fff;color:var(--ink);font:inherit;font-size:22px;font-weight:800;letter-spacing:.04em;outline:none}
+    .reserve-time-input{width:100%;min-height:58px;box-sizing:border-box;border:2px solid #d9e5e0;border-radius:10px;padding:10px 14px;background:var(--paper);color:var(--ink);font:inherit;font-size:22px;font-weight:800;letter-spacing:.04em;outline:none}
     .reserve-time-input:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(33,131,111,.10)}
-    .reserve-time-input:disabled{background:#f2f5f3;color:#9aa7a1;cursor:not-allowed}
+    .reserve-time-input:disabled{background:#ece3d6;color:#9aa7a1;cursor:not-allowed}
     .reserve-field-help{margin:8px 0 0;color:var(--muted);font-size:12px;line-height:1.6}
 
-    .reserve-notice{margin-top:12px;padding:13px 14px;border-radius:10px;background:#f5f8f6;border:1px solid #e4ece8;color:#52605b;font-size:13px;line-height:1.7}
+    .reserve-notice{margin-top:12px;padding:13px 14px;border-radius:10px;background:#f2e9dc;border:1px solid #e4ece8;color:#52605b;font-size:13px;line-height:1.7}
     .reserve-notice strong{color:var(--ink)}
     .reserve-unavailable{margin-top:12px}
     .reserve-unavailable:empty{display:none}
@@ -63,13 +63,13 @@
     .reserve-fields{display:grid;gap:16px}
     .reserve-field label{display:flex;align-items:center;gap:6px;margin-bottom:7px;font-size:14px;font-weight:800;color:var(--ink)}
     .reserve-required{color:#b64d3d;font-size:11px}
-    .reserve-field input,.reserve-field textarea{width:100%;box-sizing:border-box;border:1px solid #d7e2de;border-radius:10px;background:#fff;color:var(--ink);padding:12px 13px;font:inherit;outline:none}
+    .reserve-field input,.reserve-field textarea{width:100%;box-sizing:border-box;border:1px solid #d7e2de;border-radius:10px;background:var(--paper);color:var(--ink);padding:12px 13px;font:inherit;outline:none}
     .reserve-field input{min-height:48px}
     .reserve-field textarea{resize:vertical;min-height:104px}
     .reserve-field input:focus,.reserve-field textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(33,131,111,.08)}
 
     .reserve-extension-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-    .reserve-extension-options label{display:flex;align-items:center;gap:7px;padding:12px 10px;border:1px solid #d9e5e0;border-radius:10px;background:#fff;color:var(--ink);font-size:14px;font-weight:700;cursor:pointer}
+    .reserve-extension-options label{display:flex;align-items:center;gap:7px;padding:12px 10px;border:1px solid #d9e5e0;border-radius:10px;background:var(--paper);color:var(--ink);font-size:14px;font-weight:700;cursor:pointer}
     .reserve-extension-options label:has(input:checked){border-color:var(--green);background:var(--soft);color:var(--green-dark)}
     .reserve-extension-options input{accent-color:var(--green);width:16px;height:16px;flex:0 0 auto}
     .reserve-field-help{display:block;margin-top:6px;color:var(--muted);font-size:12px}
@@ -82,41 +82,46 @@
     .reserve-success-icon{width:58px;height:58px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--green);font-size:28px;font-weight:800}
     .reserve-success h2{margin:0;color:var(--ink);font-size:26px}
     .reserve-success-main{margin:10px 0 18px;color:var(--muted)}
-    .reserve-success-time{display:inline-block;padding:12px 18px;border-radius:10px;background:#f5f8f6;color:var(--ink);font-size:17px;font-weight:800}
-    .reserve-home{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin-top:20px;padding:0 18px;border-radius:9px;background:#eef3ef;color:var(--ink);font-weight:700}
+    .reserve-success-time{display:inline-block;padding:12px 18px;border-radius:10px;background:#f2e9dc;color:var(--ink);font-size:17px;font-weight:800}
+    .reserve-home{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin-top:20px;padding:0 18px;border-radius:9px;background:#eadfce;color:var(--ink);font-weight:700}
     .reserve-footer{text-align:center;margin-top:20px;color:var(--muted);font-size:12px}
     .reserve-footer a{color:var(--green-dark);font-weight:700}
 
     /* Automatic closed-hours / holiday theme */
     body.reserve-page{transition:background-color .35s ease,color .35s ease}
     body.reserve-page.night-mode{
-      --ink:#eef4f1;--muted:#aab8b2;--soft:#17211e;--paper:#101614;--edge:#2b3934;
-      background:#0c1110;color:#eef4f1
+      --green:#4aa88c;--green-dark:#226b58;--accent:#d6b45d;
+      --ink:#f3f5ef;--muted:#adbbb5;--soft:#17221e;--paper:#121916;--edge:#30433b;
+      background:#0a0f0d;color:#f3f5ef;
+      color-scheme:dark;
     }
-    body.reserve-page.night-mode .reserve-header{background:rgba(13,19,17,.96);border-bottom-color:#2b3934}
-    body.reserve-page.night-mode .reserve-brand{color:#63b59e}
-    body.reserve-page.night-mode .reserve-back{color:#aab8b2}
-    body.reserve-page.night-mode .reserve-language{background:#18211e;color:#eef4f1;border-color:#34443e}
-    body.reserve-page.night-mode .reserve-hero h1{color:#eef4f1}
-    body.reserve-page.night-mode .reserve-hero p,.reserve-page.night-mode .reserve-footer{color:#aab8b2}
-    body.reserve-page.night-mode .reserve-card{background:#111816;border-color:#2b3934;box-shadow:0 18px 45px rgba(0,0,0,.28)}
-    body.reserve-page.night-mode .reserve-card-section{border-bottom-color:#26332f}
+    body.reserve-page.night-mode .reserve-header{background:rgba(10,16,14,.96);border-bottom-color:#2d4038}
+    body.reserve-page.night-mode .reserve-brand{color:#63b89e}
+    body.reserve-page.night-mode .reserve-back{color:#adbbb5}
+    body.reserve-page.night-mode .reserve-language{background:#151e1b;color:#f3f5ef;border-color:#34483f}
+    body.reserve-page.night-mode .reserve-hero h1{color:#f3f5ef}
+    body.reserve-page.night-mode .reserve-hero p,body.reserve-page.night-mode .reserve-footer{color:#adbbb5}
+    body.reserve-page.night-mode .reserve-card{background:#111815;border-color:#2d4038;box-shadow:0 18px 45px rgba(0,0,0,.30)}
+    body.reserve-page.night-mode .reserve-card-section{border-top-color:#263630}
+    body.reserve-page.night-mode .reserve-section-title .num{background:#17372f;color:#8fd0bb}
     body.reserve-page.night-mode .reserve-info-item,
     body.reserve-page.night-mode .reserve-time-box,
     body.reserve-page.night-mode .reserve-time-input,
     body.reserve-page.night-mode .reserve-field input,
     body.reserve-page.night-mode .reserve-field textarea,
-    body.reserve-page.night-mode .reserve-extension-options label{background:#17201d;color:#eef4f1;border-color:#30403a}
+    body.reserve-page.night-mode .reserve-extension-options label{background:#151e1b;color:#f3f5ef;border-color:#30433b}
     body.reserve-page.night-mode .reserve-info-item strong,
     body.reserve-page.night-mode .reserve-field-help,
-    body.reserve-page.night-mode .reserve-date-help{color:#aab8b2}
-    body.reserve-page.night-mode .reserve-date-btn{background:#17201d;color:#83c4b0;border-color:#30403a}
-    body.reserve-page.night-mode .reserve-date-btn:hover:not(:disabled){background:#1e2b27}
+    body.reserve-page.night-mode .reserve-date-help{color:#adbbb5}
+    body.reserve-page.night-mode .reserve-date-btn{background:#151e1b;color:#8fd0bb;border-color:#30433b}
+    body.reserve-page.night-mode .reserve-date-btn:hover:not(:disabled){background:#1d2b26}
     body.reserve-page.night-mode .reserve-extension-options label:has(input:checked){background:#17372f;border-color:#3d9c84;color:#9be0cb}
-    body.reserve-page.night-mode .reserve-notice{background:#18211e;border-color:#30403a;color:#b6c3be}
-    body.reserve-page.night-mode .reserve-notice strong{color:#eef4f1}
-    body.reserve-page.night-mode .reserve-success-time{background:#18211e;color:#eef4f1}
-    body.reserve-page.night-mode .reserve-home{background:#1d2925;color:#eef4f1}
+    body.reserve-page.night-mode .reserve-notice{background:#151e1b;border-color:#30433b;color:#b9c6c0}
+    body.reserve-page.night-mode .reserve-notice strong{color:#f3f5ef}
+    body.reserve-page.night-mode .reserve-success-time{background:#18221e;color:#f3f5ef}
+    body.reserve-page.night-mode .reserve-home{background:#1d2925;color:#f3f5ef}
+    body.reserve-page.night-mode .reserve-footer a{color:#8fd0bb}
+    body.reserve-page.night-mode input,body.reserve-page.night-mode textarea,body.reserve-page.night-mode select{color-scheme:dark}
 
     @media(max-width:600px){
       .reserve-header-inner{min-height:60px}
@@ -204,7 +209,7 @@
             <div class="reserve-notice">
               <strong data-i18n="reserve.rulesTitle">ご予約について</strong><br>
               <span data-i18n="reserve.rule1">予約済み・不可予約時間と重なる時間は選択できません。</span><br>
-              <span data-i18n="reserve.rule2">予約時間から5分経過してもご来院がない場合、スタッフの判断により予約をキャンセルする場合があります。</span>
+              <span data-i18n="reserve.rule2">予約時間から5分経過してもご来院がない場合、スタッフの判断により予約をキャンセルする場合があります。</span><br><span data-i18n="reserve.rule3">キャンセル・日時変更をご希望の場合は、LINEまたはお電話でスタッフまでご連絡ください。</span>
             </div>
           </section>
 
@@ -258,11 +263,11 @@
   <script>
     const reserveI18n = {
       ja: {
-        siteName:'上高田整骨院', back:'← トップへ戻る', title:'Web予約', subtitle:'ご希望の日付と開始時間を選択してください。', dateTitle:'予約日・時間', hoursLabel:'営業時間', receptionLabel:'予約受付', receptionValue:'本日から14日先まで', dateHelp:'14日先まで予約できます', timeLabel:'予約時間', duration:'基本施術 25分', timeHelp:'開始時間は1分単位で選択できます。基本施術は25分です。', extensionLabel:'延長施術', ext0:'なし', ext10:'10分延長　＋800円', ext20:'20分延長　＋1,600円', ext30:'30分延長　＋2,400円', summaryFormat:(actual)=>`施術時間：${actual}分`, rulesTitle:'ご予約について', rule1:'予約済み・不可予約時間と重なる時間は選択できません。', rule2:'予約時間から5分経過してもご来院がない場合、スタッフの判断により予約をキャンセルする場合があります。', infoTitle:'お客様情報', name:'お名前', required:'必須', optional:'任意', namePlaceholder:'お名前を入力してください', phone:'電話番号', phonePlaceholder:'090-1234-5678', phoneHelp:'例：090-1234-5678', email:'メールアドレス', emailPlaceholder:'example@example.com', note:'備考', notePlaceholder:'症状やご要望があればご記入ください', submit:'この内容で予約する', privacy:'入力内容をご確認のうえ、予約を確定してください。', successTitle:'予約を受け付けました', successMain:'ご予約ありがとうございます。', home:'トップへ戻る', footer:'ご不明な点がありましたら、お電話でお問い合わせください。', unavailable:'予約できない時間', holiday:'この日は休診です。', noReception:'この日は予約を受け付けていません。', past:'過去の日付は予約できません。', loadError:'予約枠を取得できませんでした。しばらくしてから再度お試しください。', selectTime:'時間を選択してください。', booked:'その時間は予約済みです。', notAvailable:'その時間は予約できません。', phoneError:'電話番号の形式が正しくありません。例：090-1234-5678', reserveError:'予約できませんでした。', dateFormat:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日月火水木金土'[d.getDay()]}）`, successFormat:(date,time,occupied)=>`${date} ${time} の予約を受け付けました。`},
+        siteName:'上高田整骨院', back:'← トップへ戻る', title:'Web予約', subtitle:'ご希望の日付と開始時間を選択してください。', dateTitle:'予約日・時間', hoursLabel:'営業時間', receptionLabel:'予約受付', receptionValue:'本日から14日先まで', dateHelp:'14日先まで予約できます', timeLabel:'予約時間', duration:'基本施術 25分', timeHelp:'開始時間は1分単位で選択できます。基本施術は25分です。', extensionLabel:'延長施術', ext0:'なし', ext10:'10分延長　＋800円', ext20:'20分延長　＋1,600円', ext30:'30分延長　＋2,400円', summaryFormat:(actual)=>`施術時間：${actual}分`, rulesTitle:'ご予約について', rule1:'予約済み・不可予約時間と重なる時間は選択できません。', rule2:'予約時間から5分経過してもご来院がない場合、スタッフの判断により予約をキャンセルする場合があります。', rule3:'キャンセル・日時変更をご希望の場合は、LINEまたはお電話でスタッフまでご連絡ください。', infoTitle:'お客様情報', name:'お名前', required:'必須', optional:'任意', namePlaceholder:'お名前を入力してください', phone:'電話番号', phonePlaceholder:'090-1234-5678', phoneHelp:'例：090-1234-5678', email:'メールアドレス', emailPlaceholder:'example@example.com', note:'備考', notePlaceholder:'症状やご要望があればご記入ください', submit:'この内容で予約する', privacy:'入力内容をご確認のうえ、予約を確定してください。', successTitle:'予約を受け付けました', successMain:'ご予約ありがとうございます。', home:'トップへ戻る', footer:'ご不明な点がありましたら、お電話でお問い合わせください。', unavailable:'予約できない時間', holiday:'この日は休診です。', noReception:'この日は予約を受け付けていません。', past:'過去の日付は予約できません。', loadError:'予約枠を取得できませんでした。しばらくしてから再度お試しください。', selectTime:'時間を選択してください。', booked:'その時間は予約済みです。', notAvailable:'その時間は予約できません。', phoneError:'電話番号の形式が正しくありません。例：090-1234-5678', reserveError:'予約できませんでした。', dateFormat:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日月火水木金土'[d.getDay()]}）`, successFormat:(date,time,occupied)=>`${date} ${time} の予約を受け付けました。`},
       zh: {
-        siteName:'上高田整骨院', back:'← 返回首页', title:'网上预约', subtitle:'请选择您希望的日期和开始时间。', dateTitle:'预约日期与时间', hoursLabel:'营业时间', receptionLabel:'预约范围', receptionValue:'今天起14天内', dateHelp:'最多可预约未来14天', timeLabel:'预约时间', duration:'基础治疗25分钟', timeHelp:'开始时间可按分钟自由选择。基础治疗25分钟。', extensionLabel:'延长治疗', ext0:'不延长', ext10:'延长10分钟　＋800日元', ext20:'延长20分钟　＋1,600日元', ext30:'延长30分钟　＋2,400日元', summaryFormat:(actual)=>`治疗时间：${actual}分钟`, rulesTitle:'预约须知', rule1:'已预约或不可预约的时间段无法选择。', rule2:'预约时间超过5分钟仍未到院时，工作人员可能会根据情况取消预约。', infoTitle:'您的信息', name:'姓名', required:'必填', optional:'选填', namePlaceholder:'请输入姓名', phone:'电话号码', phonePlaceholder:'090-1234-5678', phoneHelp:'例：090-1234-5678', email:'邮箱地址', emailPlaceholder:'example@example.com', note:'备注', notePlaceholder:'如有症状或其他要求，请填写。', submit:'确认并预约', privacy:'请确认输入内容后提交预约。', successTitle:'预约成功', successMain:'感谢您的预约。', home:'返回首页', footer:'如有疑问，请通过电话联系我们。', unavailable:'不可预约时间', holiday:'当天休诊。', noReception:'当天不接受预约。', past:'过去的日期无法预约。', loadError:'无法获取预约时间，请稍后再试。', selectTime:'请选择时间。', booked:'该时间已被预约。', notAvailable:'该时间无法预约。', phoneError:'电话号码格式不正确。例：090-1234-5678', reserveError:'预约失败，请稍后再试。', dateFormat:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`, successFormat:(date,time,occupied)=>`已接受 ${date} ${time} 的预约。`},
+        siteName:'上高田整骨院', back:'← 返回首页', title:'网上预约', subtitle:'请选择您希望的日期和开始时间。', dateTitle:'预约日期与时间', hoursLabel:'营业时间', receptionLabel:'预约范围', receptionValue:'今天起14天内', dateHelp:'最多可预约未来14天', timeLabel:'预约时间', duration:'基础治疗25分钟', timeHelp:'开始时间可按分钟自由选择。基础治疗25分钟。', extensionLabel:'延长治疗', ext0:'不延长', ext10:'延长10分钟　＋800日元', ext20:'延长20分钟　＋1,600日元', ext30:'延长30分钟　＋2,400日元', summaryFormat:(actual)=>`治疗时间：${actual}分钟`, rulesTitle:'预约须知', rule1:'已预约或不可预约的时间段无法选择。', rule2:'预约时间超过5分钟仍未到院时，工作人员可能会根据情况取消预约。', rule3:'如需取消预约或变更预约时间，请通过LINE或电话联系店员。', infoTitle:'您的信息', name:'姓名', required:'必填', optional:'选填', namePlaceholder:'请输入姓名', phone:'电话号码', phonePlaceholder:'090-1234-5678', phoneHelp:'例：090-1234-5678', email:'邮箱地址', emailPlaceholder:'example@example.com', note:'备注', notePlaceholder:'如有症状或其他要求，请填写。', submit:'确认并预约', privacy:'请确认输入内容后提交预约。', successTitle:'预约成功', successMain:'感谢您的预约。', home:'返回首页', footer:'如有疑问，请通过电话联系我们。', unavailable:'不可预约时间', holiday:'当天休诊。', noReception:'当天不接受预约。', past:'过去的日期无法预约。', loadError:'无法获取预约时间，请稍后再试。', selectTime:'请选择时间。', booked:'该时间已被预约。', notAvailable:'该时间无法预约。', phoneError:'电话号码格式不正确。例：090-1234-5678', reserveError:'预约失败，请稍后再试。', dateFormat:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`, successFormat:(date,time,occupied)=>`已接受 ${date} ${time} 的预约。`},
       en: {
-        siteName:'Kamitakada Seikotsuin', back:'← Back to home', title:'Web Reservation', subtitle:'Please select your preferred date and start time.', dateTitle:'Date & Time', hoursLabel:'Hours', receptionLabel:'Booking window', receptionValue:'Up to 14 days ahead', dateHelp:'Reservations are available up to 14 days ahead', timeLabel:'Appointment time', duration:'Basic treatment 25 min', timeHelp:'Choose any start time by the minute. Basic treatment is 25 min.', extensionLabel:'Treatment extension', ext0:'None', ext10:'10 min extension　+¥800', ext20:'20 min extension　+¥1,600', ext30:'30 min extension　+¥2,400', summaryFormat:(actual)=>`Treatment time: ${actual} min`, rulesTitle:'Reservation information', rule1:'Times that overlap with an existing booking or unavailable period cannot be selected.', rule2:'If you have not arrived within 5 minutes after your appointment time, staff may cancel the reservation at their discretion.', infoTitle:'Your information', name:'Name', required:'Required', optional:'Optional', namePlaceholder:'Enter your name', phone:'Phone number', phonePlaceholder:'090-1234-5678', phoneHelp:'Example: 090-1234-5678', email:'Email address', emailPlaceholder:'example@example.com', note:'Notes', notePlaceholder:'Tell us about any symptoms or requests.', submit:'Confirm reservation', privacy:'Please review your information before confirming.', successTitle:'Reservation confirmed', successMain:'Thank you for your reservation.', home:'Back to home', footer:'If you have any questions, please call us.', unavailable:'Unavailable times', holiday:'The clinic is closed on this date.', noReception:'Reservations are not available on this date.', past:'Past dates cannot be booked.', loadError:'Unable to load available times. Please try again later.', selectTime:'Please select a time.', booked:'That time has already been booked.', notAvailable:'That time is not available.', phoneError:'Please enter a valid Japanese phone number. Example: 090-1234-5678', reserveError:'The reservation could not be completed.', dateFormat:(d)=>`${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`, successFormat:(date,time,occupied)=>`Your reservation for ${date} at ${time} has been accepted.`}
+        siteName:'Kamitakada Seikotsuin', back:'← Back to home', title:'Web Reservation', subtitle:'Please select your preferred date and start time.', dateTitle:'Date & Time', hoursLabel:'Hours', receptionLabel:'Booking window', receptionValue:'Up to 14 days ahead', dateHelp:'Reservations are available up to 14 days ahead', timeLabel:'Appointment time', duration:'Basic treatment 25 min', timeHelp:'Choose any start time by the minute. Basic treatment is 25 min.', extensionLabel:'Treatment extension', ext0:'None', ext10:'10 min extension　+¥800', ext20:'20 min extension　+¥1,600', ext30:'30 min extension　+¥2,400', summaryFormat:(actual)=>`Treatment time: ${actual} min`, rulesTitle:'Reservation information', rule1:'Times that overlap with an existing booking or unavailable period cannot be selected.', rule2:'If you have not arrived within 5 minutes after your appointment time, staff may cancel the reservation at their discretion.', rule3:'If you need to cancel or change your appointment time, please contact our staff by LINE or phone.', infoTitle:'Your information', name:'Name', required:'Required', optional:'Optional', namePlaceholder:'Enter your name', phone:'Phone number', phonePlaceholder:'090-1234-5678', phoneHelp:'Example: 090-1234-5678', email:'Email address', emailPlaceholder:'example@example.com', note:'Notes', notePlaceholder:'Tell us about any symptoms or requests.', submit:'Confirm reservation', privacy:'Please review your information before confirming.', successTitle:'Reservation confirmed', successMain:'Thank you for your reservation.', home:'Back to home', footer:'If you have any questions, please call us.', unavailable:'Unavailable times', holiday:'The clinic is closed on this date.', noReception:'Reservations are not available on this date.', past:'Past dates cannot be booked.', loadError:'Unable to load available times. Please try again later.', selectTime:'Please select a time.', booked:'That time has already been booked.', notAvailable:'That time is not available.', phoneError:'Please enter a valid Japanese phone number. Example: 090-1234-5678', reserveError:'The reservation could not be completed.', dateFormat:(d)=>`${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`, successFormat:(date,time,occupied)=>`Your reservation for ${date} at ${time} has been accepted.`}
     };
 
     let currentLang = localStorage.getItem('language');
