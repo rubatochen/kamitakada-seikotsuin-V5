@@ -6,12 +6,11 @@ export async function onRequest(context) {
 
   const s = await settings(context.env);
   const now = tokyoNow(new Date());
-  const nowKey = `${now.date}T${now.time}`;
-  const reopeningAt = s.temporaryPauseUntil || '';
-  const paused = !!reopeningAt && reopeningAt > nowKey;
+  const reopeningDate = s.temporaryPauseUntil || '';
+  const paused = !!reopeningDate && reopeningDate > now.date;
 
   return withCors(json({
     paused,
-    reopeningAt: paused ? reopeningAt : null,
+    reopeningAt: paused ? reopeningDate : null,
   }), context.request);
 }

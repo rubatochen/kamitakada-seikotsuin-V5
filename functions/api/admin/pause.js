@@ -1,4 +1,4 @@
-import { json, optionResponse, withCors, requireAdmin, isValidDate, isValidTime, tokyoNow } from '../../lib/utils.js';
+import { json, optionResponse, withCors, requireAdmin, isValidDate, tokyoNow } from '../../lib/utils.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') return optionResponse(context.request);
@@ -16,21 +16,19 @@ export async function onRequest(context) {
     return withCors(json({ ok: false, code: 'invalid_action', error: 'Invalid action' }, 400), context.request);
   }
 
-  const reopeningAt = String(body.reopeningAt || '').trim();
-  const match = reopeningAt.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})$/);
-  if (!match || !isValidDate(match[1]) || !isValidTime(match[2])) {
+  const reopeningDate = String(body.reopeningDate || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(reopeningDate) || !isValidDate(reopeningDate)) {
     return withCors(json({ ok: false, code: 'invalid_reopening_time', error: 'Invalid reopening time' }, 400), context.request);
   }
 
   const now = tokyoNow(new Date());
-  const nowKey = `${now.date}T${now.time}`;
-  if (reopeningAt <= nowKey) {
+  if (reopeningDate <= now.date) {
     return withCors(json({ ok: false, code: 'invalid_reopening_time', error: 'Reopening time must be in the future' }, 400), context.request);
   }
 
   await context.env.DB.prepare("INSERT OR REPLACE INTO settings(key,value) VALUES('temporary_pause_until',?)")
-    .bind(reopeningAt)
+    .bind(reopeningDate)
     .run();
 
-  return withCors(json({ ok: true, paused: true, reopeningAt }), context.request);
+  return withCors(json({ ok: true, paused: true, reopeningDate }), context.request);
 }

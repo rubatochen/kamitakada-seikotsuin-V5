@@ -60,7 +60,7 @@
         <h1 data-i18n="title">暂停营业</h1>
         <p class="pause-copy" data-i18n="copy">目前暂时停止营业，给您带来不便，敬请谅解。</p>
         <div class="pause-reopening">
-          <span data-i18n="reopeningLabel">预计开业时间</span>
+          <span data-i18n="reopeningLabel">预计开业日期</span>
           <strong id="reopeningAt">—</strong>
         </div>
         <div class="pause-actions">
@@ -68,7 +68,7 @@
           <a class="pause-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="line">官方LINE</a>
           <a class="pause-reserve" href="reserve.html" data-i18n="reserve">预约</a>
         </div>
-        <p class="pause-note" data-i18n="note">预计开业时间可能根据实际情况调整，敬请谅解。</p>
+        <p class="pause-note" data-i18n="note">预计开业日期可能根据实际情况调整，敬请谅解。</p>
       </section>
     </div>
   </main>
@@ -77,9 +77,9 @@
 
   <script>
     const texts={
-      ja:{eyebrow:'TEMPORARILY CLOSED',title:'臨時休業',copy:'現在、一時的に営業を休止しております。ご不便をおかけしますが、ご了承ください。',reopeningLabel:'再開予定時刻',phone:'電話',line:'公式LINE',reserve:'予約',note:'再開予定時刻は状況により変更となる場合があります。'},
-      zh:{eyebrow:'TEMPORARILY CLOSED',title:'暂停营业',copy:'目前暂时停止营业，给您带来不便，敬请谅解。',reopeningLabel:'预计开业时间',phone:'电话',line:'官方LINE',reserve:'预约',note:'预计开业时间可能根据实际情况调整，敬请谅解。'},
-      en:{eyebrow:'TEMPORARILY CLOSED',title:'Temporarily Closed',copy:'We are temporarily closed. We apologize for the inconvenience.',reopeningLabel:'Expected reopening',phone:'Call',line:'Official LINE',reserve:'Reservation',note:'The expected reopening time may change depending on circumstances.'}
+      ja:{eyebrow:'TEMPORARILY CLOSED',title:'臨時休業',copy:'現在、一時的に営業を休止しております。ご不便をおかけしますが、ご了承ください。',reopeningLabel:'再開予定日',phone:'電話',line:'公式LINE',reserve:'予約',note:'再開予定日は状況により変更となる場合があります。'},
+      zh:{eyebrow:'TEMPORARILY CLOSED',title:'暂停营业',copy:'目前暂时停止营业，给您带来不便，敬请谅解。',reopeningLabel:'预计开业日期',phone:'电话',line:'官方LINE',reserve:'预约',note:'预计开业日期可能根据实际情况调整，敬请谅解。'},
+      en:{eyebrow:'TEMPORARILY CLOSED',title:'Temporarily Closed',copy:'We are temporarily closed. We apologize for the inconvenience.',reopeningLabel:'Expected reopening date',phone:'Call',line:'Official LINE',reserve:'Reservation',note:'The expected reopening date may change depending on circumstances.'}
     };
     let currentLang=localStorage.getItem('language');
     if(!texts[currentLang])currentLang=navigator.language?.toLowerCase().startsWith('zh')?'zh':navigator.language?.toLowerCase().startsWith('ja')?'ja':'en';
@@ -88,11 +88,10 @@
     select.addEventListener('change',()=>{currentLang=select.value;localStorage.setItem('language',currentLang);applyLang();});
     function formatReopening(value){
       if(!value)return '—';
-      const [d,time]=value.split('T');
-      const [y,m,day]=d.split('-').map(Number);
-      if(currentLang==='ja')return `${y}年${m}月${day}日 ${time}`;
-      if(currentLang==='en')return `${m}/${day}/${y} ${time}`;
-      return `${y}年${m}月${day}日 ${time}`;
+      const [y,m,day]=value.split('-').map(Number);
+      if(currentLang==='ja')return `${y}年${m}月${day}日`;
+      if(currentLang==='en')return `${m}/${day}/${y}`;
+      return `${y}年${m}月${day}日`;
     }
     function updateTheme(){
       const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
