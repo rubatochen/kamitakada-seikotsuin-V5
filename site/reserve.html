@@ -41,9 +41,10 @@
     .reserve-info-note{margin:0;padding:12px 14px;border-radius:10px;background:#fff1cf;color:#69572e;font-size:13px;line-height:1.65}
 
     .reserve-date-row{display:grid;grid-template-columns:44px 1fr 44px;gap:10px;align-items:center}
-    .reserve-date-btn{width:44px;height:44px;border:1px solid var(--edge);border-radius:10px;background:var(--paper);color:var(--green-dark);font-size:20px;font-weight:700;cursor:pointer}
-    .reserve-date-btn:hover:not(:disabled){background:var(--soft)}
-    .reserve-date-btn:disabled{opacity:.35;cursor:not-allowed}
+    .reserve-date-btn{width:44px;height:44px;border:1.5px solid var(--green-dark);border-radius:10px;background:var(--paper);color:var(--green-dark);font-size:26px;line-height:1;font-weight:800;cursor:pointer;display:grid;place-items:center;transition:background .15s ease,border-color .15s ease,transform .15s ease}
+    .reserve-date-btn:hover:not(:disabled){background:var(--soft);border-color:var(--green);transform:translateY(-1px)}
+    .reserve-date-btn:focus-visible{outline:3px solid rgba(33,131,111,.18);outline-offset:2px}
+    .reserve-date-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
     .reserve-date-label{text-align:center;font-weight:800;color:var(--ink);font-size:17px}
     .reserve-date-meta{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:7px;margin:8px 0 12px;color:var(--muted);font-size:12px;line-height:1.6}
     .reserve-date-meta strong{color:var(--ink);font-weight:700}
@@ -128,7 +129,7 @@
     body.reserve-page.night-mode .reserve-field-help,
     body.reserve-page.night-mode .reserve-date-meta{color:#adbbb5}
     body.reserve-page.night-mode .reserve-date-meta strong{color:#e8eee9}
-    body.reserve-page.night-mode .reserve-date-btn{background:#151e1b;color:#8fd0bb;border-color:#30433b}
+    body.reserve-page.night-mode .reserve-date-btn{background:#151e1b;color:#9be0cb;border-color:#4d8f7c}
     body.reserve-page.night-mode .reserve-date-btn:hover:not(:disabled){background:#1d2b26}
     body.reserve-page.night-mode .reserve-extension-options label:has(input:checked){background:#17372f;border-color:#3d9c84;color:#9be0cb}
     body.reserve-page.night-mode .reserve-notice{background:#151e1b;border-color:#30433b;color:#b9c6c0}
