@@ -8,6 +8,87 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .admin{max-width:1100px;margin:auto;padding:45px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}.panel{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:24px;margin-bottom:20px}.panel-heading-row{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}.panel-heading-row h2{margin-bottom:4px}.extension-actions-inline{display:flex;gap:8px;align-items:center;margin-left:auto}.extension-actions-inline .primary{min-height:42px;font-weight:800;padding:8px 14px}.schedule-list{margin-top:8px}.schedule-summary{display:flex;min-width:360px;background:linear-gradient(135deg,#f7f8f5,#f1f3ee);border-radius:12px;padding:14px 8px;text-align:center;box-sizing:border-box}.schedule-summary-item{flex:1;padding:4px 18px}.schedule-summary-item+.schedule-summary-item{border-left:1px solid #ddd}.schedule-summary-label{font-size:.9rem;font-weight:700;color:#777;margin-bottom:4px}.schedule-summary-value{font-size:2.05rem;line-height:1.1;font-weight:900;color:var(--green-dark)}.schedule-summary-unit{font-size:.95rem;font-weight:700;margin-left:4px}@media(max-width:700px){.schedule-summary{width:100%;min-width:0;margin-top:8px}.schedule-summary-item{padding:4px 8px}}.schedule-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end}.schedule-actions button{white-space:nowrap}.schedule-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #eee}.schedule-row:last-child{border-bottom:0}.schedule-time{font-weight:800;font-size:1.05rem}.schedule-tag{display:inline-block;margin-right:8px;font-size:.82rem;font-weight:800;padding:3px 8px;border-radius:999px;background:#eef7f5}.schedule-tag.stop{background:#f3f3f3}.extension-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}.extension-actions .primary{min-height:48px;font-weight:800}.secondary-tools{margin-top:0}.login{max-width:420px;margin:100px auto}.login input{width:100%;box-sizing:border-box;margin:12px 0}.calendar{display:flex;gap:10px;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button,.daybtn{border:0;border-radius:8px;padding:10px 14px;background:#eef3ef;cursor:pointer}.tabs .active,.daybtn.active{background:var(--green);color:#fff}.appt{display:grid;grid-template-columns:80px 1fr auto;gap:15px;padding:14px 0;border-bottom:1px solid #eee;align-items:center}.muted{color:#777}.danger{border:0;border-radius:7px;padding:8px 12px;cursor:pointer;background:#eee}.danger:hover{background:#ddd}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}.compact-panel{padding:20px}.compact-panel h2{margin-bottom:14px}.compact-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.break-controls{display:grid;grid-template-columns:1fr;gap:8px}.break-controls input[type="date"],.break-controls input[type="time"]{width:100%;box-sizing:border-box}.break-controls .break-range{display:grid;grid-template-columns:1fr;gap:8px}.break-time-row{display:grid;grid-template-columns:56px 1fr;gap:8px;align-items:center}.break-time-row label{font-size:13px;font-weight:700;color:#666}.break-controls .primary{width:100%}.pause-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pause-actions .pause-btn{margin-top:0}.compact-controls input[type="date"]{flex:1 1 145px;min-width:140px}.compact-controls input[type="time"]{flex:1 1 95px;min-width:90px}.compact-panel .primary{min-height:40px;padding:8px 12px}.pause-panel .pause-btn{margin-top:10px}.pause-direct-controls{display:grid;gap:8px;margin-top:14px}.pause-direct-controls input[type="date"]{width:100%;box-sizing:border-box}.pause-btn{border:0;border-radius:8px;padding:9px 13px;background:#b64d3d;color:#fff;font-weight:800;cursor:pointer}.pause-btn:hover{background:#9f3f31}.pause-btn.resume{background:var(--green)}.pause-state{margin:12px 0 0;padding:10px 12px;border-radius:9px;background:#f7ebe7;color:#8f3c30;font-size:13px;line-height:1.6}.pause-state strong{display:block;margin-bottom:2px}.pause-periods{margin-top:14px}.pause-period{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:9px 0;border-top:1px solid #eee}.pause-period-dates{font-weight:700}.pause-period-actions{display:flex;gap:6px}.pause-period-actions button{white-space:nowrap}.pause-btn:disabled{opacity:.5;cursor:not-allowed}@media(max-width:900px){.grid3{grid-template-columns:1fr}}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid #eee}select{padding:8px}.phone-reserve-btn{border:0;border-radius:8px;padding:10px 16px;background:var(--green);color:#fff;font-weight:800;cursor:pointer}.phone-reserve-btn:hover{background:var(--green-dark)}.phone-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)}.phone-modal.open{display:flex}.phone-modal-box{width:min(480px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:12px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.25);box-sizing:border-box}.phone-modal-box h2{margin:0;color:var(--green-dark)}.phone-field{margin-bottom:14px}.phone-field label{display:block;margin-bottom:5px;font-weight:700}.phone-field input,.phone-field textarea{width:100%;padding:10px;border:1px solid var(--edge);border-radius:8px;box-sizing:border-box;font:inherit}.phone-error{color:#c0392b;margin:10px 0 0;min-height:1.5em}.phone-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.lang-switch{display:inline-flex;align-items:center;border:1px solid var(--edge);border-radius:8px;overflow:hidden;background:#fff}.lang-switch button{border:0;background:transparent;padding:9px 11px;font-weight:700;cursor:pointer;color:var(--text)}.lang-switch button.active{background:var(--green);color:#fff}.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}@media(max-width:700px){.grid2{grid-template-columns:1fr}.panel-heading-row{align-items:flex-start;flex-direction:column}.panel-heading-row .phone-reserve-btn{width:100%}.extension-actions-inline{flex-wrap:wrap;justify-content:flex-end}.extension-actions-inline .primary{flex:1 1 70px}.schedule-row{grid-template-columns:1fr auto}.schedule-time{grid-column:1/-1}.appt{grid-template-columns:60px 1fr}.appt button{grid-column:2}.top{align-items:flex-start;flex-direction:column}.top-actions{width:100%;flex-wrap:wrap}.top-actions>*{flex:0 0 auto}}
+    
+    /* Admin UI consistency */
+    .admin{max-width:1100px;padding:42px 20px 60px}
+    .panel{border:1px solid var(--edge);border-radius:14px;background:var(--paper);box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
+    .top{margin-bottom:22px}
+    .top h1,.panel h1,.panel h2{color:var(--ink)}
+    .top-actions,.calendar-controls,.extension-actions-inline,.schedule-actions,.phone-modal-actions{gap:8px}
+    button.primary,button.secondary,button.danger,button.phone-reserve-btn,button.pause-btn,.tabs button,.daybtn{
+      min-height:42px;padding:9px 14px;border:1px solid transparent;border-radius:8px;font-weight:700;line-height:1.2;cursor:pointer;box-sizing:border-box;transition:background .18s ease,border-color .18s ease,color .18s ease,transform .08s ease
+    }
+    button.primary:active,button.secondary:active,button.danger:active,button.phone-reserve-btn:active,button.pause-btn:active{transform:translateY(1px)}
+    button.primary{background:var(--green);color:#fff;border-color:var(--green)}
+    button.primary:hover{background:var(--green-dark);border-color:var(--green-dark)}
+    button.secondary{background:var(--paper);color:var(--ink);border-color:var(--edge)}
+    button.secondary:hover{background:var(--soft);border-color:var(--green)}
+    button.danger{background:#f1eeea;color:#4f463f;border-color:#ddd5cb}
+    button.danger:hover{background:#e8e2db;border-color:#cfc3b6}
+    button.phone-reserve-btn{background:var(--green);color:#fff;border-color:var(--green)}
+    button.phone-reserve-btn:hover{background:var(--green-dark);border-color:var(--green-dark)}
+    button.pause-btn{background:var(--green);color:#fff;border-color:var(--green);width:100%;margin-top:0}
+    button.pause-btn:hover{background:var(--green-dark);border-color:var(--green-dark)}
+    .lang-switch{border-color:var(--edge);border-radius:8px;background:var(--paper)}
+    .lang-switch button{min-height:42px;padding:9px 13px}
+    .lang-switch button.active{background:var(--green);color:#fff}
+    input,select,textarea{border:1px solid var(--edge);border-radius:8px;background:var(--paper);color:var(--ink);padding:9px 10px;min-height:40px;box-sizing:border-box}
+    input[type=checkbox]{min-height:auto;width:16px;height:16px;accent-color:var(--green)}
+    input:focus,select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--green) 24%,transparent);outline-offset:1px;border-color:var(--green)}
+    .calendar{background:var(--paper)}
+    .schedule-summary{background:linear-gradient(135deg,var(--soft),var(--paper));border:1px solid var(--edge);border-radius:12px}
+    .schedule-summary-item+.schedule-summary-item{border-left-color:var(--edge)}
+    .schedule-summary-label,.muted{color:var(--muted)}
+    .schedule-tag{background:#eef7f5;color:var(--green-dark)}
+    .schedule-tag.stop{background:#f1eeea;color:#5f554d}
+    .schedule-row,.appt,td,th{border-bottom-color:var(--edge)}
+    table{background:transparent}
+    th{font-weight:800;color:var(--ink)}
+    .grid2{gap:18px}
+    .secondary-tools .panel{height:100%;box-sizing:border-box}
+    .compact-panel{padding:22px}
+    .compact-panel h2{margin-top:0}
+    .break-controls,.pause-direct-controls{gap:10px}
+    .break-time-row{grid-template-columns:48px 1fr}
+    .break-controls .primary{width:100%;margin-top:2px}
+    .pause-period{border-top-color:var(--edge)}
+    .pause-state{background:color-mix(in srgb,#b64d3d 10%,var(--paper));color:#8f3c30;border:1px solid color-mix(in srgb,#b64d3d 18%,var(--edge))}
+    .phone-modal-box{background:var(--paper);border:1px solid var(--edge);border-radius:14px}
+    .phone-field input,.phone-field textarea{background:var(--paper);color:var(--ink)}
+    .phone-modal{background:rgba(20,16,12,.48)}
+
+    /* Match the site's automatic 麻の葉 / 青海波 day-night treatment on admin. */
+    body{transition:background-color .35s ease,color .35s ease}
+    body.night-mode{
+      --green:#4aa88c;--green-dark:#226b58;--accent:#d6b45d;--ink:#f3f5ef;--muted:#adbbb5;--soft:#17221e;--paper:#121916;--edge:#30433b;--shadow:0 18px 45px rgba(0,0,0,.30);
+      background:#0a0f0d;color:#f3f5ef
+    }
+    body.night-mode .panel{background:var(--paper);border-color:var(--edge);box-shadow:var(--shadow)}
+    body.night-mode .top h1,body.night-mode .panel h1,body.night-mode .panel h2,body.night-mode th{color:#f3f5ef}
+    body.night-mode .muted,body.night-mode .schedule-summary-label{color:#adbbb5}
+    body.night-mode button.secondary{background:#151e1b;color:#f3f5ef;border-color:#34483f}
+    body.night-mode button.secondary:hover{background:#1d2b26;border-color:#4aa88c}
+    body.night-mode button.danger{background:#1b211f;color:#d8e0dc;border-color:#34413c}
+    body.night-mode button.danger:hover{background:#252d2a;border-color:#4b5d54}
+    body.night-mode .lang-switch{background:#151e1b;border-color:#34483f}
+    body.night-mode .lang-switch button{color:#f3f5ef}
+    body.night-mode input,body.night-mode select,body.night-mode textarea{background:#151e1b;color:#f3f5ef;border-color:#30433b;color-scheme:dark}
+    body.night-mode .schedule-summary{background:linear-gradient(135deg,#18221e,#121916);border-color:#30433b}
+    body.night-mode .schedule-tag{background:#17372f;color:#9be0cb}
+    body.night-mode .schedule-tag.stop{background:#202622;color:#c3ccc8}
+    body.night-mode .schedule-row,body.night-mode .appt,body.night-mode td,body.night-mode th{border-bottom-color:#2b3933}
+    body.night-mode .pause-state{background:#241b18;color:#e0aaa0;border-color:#543b35}
+    body.night-mode .phone-modal{background:rgba(0,0,0,.62)}
+    body.night-mode .phone-modal-box{background:#121916;border-color:#30433b}
+    body.night-mode .phone-field input,body.night-mode .phone-field textarea{background:#151e1b;color:#f3f5ef;border-color:#30433b}
+
+    @media(max-width:700px){
+      .admin{padding-top:28px}
+      .panel{padding:18px}
+      .extension-actions-inline{width:100%}
+      .extension-actions-inline button{flex:1 1 calc(50% - 8px)}
+      .extension-actions-inline .phone-reserve-btn{flex-basis:100%}
+    }
   </style>
 </head>
 <body>
@@ -257,6 +338,15 @@
   document.getElementById('phoneReserveModal').addEventListener('click',function(e){if(e.target===this)closePhoneModal();});
   document.getElementById('date').addEventListener('change',function(){render().catch(handleAdminLoadError);});
   document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')login();});
+  function updateAdminTheme(){
+    const now=new Date();
+    const minutes=now.getHours()*60+now.getMinutes();
+    const isDay=minutes>=9*60 && minutes<19*60;
+    document.body.classList.toggle('night-mode',!isDay);
+  }
+  updateAdminTheme();
+  setInterval(updateAdminTheme,60000);
+
   applyAdminLanguage();
   (async function(){try{await api('/api/admin/data');showApp();}catch(e){showLogin();}})();
 </script>
