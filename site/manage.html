@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="上高田整骨院の予約変更・キャンセルページ。">
+  <title>予約変更・キャンセル | 上高田整骨院</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root{--manage-max:760px}
+    body.manage-page{background:#f5efe4;color:var(--ink)}
+    .manage-header{position:sticky;top:0;z-index:30;background:rgba(255,250,240,.96);border-bottom:1px solid var(--edge);backdrop-filter:blur(14px)}
+    .manage-header-inner{width:min(1120px,calc(100% - 32px));min-height:68px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .manage-brand{font-weight:800;color:var(--green);font-size:20px;white-space:nowrap;text-decoration:none}
+    .manage-header-actions{display:flex;align-items:center;gap:10px}
+    .manage-back{font-size:14px;font-weight:700;color:var(--muted);text-decoration:none}
+    .manage-language{border:1px solid var(--edge);border-radius:8px;background:var(--paper);color:var(--ink);padding:8px 30px 8px 10px;font-size:14px}
+    .manage-main{padding:42px 16px 72px}
+    .manage-shell{width:min(var(--manage-max),100%);margin:0 auto}
+    .manage-hero{text-align:center;margin:8px 0 28px}
+    .manage-eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 10px;color:var(--green);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .manage-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}
+    .manage-hero h1{margin:0;color:var(--ink);font-size:clamp(28px,6vw,42px);line-height:1.2}
+    .manage-hero p{margin:10px 0 0;color:var(--muted);font-size:15px}
+    .manage-card{background:var(--paper);border:1px solid var(--edge);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+    .manage-section{padding:24px clamp(20px,5vw,34px)}
+    .manage-section+.manage-section{border-top:1px solid #edf2ef}
+    .manage-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:18px;color:var(--ink)}
+    .manage-title .num{width:28px;height:28px;display:inline-grid;place-items:center;border-radius:50%;background:var(--soft);color:var(--green-dark);font-size:13px;font-weight:800;flex:0 0 auto}
+    .manage-field{display:block;margin:0 0 16px}
+    .manage-label{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px;font-size:14px;font-weight:700;color:var(--ink)}
+    .manage-input,.manage-select,.manage-textarea{width:100%;border:1px solid var(--edge);border-radius:10px;background:var(--paper);color:var(--ink);padding:12px 13px;font:inherit;font-size:16px;box-sizing:border-box;outline:none}
+    .manage-input:focus,.manage-select:focus,.manage-textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(33,131,111,.10)}
+    .manage-date-row{display:grid;grid-template-columns:54px 1fr 54px;align-items:center;gap:10px}
+    .manage-date-btn{height:48px;border:1.5px solid var(--green-dark);border-radius:10px;background:var(--paper);color:var(--green-dark);font-size:28px;font-weight:800;line-height:1;cursor:pointer}
+    .manage-date-btn:hover,.manage-date-btn:focus-visible{background:var(--soft);outline:none}
+    .manage-date-btn:disabled{opacity:.35;cursor:not-allowed}
+    .manage-date-label{text-align:center;font-size:17px;font-weight:800;color:var(--ink)}
+    .manage-help{margin:7px 0 0;color:var(--muted);font-size:13px}
+    .manage-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+    .manage-slot{min-height:46px;border:1px solid var(--edge);border-radius:9px;background:var(--paper);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+    .manage-slot:hover,.manage-slot:focus-visible{border-color:var(--green);background:var(--soft);outline:none}
+    .manage-slot.selected{background:var(--green);border-color:var(--green);color:#fff}
+    .manage-slot:disabled{opacity:.55;cursor:not-allowed}
+    .manage-empty,.manage-notice{padding:14px 15px;border-radius:10px;background:var(--soft);color:var(--muted);font-size:14px}
+    .manage-form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .manage-primary,.manage-secondary,.manage-danger{min-height:48px;border-radius:10px;padding:11px 18px;font:inherit;font-weight:800;cursor:pointer}
+    .manage-primary{border:0;background:var(--green);color:#fff;box-shadow:0 7px 18px rgba(33,131,111,.16)}
+    .manage-primary:hover{background:var(--green-dark)}
+    .manage-secondary{border:1px solid var(--edge);background:var(--paper);color:var(--ink)}
+    .manage-danger{border:1px solid #b84b4b;background:#fff;color:#a73c3c}
+    .manage-danger:hover{background:#fff4f4}
+    .manage-primary:disabled,.manage-secondary:disabled,.manage-danger:disabled{opacity:.55;cursor:not-allowed}
+    .manage-result{display:none}
+    .manage-summary{padding:16px;border-radius:12px;background:var(--soft);margin-bottom:18px}
+    .manage-summary strong{display:block;font-size:19px;color:var(--ink);margin-bottom:5px}
+    .manage-summary span{display:block;color:var(--muted);font-size:14px;line-height:1.7}
+    .manage-danger-zone{margin-top:18px;padding-top:18px;border-top:1px solid #edf2ef}
+    .manage-status{margin-top:14px;display:none}
+    .manage-footer{text-align:center;color:var(--muted);font-size:13px;margin-top:22px}
+    .manage-footer a{color:var(--green);font-weight:700}
+    body.manage-page.night-mode{background:#101714}
+    body.manage-page.night-mode .manage-header{background:rgba(17,24,21,.96)}
+    body.manage-page.night-mode .manage-date-btn,body.manage-page.night-mode .manage-slot,body.manage-page.night-mode .manage-secondary,body.manage-page.night-mode .manage-input,body.manage-page.night-mode .manage-select,body.manage-page.night-mode .manage-textarea{background:#151e1a;color:#f3f5ef;border-color:#314139}
+    body.manage-page.night-mode .manage-danger{background:#211818;color:#ffb2b2;border-color:#824545}
+    body.manage-page.night-mode .manage-section+.manage-section,body.manage-page.night-mode .manage-danger-zone{border-color:#26342e}
+    @media(max-width:600px){
+      .manage-header-inner{width:min(100% - 20px,1120px);min-height:60px}
+      .manage-brand{font-size:17px}
+      .manage-back{font-size:13px}
+      .manage-main{padding:30px 12px 58px}
+      .manage-slots{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .manage-date-row{grid-template-columns:48px 1fr 48px}
+      .manage-form-actions>*{flex:1 1 100%}
+    }
+  </style>
+</head>
+<body class="manage-page">
+  <header class="manage-header">
+    <div class="manage-header-inner">
+      <a class="manage-brand" href="index.html">上高田整骨院</a>
+      <div class="manage-header-actions">
+        <a class="manage-back" href="index.html" data-i18n="back">← トップへ戻る</a>
+        <select id="language" class="manage-language" aria-label="Language">
+          <option value="ja">日本語</option><option value="zh">中文</option><option value="en">English</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="manage-main">
+    <div class="manage-shell">
+      <div class="manage-hero">
+        <div class="manage-eyebrow">RESERVATION</div>
+        <h1 data-i18n="title">予約変更・キャンセル</h1>
+        <p data-i18n="subtitle">予約した日時を選択し、お名前と電話番号を入力してください。</p>
+      </div>
+
+      <div class="manage-card">
+        <section class="manage-section" id="lookupSection">
+          <h2 class="manage-title"><span class="num">1</span><span data-i18n="chooseDate">予約日を選択</span></h2>
+          <div class="manage-date-row">
+            <button id="prev" class="manage-date-btn" type="button" aria-label="前の日">‹</button>
+            <div id="dateLabel" class="manage-date-label"></div>
+            <button id="next" class="manage-date-btn" type="button" aria-label="次の日">›</button>
+          </div>
+          <input id="dateInput" class="manage-input" type="date" style="margin-top:12px" aria-label="予約日">
+          <p class="manage-help" data-i18n="dateHelp">本日から14日先まで表示します。</p>
+        </section>
+
+        <section class="manage-section">
+          <h2 class="manage-title"><span class="num">2</span><span data-i18n="chooseTime">予約時間を選択</span></h2>
+          <div id="slots" class="manage-slots"></div>
+          <div id="slotsMessage" class="manage-empty" style="display:none"></div>
+        </section>
+
+        <section class="manage-section" id="identitySection">
+          <h2 class="manage-title"><span class="num">3</span><span data-i18n="verifyTitle">予約情報を確認</span></h2>
+          <label class="manage-field"><span class="manage-label"><span data-i18n="name">お名前</span></span><input id="name" class="manage-input" autocomplete="name" maxlength="80" data-i18n-placeholder="namePlaceholder" placeholder="お名前を入力してください"></label>
+          <label class="manage-field"><span class="manage-label"><span data-i18n="phone">電話番号</span></span><input id="phone" class="manage-input" type="tel" inputmode="tel" autocomplete="tel" maxlength="40" data-i18n-placeholder="phonePlaceholder" placeholder="090-1234-5678"></label>
+          <div class="manage-form-actions"><button id="verifyBtn" class="manage-primary" type="button" data-i18n="verify">確認する</button></div>
+          <div id="status" class="manage-notice manage-status"></div>
+        </section>
+
+        <section class="manage-section manage-result" id="resultSection">
+          <h2 class="manage-title"><span class="num">4</span><span data-i18n="resultTitle">予約内容</span></h2>
+          <div id="summary" class="manage-summary"></div>
+          <div class="manage-form-actions"><button id="editBtn" class="manage-primary" type="button" data-i18n="edit">予約を変更する</button><button id="backBtn" class="manage-secondary" type="button" data-i18n="backToSearch">戻る</button></div>
+          <div id="editForm" style="display:none;margin-top:18px">
+            <label class="manage-field"><span class="manage-label"><span data-i18n="newDate">変更後の予約日</span></span><input id="newDate" class="manage-input" type="date"></label>
+            <label class="manage-field"><span class="manage-label"><span data-i18n="newTime">変更後の予約時間</span></span><input id="newTime" class="manage-input" type="text" inputmode="numeric" placeholder="HH:MM" maxlength="5"></label>
+            <label class="manage-field"><span class="manage-label"><span data-i18n="newName">お名前</span></span><input id="newName" class="manage-input" maxlength="80"></label>
+            <label class="manage-field"><span class="manage-label"><span data-i18n="newPhone">電話番号</span></span><input id="newPhone" class="manage-input" type="tel" inputmode="tel" maxlength="40"></label>
+            <div class="manage-field"><span class="manage-label"><span data-i18n="extension">延長施術</span></span>
+              <select id="newExtension" class="manage-select"><option value="0">なし</option><option value="10">10分延長</option><option value="20">20分延長</option><option value="30">30分延長</option></select>
+            </div>
+            <label class="manage-field"><span class="manage-label"><span data-i18n="note">備考</span></span><textarea id="newNote" class="manage-textarea" rows="4" maxlength="500"></textarea></label>
+            <div class="manage-form-actions"><button id="saveBtn" class="manage-primary" type="button" data-i18n="save">変更を保存する</button><button id="cancelEditBtn" class="manage-secondary" type="button" data-i18n="cancelEdit">変更をやめる</button></div>
+          </div>
+          <div class="manage-danger-zone"><button id="cancelBtn" class="manage-danger" type="button" data-i18n="cancelReservation">この予約をキャンセルする</button></div>
+        </section>
+      </div>
+
+      <div class="manage-footer"><span data-i18n="footer">ご不明な点がありましたら、お電話でお問い合わせください。</span><br><a href="tel:0353801963">03-5380-1963</a></div>
+    </div>
+  </main>
+
+  <script>
+    const I18N={
+      ja:{back:'← トップへ戻る',title:'予約変更・キャンセル',subtitle:'予約した日時を選択し、お名前と電話番号を入力してください。',chooseDate:'予約日を選択',dateHelp:'本日から14日先まで表示します。',chooseTime:'予約時間を選択',verifyTitle:'予約情報を確認',name:'お名前',phone:'電話番号',namePlaceholder:'お名前を入力してください',phonePlaceholder:'090-1234-5678',verify:'確認する',resultTitle:'予約内容',edit:'予約を変更する',backToSearch:'戻る',newDate:'変更後の予約日',newTime:'変更後の予約時間',newName:'お名前',newPhone:'電話番号',extension:'延長施術',note:'備考',save:'変更を保存する',cancelEdit:'変更をやめる',cancelReservation:'この予約をキャンセルする',footer:'ご不明な点がありましたら、お電話でお問い合わせください。',noBookings:'この日はWeb予約がありません。',loadError:'予約情報を取得できませんでした。',selectTime:'予約時間を選択してください。',verifyError:'予約情報を確認できませんでした。日付・時間・お名前・電話番号をご確認ください。',verified:'予約情報を確認しました。',updateOk:'予約を変更しました。',cancelOk:'予約をキャンセルしました。',updateError:'予約を変更できませんでした。',cancelConfirm:'この予約をキャンセルしますか？',cancelError:'予約をキャンセルできませんでした。',past:'過去または開始済みの予約は変更・キャンセルできません。',unavailable:'この時間は予約できません。',closed:'この日は臨時休業中です。',days:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日月火水木金土'[d.getDay()]}）`},
+      zh:{back:'← 返回首页',title:'修改・取消预约',subtitle:'请选择预约日期和时间，然后输入姓名与电话号码。',chooseDate:'选择预约日期',dateHelp:'显示从今天起14天内的预约。',chooseTime:'选择预约时间',verifyTitle:'确认预约信息',name:'姓名',phone:'电话号码',namePlaceholder:'请输入姓名',phonePlaceholder:'090-1234-5678',verify:'确认',resultTitle:'预约内容',edit:'修改预约',backToSearch:'返回',newDate:'修改后的预约日期',newTime:'修改后的预约时间',newName:'姓名',newPhone:'电话号码',extension:'延长治疗',note:'备注',save:'保存修改',cancelEdit:'取消修改',cancelReservation:'取消此预约',footer:'如有疑问，请通过电话联系我们。',noBookings:'当天没有网上预约。',loadError:'无法获取预约信息，请稍后再试。',selectTime:'请选择预约时间。',verifyError:'无法确认预约信息，请检查日期、时间、姓名和电话号码。',verified:'预约信息已确认。',updateOk:'预约已修改。',cancelOk:'预约已取消。',updateError:'无法修改预约。',cancelConfirm:'确定要取消此预约吗？',cancelError:'无法取消预约。',past:'已经开始或已经过去的预约不能修改或取消。',unavailable:'该时间无法预约。',closed:'当天正在临时休业。',days:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`},
+      en:{back:'← Back to home',title:'Change or Cancel Reservation',subtitle:'Select your reservation date and time, then enter your name and phone number.',chooseDate:'Select reservation date',dateHelp:'Reservations from today through 14 days ahead are shown.',chooseTime:'Select reservation time',verifyTitle:'Verify reservation',name:'Name',phone:'Phone number',namePlaceholder:'Enter your name',phonePlaceholder:'090-1234-5678',verify:'Verify',resultTitle:'Reservation details',edit:'Change reservation',backToSearch:'Back',newDate:'New reservation date',newTime:'New reservation time',newName:'Name',newPhone:'Phone number',extension:'Treatment extension',note:'Notes',save:'Save changes',cancelEdit:'Cancel changes',cancelReservation:'Cancel this reservation',footer:'If you have any questions, please call us.',noBookings:'There are no Web reservations on this date.',loadError:'Unable to load reservation information.',selectTime:'Please select a reservation time.',verifyError:'The reservation could not be verified. Please check the date, time, name, and phone number.',verified:'Reservation verified.',updateOk:'Reservation changed.',cancelOk:'Reservation cancelled.',updateError:'The reservation could not be changed.',cancelConfirm:'Cancel this reservation?',cancelError:'The reservation could not be cancelled.',past:'Reservations that have started or already passed cannot be changed or cancelled.',unavailable:'This time is not available.',closed:'The clinic is temporarily closed on this date.',days:(d)=>`${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`}
+    };
+    let lang=localStorage.getItem('language'); if(!['ja','zh','en'].includes(lang)) lang=navigator.language?.toLowerCase().startsWith('zh')?'zh':navigator.language?.toLowerCase().startsWith('ja')?'ja':'en';
+    const $=id=>document.getElementById(id); const t=k=>I18N[lang][k]??I18N.ja[k]??k;
+    const pad=n=>String(n).padStart(2,'0');
+    const tokyoParts=()=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());return Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));};
+    const tokyoDate=()=>{const p=tokyoParts();return `${p.year}-${p.month}-${p.day}`};
+    const addDays=(s,n)=>{const d=new Date(`${s}T12:00:00`);d.setDate(d.getDate()+n);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
+    const maxDate=()=>addDays(tokyoDate(),14);
+    const minutesOf=s=>{const [h,m]=String(s).split(':').map(Number);return h*60+m};
+    let date=tokyoDate(), selectedTime='', current=null;
+
+    function applyLanguage(){
+      localStorage.setItem('language',lang); document.documentElement.lang=lang; $('language').value=lang;
+      document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(I18N[lang][k])el.textContent=I18N[lang][k]});
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.dataset.i18nPlaceholder;if(I18N[lang][k])el.placeholder=I18N[lang][k]});
+      renderDateLabel();
+    }
+    $('language').addEventListener('change',()=>{lang=$('language').value;applyLanguage();renderSlots(lastSlots)});
+    function renderDateLabel(){const d=new Date(`${date}T12:00:00`);$('dateLabel').textContent=t('days')(d);$('dateInput').value=date;$('prev').disabled=date<=tokyoDate();$('next').disabled=date>=maxDate();}
+    function setStatus(msg,show=true){$('status').textContent=msg;$('status').style.display=show?'block':'none'}
+    function normalizePhone(v){return String(v||'').replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xfee0)).replace(/[\s\-ー−―]/g,'')}
+    function validPhone(v){return /^0\d{9,10}$/.test(normalizePhone(v))}
+    function normalizeTime(v){let x=String(v||'').replace(/[^0-9:]/g,'');if(/^\d{3,4}$/.test(x)){x=x.padStart(4,'0');x=x.slice(0,2)+':'+x.slice(2)}return x}
+    let lastSlots=[];
+    async function loadSlots(){
+      selectedTime=''; current=null; $('resultSection').style.display='none'; $('editForm').style.display='none'; setStatus('',false);
+      $('slots').innerHTML=''; $('slotsMessage').style.display='none';
+      renderDateLabel();
+      try{
+        const r=await fetch(`/api/manage?date=${encodeURIComponent(date)}`,{cache:'no-store'}); const j=await r.json(); if(!r.ok||!j.ok)throw new Error(j.error||'load');
+        lastSlots=j.slots||[]; renderSlots(lastSlots);
+      }catch(e){$('slotsMessage').textContent=t('loadError');$('slotsMessage').style.display='block';lastSlots=[]}
+    }
+    function renderSlots(slots){
+      const box=$('slots');box.innerHTML='';
+      if(!slots.length){$('slotsMessage').textContent=t('noBookings');$('slotsMessage').style.display='block';return}
+      $('slotsMessage').style.display='none';
+      slots.forEach(time=>{const b=document.createElement('button');b.type='button';b.className='manage-slot';b.textContent=time;b.addEventListener('click',()=>{document.querySelectorAll('.manage-slot').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');selectedTime=time});box.appendChild(b)});
+    }
+    $('dateInput').min=tokyoDate();$('dateInput').max=maxDate();$('dateInput').addEventListener('change',()=>{const v=$('dateInput').value;if(v>=tokyoDate()&&v<=maxDate()){date=v;loadSlots()}});
+    $('prev').addEventListener('click',()=>{date=addDays(date,-1);loadSlots()});$('next').addEventListener('click',()=>{date=addDays(date,1);loadSlots()});
+
+    async function verify(){
+      if(!selectedTime)return setStatus(t('selectTime'));
+      const name=$('name').value.trim(),phone=$('phone').value.trim();
+      if(!name||!validPhone(phone))return setStatus(t('verifyError'));
+      $('verifyBtn').disabled=true;setStatus('',false);
+      try{
+        const r=await fetch('/api/manage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify',date,time:selectedTime,name,phone})});
+        const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||t('verifyError'));
+        current=j.appointment; fillResult(); setStatus(t('verified'));
+      }catch(e){setStatus(e.message||t('verifyError'))}finally{$('verifyBtn').disabled=false}
+    }
+    function fillResult(){
+      const a=current;$('summary').innerHTML=`<strong>${escapeHtml(a.date)} ${escapeHtml(a.time)}</strong><span>${escapeHtml(a.name)}</span><span>${escapeHtml(a.phone)}</span><span>${escapeHtml(a.duration_minutes||30)}分</span>`;
+      $('newDate').min=tokyoDate();$('newDate').max=maxDate();$('newDate').value=a.date;$('newTime').value=a.time;$('newName').value=a.name;$('newPhone').value=a.phone;$('newExtension').value=String(Math.max(0,Number(a.duration_minutes||30)-30));$('newNote').value=a.note||'';$('resultSection').style.display='block';$('resultSection').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+    $('verifyBtn').addEventListener('click',verify);
+    $('editBtn').addEventListener('click',()=>{$('editForm').style.display='block';$('editBtn').style.display='none'});
+    $('cancelEditBtn').addEventListener('click',()=>{$('editForm').style.display='none';$('editBtn').style.display='inline-block';fillResult()});
+    $('backBtn').addEventListener('click',()=>{$('resultSection').style.display='none';current=null;setStatus('',false)});
+    $('newTime').addEventListener('input',()=>{$('newTime').value=normalizeTime($('newTime').value).slice(0,5)});
+    $('saveBtn').addEventListener('click',async()=>{
+      if(!current)return;
+      const newDate=$('newDate').value,newTime=normalizeTime($('newTime').value),newName=$('newName').value.trim(),newPhone=$('newPhone').value.trim(),extensionMinutes=Number($('newExtension').value||0),note=$('newNote').value;
+      if(!newDate||!newTime||!newName||!validPhone(newPhone))return setStatus(t('updateError'));
+      $('saveBtn').disabled=true;setStatus('',false);
+      try{
+        const r=await fetch('/api/manage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'update',original:{date:current.date,time:current.time,name:current.name,phone:current.phone},date:newDate,time:newTime,name:newName,phone:newPhone,extensionMinutes,note})});
+        const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||t('updateError'));
+        date=j.appointment.date;await loadSlots();current=j.appointment;fillResult();$('editForm').style.display='none';$('editBtn').style.display='inline-block';setStatus(t('updateOk'));
+      }catch(e){setStatus(e.message||t('updateError'))}finally{$('saveBtn').disabled=false}
+    });
+    $('cancelBtn').addEventListener('click',async()=>{
+      if(!current)return;if(!confirm(t('cancelConfirm')))return;
+      $('cancelBtn').disabled=true;setStatus('',false);
+      try{
+        const r=await fetch('/api/manage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'cancel',date:current.date,time:current.time,name:current.name,phone:current.phone})});
+        const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||t('cancelError'));
+        const cancelledDate=current.date;$('resultSection').style.display='none';date=cancelledDate;await loadSlots();current=null;setStatus(t('cancelOk'));
+      }catch(e){setStatus(e.message||t('cancelError'))}finally{$('cancelBtn').disabled=false}
+    });
+    applyLanguage();loadSlots();
+    function applyTheme(){const p=tokyoParts();const m=Number(p.hour)*60+Number(p.minute);document.body.classList.toggle('night-mode',!(m>=540&&m<1140));}
+    applyTheme();setInterval(applyTheme,60000);
+  </script>
+</body>
+</html>

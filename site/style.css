@@ -135,6 +135,7 @@ button, select { font: inherit; }
 .btn-phone { background: var(--paper); color: var(--green-dark); }
 .btn-line { background: var(--line); color: #fff; }
 .btn-reserve { background: var(--paper); color: var(--green-dark); }
+.btn-manage { background: var(--paper); color: var(--green-dark); }
 .hero-info {
   display: flex;
   flex-wrap: wrap;
