@@ -220,7 +220,7 @@
               <p id="durationSummary" class="reserve-field-help"></p>
             </div>
 
-            <div id="pauseNotice" class="reserve-closed-notice" style="display:none"><strong id="pauseNoticeTitle">現在、臨時休業中です。</strong><span id="pauseNoticeText">再開予定日以降の日付をご確認ください。</span></div>
+            <div id="pauseNotice" class="reserve-closed-notice" style="display:none"><strong data-i18n="reserve.pausedTitle">現在、臨時休業中です。</strong><span id="pauseNoticeText" data-i18n="reserve.pausedHelp">再開予定日以降の日付をご確認ください。</span></div>
             <div class="reserve-notice">
               <strong data-i18n="reserve.rulesTitle">ご予約について</strong><br>
               <span data-i18n="reserve.rule1">予約済み・不可予約時間と重なる時間は選択できません。</span><br>
@@ -297,11 +297,14 @@
       langSelect.value = currentLang;
       document.documentElement.lang = currentLang;
       setLanguage(currentLang);
-      document.getElementById('pauseNoticeTitle').textContent = reserveI18n[currentLang].pausedTitle;
       document.querySelectorAll('[data-i18n]').forEach(el=>{
         const key=el.dataset.i18n;
-        if(Object.prototype.hasOwnProperty.call(reserveI18n[currentLang], key)) el.textContent=reserveI18n[currentLang][key];
+        const localKey=key.startsWith('reserve.')?key.slice(8):key;
+        if(Object.prototype.hasOwnProperty.call(reserveI18n[currentLang], localKey)) el.textContent=reserveI18n[currentLang][localKey];
       });
+      document.getElementById('pauseNoticeTitle').textContent = reserveI18n[currentLang].pausedTitle;
+      const pauseReopening=document.getElementById('pauseNotice').dataset.reopeningDate;
+      if(pauseReopening) renderPauseNoticeText(pauseReopening);
       document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
         const key=el.dataset.i18nPlaceholder;
         if(reserveI18n[currentLang][key]) el.placeholder=reserveI18n[currentLang][key];
@@ -391,6 +394,15 @@
       updateDurationSummary();
     }
 
+    function renderPauseNoticeText(reopeningDate){
+      const pauseNoticeText=document.getElementById('pauseNoticeText');
+      if(!pauseNoticeText)return;
+      if(!reopeningDate){pauseNoticeText.textContent=t('pausedHelp');return;}
+      const d=String(reopeningDate).split('-').map(Number);
+      const label=currentLang==='ja'?`${d[0]}年${d[1]}月${d[2]}日`:currentLang==='en'?`${d[1]}/${d[2]}/${d[0]}`:`${d[0]}年${d[1]}月${d[2]}日`;
+      pauseNoticeText.textContent=`${t('pausedHelp')} (${t('reopeningLabel')}: ${label})`;
+    }
+
     function setReservationClosedView(kind, reopeningDate){
       const timeBox=document.getElementById('reserveTimeBox');
       const extensionBox=document.getElementById('reserveExtensionBox');
@@ -403,11 +415,8 @@
       extensionBox.style.display=closed?'none':'block';
       infoSection.style.display=closed?'none':'block';
       pauseNotice.style.display=kind==='paused'?'block':'none';
-      if(kind==='paused' && reopeningDate){
-        const d=String(reopeningDate).split('-').map(Number);
-        const label=currentLang==='ja'?`${d[0]}年${d[1]}月${d[2]}日`:currentLang==='en'?`${d[1]}/${d[2]}/${d[0]}`:`${d[0]}年${d[1]}月${d[2]}日`;
-        pauseNoticeText.textContent=`${t('pausedHelp')} (${t('reopeningLabel')}: ${label})`;
-      }
+      pauseNotice.dataset.reopeningDate=kind==='paused'?(reopeningDate||''):'';
+      if(kind==='paused') renderPauseNoticeText(reopeningDate);
       if(closed)form.reset();
     }
 
