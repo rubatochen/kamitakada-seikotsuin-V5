@@ -45,7 +45,8 @@
     .reserve-date-btn:hover:not(:disabled){background:var(--soft)}
     .reserve-date-btn:disabled{opacity:.35;cursor:not-allowed}
     .reserve-date-label{text-align:center;font-weight:800;color:var(--ink);font-size:17px}
-    .reserve-date-help{text-align:center;margin:8px 0 0;color:var(--muted);font-size:12px}
+    .reserve-date-meta{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:7px;margin:8px 0 12px;color:var(--muted);font-size:12px;line-height:1.6}
+    .reserve-date-meta strong{color:var(--ink);font-weight:700}
 
     .reserve-time-box{padding:18px;border:1px solid var(--edge);border-radius:12px;background:#f8f1e6}
     .reserve-time-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px;font-weight:800;color:var(--ink)}
@@ -125,7 +126,8 @@
     body.reserve-page.night-mode .reserve-extension-options label{background:#151e1b;color:#f3f5ef;border-color:#30433b}
     body.reserve-page.night-mode .reserve-info-item strong,
     body.reserve-page.night-mode .reserve-field-help,
-    body.reserve-page.night-mode .reserve-date-help{color:#adbbb5}
+    body.reserve-page.night-mode .reserve-date-meta{color:#adbbb5}
+    body.reserve-page.night-mode .reserve-date-meta strong{color:#e8eee9}
     body.reserve-page.night-mode .reserve-date-btn{background:#151e1b;color:#8fd0bb;border-color:#30433b}
     body.reserve-page.night-mode .reserve-date-btn:hover:not(:disabled){background:#1d2b26}
     body.reserve-page.night-mode .reserve-extension-options label:has(input:checked){background:#17372f;border-color:#3d9c84;color:#9be0cb}
@@ -144,16 +146,11 @@
       .reserve-hero{margin-bottom:20px}
       .reserve-hero p{font-size:14px}
       .reserve-card-section{padding:20px 16px}
-      .reserve-info{grid-template-columns:1fr 1fr;gap:8px}
-      .reserve-info-item{padding:11px 10px}
-      .reserve-info-item strong{font-size:11px}
-      .reserve-info-item span{font-size:14px}
       .reserve-time-input{font-size:20px}
       .reserve-extension-options{grid-template-columns:1fr}
       .reserve-date-label{font-size:15px}
     }
     @media(max-width:380px){
-      .reserve-info{grid-template-columns:1fr}
       .reserve-date-row{grid-template-columns:40px 1fr 40px;gap:6px}
       .reserve-date-btn{width:40px;height:40px}
     }
@@ -186,17 +183,16 @@
         <div id="app">
           <section class="reserve-card-section">
             <h2 class="reserve-section-title"><span class="num">1</span><span data-i18n="reserve.dateTitle">予約日・時間</span></h2>
-            <div class="reserve-info">
-              <div class="reserve-info-item"><strong data-i18n="reserve.hoursLabel">営業時間</strong><span>10:00～19:00</span></div>
-              <div class="reserve-info-item"><strong data-i18n="reserve.receptionLabel">予約受付</strong><span data-i18n="reserve.receptionValue">本日から14日先まで</span></div>
-            </div>
-
             <div class="reserve-date-row">
               <button id="prev" class="reserve-date-btn" type="button" aria-label="前の日">‹</button>
               <div id="dateLabel" class="reserve-date-label"></div>
               <button id="next" class="reserve-date-btn" type="button" aria-label="次の日">›</button>
             </div>
-            <p class="reserve-date-help" data-i18n="reserve.dateHelp">14日先まで予約できます</p>
+            <p class="reserve-date-meta">
+              <span><strong data-i18n="reserve.hoursLabel">営業時間</strong> <span>10:00～19:00</span></span>
+              <span aria-hidden="true">・</span>
+              <span data-i18n="reserve.receptionValue">本日から14日先まで</span>
+            </p>
 
 
             <div id="unavailableInfo" class="reserve-notice reserve-unavailable" style="display:none"></div>
