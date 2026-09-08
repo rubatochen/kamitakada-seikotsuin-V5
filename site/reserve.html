@@ -34,11 +34,9 @@
     .reserve-section-title{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:18px;color:var(--ink)}
     .reserve-section-title .num{width:28px;height:28px;display:inline-grid;place-items:center;border-radius:50%;background:var(--soft);color:var(--green-dark);font-size:13px;font-weight:800;flex:0 0 auto}
 
-    .reserve-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
-    .reserve-info-item{padding:13px 14px;border-radius:10px;background:#f1e7d6;border:1px solid #e5eeea}
-    .reserve-info-item strong{display:block;font-size:13px;color:var(--muted);margin-bottom:2px}
-    .reserve-info-item span{font-weight:800;color:var(--ink)}
-    .reserve-info-note{margin:0;padding:12px 14px;border-radius:10px;background:#fff1cf;color:#69572e;font-size:13px;line-height:1.65}
+    .reserve-date-meta{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px 12px;margin:10px 0 18px;color:var(--muted);font-size:13px;line-height:1.6}
+    .reserve-date-meta span{display:inline-flex;align-items:center;gap:5px}
+    .reserve-date-meta strong{color:var(--ink);font-weight:800}
 
     .reserve-date-row{display:grid;grid-template-columns:44px 1fr 44px;gap:10px;align-items:center}
     .reserve-date-btn{width:44px;height:44px;border:1px solid var(--edge);border-radius:10px;background:var(--paper);color:var(--green-dark);font-size:20px;font-weight:700;cursor:pointer}
@@ -117,13 +115,11 @@
     body.reserve-page.night-mode .reserve-card{background:#111815;border-color:#2d4038;box-shadow:0 18px 45px rgba(0,0,0,.30)}
     body.reserve-page.night-mode .reserve-card-section{border-top-color:#263630}
     body.reserve-page.night-mode .reserve-section-title .num{background:#17372f;color:#8fd0bb}
-    body.reserve-page.night-mode .reserve-info-item,
     body.reserve-page.night-mode .reserve-time-box,
     body.reserve-page.night-mode .reserve-time-input,
     body.reserve-page.night-mode .reserve-field input,
     body.reserve-page.night-mode .reserve-field textarea,
     body.reserve-page.night-mode .reserve-extension-options label{background:#151e1b;color:#f3f5ef;border-color:#30433b}
-    body.reserve-page.night-mode .reserve-info-item strong,
     body.reserve-page.night-mode .reserve-field-help,
     body.reserve-page.night-mode .reserve-date-help{color:#adbbb5}
     body.reserve-page.night-mode .reserve-date-btn{background:#151e1b;color:#8fd0bb;border-color:#30433b}
@@ -144,16 +140,11 @@
       .reserve-hero{margin-bottom:20px}
       .reserve-hero p{font-size:14px}
       .reserve-card-section{padding:20px 16px}
-      .reserve-info{grid-template-columns:1fr 1fr;gap:8px}
-      .reserve-info-item{padding:11px 10px}
-      .reserve-info-item strong{font-size:11px}
-      .reserve-info-item span{font-size:14px}
       .reserve-time-input{font-size:20px}
       .reserve-extension-options{grid-template-columns:1fr}
       .reserve-date-label{font-size:15px}
     }
     @media(max-width:380px){
-      .reserve-info{grid-template-columns:1fr}
       .reserve-date-row{grid-template-columns:40px 1fr 40px;gap:6px}
       .reserve-date-btn{width:40px;height:40px}
     }
@@ -186,17 +177,16 @@
         <div id="app">
           <section class="reserve-card-section">
             <h2 class="reserve-section-title"><span class="num">1</span><span data-i18n="reserve.dateTitle">予約日・時間</span></h2>
-            <div class="reserve-info">
-              <div class="reserve-info-item"><strong data-i18n="reserve.hoursLabel">営業時間</strong><span>10:00～19:00</span></div>
-              <div class="reserve-info-item"><strong data-i18n="reserve.receptionLabel">予約受付</strong><span data-i18n="reserve.receptionValue">本日から14日先まで</span></div>
-            </div>
-
             <div class="reserve-date-row">
               <button id="prev" class="reserve-date-btn" type="button" aria-label="前の日">‹</button>
               <div id="dateLabel" class="reserve-date-label"></div>
               <button id="next" class="reserve-date-btn" type="button" aria-label="次の日">›</button>
             </div>
-            <p class="reserve-date-help" data-i18n="reserve.dateHelp">14日先まで予約できます</p>
+            <div class="reserve-date-meta">
+              <span><strong data-i18n="reserve.hoursLabel">営業時間</strong> 10:00～19:00</span>
+              <span aria-hidden="true">・</span>
+              <span data-i18n="reserve.dateHelp">本日から14日先まで予約できます</span>
+            </div>
 
 
             <div id="unavailableInfo" class="reserve-notice reserve-unavailable" style="display:none"></div>
