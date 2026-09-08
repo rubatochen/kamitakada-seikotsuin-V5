@@ -52,7 +52,7 @@
     .reserve-time-box{padding:18px;border:1px solid var(--edge);border-radius:12px;background:#f8f1e6}
     .reserve-time-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px;font-weight:800;color:var(--ink)}
     .reserve-time-label span{font-size:12px;color:var(--muted);font-weight:600}
-    .reserve-time-input{width:100%;min-height:58px;box-sizing:border-box;border:2px solid #d9e5e0;border-radius:10px;padding:10px 14px;background:var(--paper);color:var(--ink);font:inherit;font-size:22px;font-weight:800;letter-spacing:.04em;outline:none;cursor:pointer}
+    .reserve-time-input{width:100%;min-height:58px;box-sizing:border-box;border:2px solid #d9e5e0;border-radius:10px;padding:10px 14px;background:var(--paper);color:var(--ink);font:inherit;font-size:22px;font-weight:800;letter-spacing:.04em;outline:none}
     .reserve-time-input:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(33,131,111,.10)}
     .reserve-time-input:disabled{background:#ece3d6;color:#9aa7a1;cursor:not-allowed}
     .reserve-field-help{margin:8px 0 0;color:var(--muted);font-size:12px;line-height:1.6}
@@ -202,10 +202,8 @@
               <label class="reserve-time-label" for="reserveTime">
                 <span data-i18n="reserve.timeLabel">予約時間</span>
               </label>
-              <select id="reserveTime" class="reserve-time-input" required disabled>
-                <option value="">時間を選択してください</option>
-              </select>
-              <p class="reserve-field-help" data-i18n="reserve.timeHelp">開始時間は1分単位で選択できます。</p>
+              <input id="reserveTime" class="reserve-time-input" type="time" step="60" required>
+              <p class="reserve-field-help" data-i18n="reserve.timeHelp">開始時間は1分単位で入力できます。</p>
             </div>
 
             <div id="reserveExtensionBox" class="reserve-time-box" style="margin-top:12px">
@@ -305,8 +303,6 @@
         const key=el.dataset.i18nPlaceholder;
         if(reserveI18n[currentLang][key]) el.placeholder=reserveI18n[currentLang][key];
       });
-      const timeSelect=document.getElementById('reserveTime');
-      if(timeSelect && timeSelect.options.length) timeSelect.options[0].textContent=t('selectTime');
       renderDateLabel();
       renderCurrentUnavailable();
       updateDurationSummary();
@@ -325,6 +321,21 @@
     function tokyoNowParts(){
       const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
       return Object.fromEntries(parts.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+    }
+
+    // Mobile: use the same simple HH:MM field style as desktop, without the
+    // browser's native circular time picker. Desktop remains type=time.
+    function setupMobileTimeInput(){
+      const input=document.getElementById('reserveTime');
+      if(!input)return;
+      const mobile=window.matchMedia('(pointer:coarse)').matches || window.matchMedia('(max-width:600px)').matches;
+      if(mobile){
+        input.type='text';
+        input.inputMode='numeric';
+        input.placeholder='HH:MM';
+        input.autocomplete='off';
+        input.setAttribute('aria-label','予約時間');
+      }
     }
 
     function isDaytime(){
@@ -432,15 +443,8 @@
       input.value='';
       input.disabled=false;
       input.dataset.validSlots=JSON.stringify(list||[]);
-      input.innerHTML='<option value="">'+t('selectTime')+'</option>';
-      (list||[]).filter(x=>x && x.time && x.status==='available').forEach(x=>{
-        const option=document.createElement('option');
-        option.value=x.time;
-        option.textContent=x.time;
-        input.appendChild(option);
-      });
       renderCurrentUnavailable();
-      if(temporarilyClosed || !(list||[]).some(x=>x && x.status==='available')){
+      if(temporarilyClosed || !list.length){
         input.disabled=true;
         input.value='';
         if(!temporarilyClosed){
@@ -451,8 +455,23 @@
         updateDurationSummary();
         return;
       }
+      input.oninput=()=>{
+        if(input.type==='text'){
+          let v=input.value.replace(/[^0-9:]/g,'');
+          if(v.length===4 && !v.includes(':')) v=v.slice(0,2)+':'+v.slice(2);
+          if(v.length>5) v=v.slice(0,5);
+          input.value=v;
+        }
+        selected=input.value;
+        updateDurationSummary();
+      };
       input.onchange=()=>{selected=input.value; updateDurationSummary()};
-      input.oninput=()=>{selected=input.value; updateDurationSummary()};
+      input.onblur=()=>{
+        if(input.type==='text' && /^\d{3,4}$/.test(input.value)){
+          const v=input.value.padStart(4,'0');
+          input.value=v.slice(0,2)+':'+v.slice(2);
+        }
+      };
       updateDurationSummary();
     }
 
@@ -534,6 +553,7 @@
 
     document.querySelectorAll('input[name="extension"]').forEach(el=>el.addEventListener('change',reloadAvailabilityForExtension));
     document.getElementById('reserveTime').addEventListener('change',updateDurationSummary);
+    setupMobileTimeInput();
     applyReserveLanguage(currentLang);
     load();
     setInterval(refreshReserveTheme,60000);
