@@ -356,6 +356,29 @@
   updateAdminTheme();
   setInterval(updateAdminTheme,60000);
 
+  // 后台预约自动刷新：只更新预约/休息列表和统计，不重绘营业时间编辑区，
+  // 避免管理员正在修改营业时间时被轮询覆盖输入内容。
+  let adminRefreshRunning=false;
+  async function refreshAdminScheduleSilently(){
+    if(adminRefreshRunning)return;
+    const app=document.getElementById('app');
+    if(!app || app.style.display==='none')return;
+    adminRefreshRunning=true;
+    try{
+      const fresh=await api('/api/admin/data');
+      D=fresh;
+      renderSchedule();
+      renderBreaks();
+      renderPausePeriods();
+    }catch(e){
+      if(e.status===401||e.status===403)showLogin();
+    }finally{
+      adminRefreshRunning=false;
+    }
+  }
+  // 每30秒检查一次新预约；无需手动刷新浏览器。
+  setInterval(refreshAdminScheduleSilently,60000);
+
   applyAdminLanguage();
   (async function(){try{await api('/api/admin/data');showApp();}catch(e){showLogin();}})();
 </script>
