@@ -299,12 +299,8 @@
       setLanguage(currentLang);
       document.querySelectorAll('[data-i18n]').forEach(el=>{
         const key=el.dataset.i18n;
-        const localKey=key.startsWith('reserve.')?key.slice(8):key;
-        if(Object.prototype.hasOwnProperty.call(reserveI18n[currentLang], localKey)) el.textContent=reserveI18n[currentLang][localKey];
+        if(Object.prototype.hasOwnProperty.call(reserveI18n[currentLang], key)) el.textContent=reserveI18n[currentLang][key];
       });
-      document.getElementById('pauseNoticeTitle').textContent = reserveI18n[currentLang].pausedTitle;
-      const pauseReopening=document.getElementById('pauseNotice').dataset.reopeningDate;
-      if(pauseReopening) renderPauseNoticeText(pauseReopening);
       document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
         const key=el.dataset.i18nPlaceholder;
         if(reserveI18n[currentLang][key]) el.placeholder=reserveI18n[currentLang][key];
@@ -394,15 +390,6 @@
       updateDurationSummary();
     }
 
-    function renderPauseNoticeText(reopeningDate){
-      const pauseNoticeText=document.getElementById('pauseNoticeText');
-      if(!pauseNoticeText)return;
-      if(!reopeningDate){pauseNoticeText.textContent=t('pausedHelp');return;}
-      const d=String(reopeningDate).split('-').map(Number);
-      const label=currentLang==='ja'?`${d[0]}年${d[1]}月${d[2]}日`:currentLang==='en'?`${d[1]}/${d[2]}/${d[0]}`:`${d[0]}年${d[1]}月${d[2]}日`;
-      pauseNoticeText.textContent=`${t('pausedHelp')} (${t('reopeningLabel')}: ${label})`;
-    }
-
     function setReservationClosedView(kind, reopeningDate){
       const timeBox=document.getElementById('reserveTimeBox');
       const extensionBox=document.getElementById('reserveExtensionBox');
@@ -415,8 +402,11 @@
       extensionBox.style.display=closed?'none':'block';
       infoSection.style.display=closed?'none':'block';
       pauseNotice.style.display=kind==='paused'?'block':'none';
-      pauseNotice.dataset.reopeningDate=kind==='paused'?(reopeningDate||''):'';
-      if(kind==='paused') renderPauseNoticeText(reopeningDate);
+      if(kind==='paused' && reopeningDate){
+        const d=String(reopeningDate).split('-').map(Number);
+        const label=currentLang==='ja'?`${d[0]}年${d[1]}月${d[2]}日`:currentLang==='en'?`${d[1]}/${d[2]}/${d[0]}`:`${d[0]}年${d[1]}月${d[2]}日`;
+        pauseNoticeText.textContent=`${t('pausedHelp')} (${t('reopeningLabel')}: ${label})`;
+      }
       if(closed)form.reset();
     }
 
