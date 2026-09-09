@@ -211,22 +211,20 @@
     </div>
   </footer>
 
+  <div class="floating-calendar" id="floatingCalendar" aria-label="予約カレンダー">
+    <div class="floating-calendar-title"><span data-i18n="calendar.title">予約カレンダー</span><span data-i18n="calendar.window">今後14日</span></div>
+    <div class="floating-calendar-grid" id="floatingCalendarGrid"></div>
+    <div class="floating-calendar-legend"><span>○ <span data-i18n="calendar.open">受付中</span></span><span><b>休</b> <span data-i18n="calendar.closed">休業日</span></span></div>
+  </div>
+
+  <button id="backToTop" class="back-top" type="button" aria-label="ページ上部へ">↑</button>
+
   <script src="lang.js"></script>
   <script src="script.js"></script>
   <script>
     (function(){
-      // Keep the calendar outside <body> so legacy body layout rules cannot affect fixed positioning.
-      const root=document.createElement('div');
-      root.id='fixedCalendarRoot';
-      root.innerHTML=`
-        <div class="fixed-calendar" id="floatingCalendar" aria-label="予約カレンダー">
-          <div class="fixed-calendar-title"><span data-i18n="calendar.title">予約カレンダー</span><span data-i18n="calendar.window">今後14日</span></div>
-          <div class="fixed-calendar-grid" id="floatingCalendarGrid"></div>
-          <div class="fixed-calendar-legend"><span>○ <span data-i18n="calendar.open">受付中</span></span><span><b>休</b> <span data-i18n="calendar.closed">休業日</span></span></div>
-        </div>`;
-      document.documentElement.appendChild(root);
-
-      const grid=root.querySelector('#floatingCalendarGrid');
+      const grid=document.getElementById('floatingCalendarGrid');
+      if(!grid)return;
       const weekdays=['日','月','火','水','木','金','土'];
       const zhWeekdays=['日','一','二','三','四','五','六'];
       const enWeekdays=['S','M','T','W','T','F','S'];
@@ -244,10 +242,7 @@
       for(let i=0;i<14;i++){const d=new Date(today);d.setUTCDate(today.getUTCDate()+i);dates.push(d);}
       const render=(lang)=>{
         const ws=lang==='zh'?zhWeekdays:lang==='en'?enWeekdays:weekdays;
-        grid.innerHTML=dates.map(d=>{
-          const key=fmt(d); const isToday=key===todayKey;
-          return `<a class="fixed-calendar-day open${isToday?' today':''}" href="reserve.html?date=${key}" data-date="${key}"><span class="fixed-calendar-weekday">${ws[d.getUTCDay()]}</span><strong>${d.getUTCDate()}</strong>${isToday?`<small class="today-label" data-i18n="calendar.today">今日</small>`:''}</a>`;
-        }).join('');
+        grid.innerHTML=dates.map(d=>{const key=fmt(d); const isToday=key===todayKey; return `<a class="floating-calendar-day open${isToday?' today':''}" href="reserve.html?date=${key}" data-date="${key}"><span class="floating-calendar-weekday">${ws[d.getUTCDay()]}</span><strong>${d.getUTCDate()}</strong>${isToday?`<small class="today-label" data-i18n="calendar.today">今日</small>`:''}</a>`;}).join('');
       };
       render(window.getPreferredLanguage?window.getPreferredLanguage():'ja');
       fetch('/api/calendar',{credentials:'same-origin',cache:'no-store'}).then(r=>r.ok?r.json():null).then(data=>{
