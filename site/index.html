@@ -211,18 +211,28 @@
     </div>
   </footer>
 
-  <div class="floating-calendar" id="floatingCalendar" aria-label="予約カレンダー">
-    <div class="floating-calendar-title"><span data-i18n="calendar.title">予約カレンダー</span><span data-i18n="calendar.window">今後14日</span></div>
-    <div class="floating-calendar-grid" id="floatingCalendarGrid"></div>
-    <div class="floating-calendar-legend"><span>○ <span data-i18n="calendar.open">受付中</span></span><span><b>休</b> <span data-i18n="calendar.closed">休業日</span></span></div>
+  <div id="floatingUiRoot" aria-label="予約・連絡メニュー">
+    <div class="floating-calendar" id="floatingCalendar" aria-label="予約カレンダー">
+      <div class="floating-calendar-title"><span data-i18n="calendar.title">予約カレンダー</span><span data-i18n="calendar.window">今後14日</span></div>
+      <div class="floating-calendar-grid" id="floatingCalendarGrid"></div>
+      <div class="floating-calendar-legend"><span>○ <span data-i18n="calendar.open">受付中</span></span><span><b>休</b> <span data-i18n="calendar.closed">休業日</span></span></div>
+    </div>
+
+    <div class="floating-actions">
+      <a class="floating-web" href="reserve.html" data-i18n="floating.web">Webで予約</a>
+      <a class="floating-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="floating.line">公式LINE</a>
+    </div>
+    <button id="backToTop" class="back-top" type="button" aria-label="ページ上部へ">↑</button>
   </div>
 
-  <div class="floating-actions">
-    <a class="floating-web" href="reserve.html" data-i18n="floating.web">Webで予約</a>
-    <a class="floating-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="floating.line">公式LINE</a>
-  </div>
-  <button id="backToTop" class="back-top" type="button" aria-label="ページ上部へ">↑</button>
-
+  <script>
+    (function(){
+      const root=document.getElementById('floatingUiRoot');
+      if(root && document.documentElement && root.parentElement!==document.documentElement){
+        document.documentElement.appendChild(root);
+      }
+    })();
+  </script>
   <script src="lang.js"></script>
   <script src="script.js"></script>
   <script>
