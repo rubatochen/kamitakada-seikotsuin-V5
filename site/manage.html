@@ -44,7 +44,8 @@
     .manage-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
     .manage-slot{min-height:46px;border:1px solid var(--edge);border-radius:9px;background:var(--paper);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
     .manage-slot:hover,.manage-slot:focus-visible{border-color:var(--green);background:var(--soft);outline:none}
-    .manage-slot.selected{background:var(--green);border-color:var(--green);color:#fff}
+    .manage-slot.selected,.manage-slot[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+    body.manage-page.night-mode .manage-slot.selected,body.manage-page.night-mode .manage-slot[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#182033}
     .manage-slot:disabled{opacity:.55;cursor:not-allowed}
     .manage-empty,.manage-notice{padding:14px 15px;border-radius:10px;background:var(--soft);color:var(--muted);font-size:14px}
     .manage-form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
@@ -63,11 +64,12 @@
     .manage-status{margin-top:14px;display:none}
     .manage-footer{text-align:center;color:var(--muted);font-size:13px;margin-top:22px}
     .manage-footer a{color:var(--green);font-weight:700}
-    body.manage-page.night-mode{background:#101714}
-    body.manage-page.night-mode .manage-header{background:rgba(17,24,21,.96)}
-    body.manage-page.night-mode .manage-date-btn,body.manage-page.night-mode .manage-slot,body.manage-page.night-mode .manage-secondary,body.manage-page.night-mode .manage-input,body.manage-page.night-mode .manage-select,body.manage-page.night-mode .manage-textarea{background:#151e1a;color:#f3f5ef;border-color:#314139}
-    body.manage-page.night-mode .manage-danger{background:#211818;color:#ffb2b2;border-color:#824545}
-    body.manage-page.night-mode .manage-section+.manage-section,body.manage-page.night-mode .manage-danger-zone{border-color:#26342e}
+    body.manage-page{min-height:100vh;background:var(--paper);color:var(--ink)}
+    body.manage-page.night-mode{background:#101625}
+    body.manage-page.night-mode .manage-header{background:rgba(16,22,37,.96)}
+    body.manage-page.night-mode .manage-date-btn,body.manage-page.night-mode .manage-slot,body.manage-page.night-mode .manage-secondary,body.manage-page.night-mode .manage-input,body.manage-page.night-mode .manage-select,body.manage-page.night-mode .manage-textarea{background:#182033;color:#f3f0e8;border-color:#3a4961}
+    body.manage-page.night-mode .manage-danger{background:#2a2024;color:#ffb8b8;border-color:#87505b}
+    body.manage-page.night-mode .manage-section+.manage-section,body.manage-page.night-mode .manage-danger-zone{border-color:#2f3c52}
     @media(max-width:600px){
       .manage-header-inner{width:min(100% - 20px,1120px);min-height:60px}
       .manage-brand{font-size:17px}
@@ -158,7 +160,7 @@
     let lang=localStorage.getItem('language'); if(!['ja','zh','en'].includes(lang)) lang=navigator.language?.toLowerCase().startsWith('zh')?'zh':navigator.language?.toLowerCase().startsWith('ja')?'ja':'en';
     const $=id=>document.getElementById(id); const t=k=>I18N[lang][k]??I18N.ja[k]??k;
     const pad=n=>String(n).padStart(2,'0');
-    const tokyoParts=()=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());return Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));};
+    const tokyoParts=()=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());return Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));};
     const tokyoDate=()=>{const p=tokyoParts();return `${p.year}-${p.month}-${p.day}`};
     const addDays=(s,n)=>{const d=new Date(`${s}T12:00:00`);d.setDate(d.getDate()+n);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
     const maxDate=()=>addDays(tokyoDate(),14);
@@ -191,7 +193,7 @@
       const box=$('slots');box.innerHTML='';
       if(!slots.length){$('slotsMessage').textContent=t('noBookings');$('slotsMessage').style.display='block';return}
       $('slotsMessage').style.display='none';
-      slots.forEach(time=>{const b=document.createElement('button');b.type='button';b.className='manage-slot';b.textContent=time;b.addEventListener('click',()=>{document.querySelectorAll('.manage-slot').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');selectedTime=time});box.appendChild(b)});
+      slots.forEach(time=>{const b=document.createElement('button');b.type='button';b.className='manage-slot';b.textContent=time;b.setAttribute('aria-pressed','false');b.addEventListener('click',()=>{document.querySelectorAll('.manage-slot').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')});b.classList.add('selected');b.setAttribute('aria-pressed','true');selectedTime=time});box.appendChild(b)});
     }
     $('dateInput').min=tokyoDate();$('dateInput').max=maxDate();$('dateInput').addEventListener('change',()=>{const v=$('dateInput').value;if(v>=tokyoDate()&&v<=maxDate()){date=v;loadSlots()}});
     $('prev').addEventListener('click',()=>{date=addDays(date,-1);loadSlots()});$('next').addEventListener('click',()=>{date=addDays(date,1);loadSlots()});
