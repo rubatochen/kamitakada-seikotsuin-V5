@@ -314,9 +314,9 @@ button, select { font: inherit; }
 .floating-calendar {
   position: fixed;
   right: 22px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 18;
+  top: 92px;
+  transform: none;
+  z-index: 30;
   width: min(220px, calc(100vw - 28px));
   padding: 12px;
   border-radius: 12px;
@@ -360,9 +360,10 @@ body.night-mode .floating-calendar-legend b { color:#d6b45d; }
 .floating-actions {
   position: fixed;
   right: 22px;
-  top: calc(50% + 190px);
-  transform: translateY(-50%);
-  z-index: 18;
+  bottom: 24px;
+  top: auto;
+  transform: none;
+  z-index: 31;
   display: grid;
   gap: 8px;
   width: min(220px, calc(100vw - 28px));
@@ -386,8 +387,8 @@ body.night-mode .floating-calendar-legend b { color:#d6b45d; }
 .back-top {
   position: fixed;
   right: 22px;
-  bottom: 138px;
-  z-index: 19;
+  bottom: 136px;
+  z-index: 32;
   width: 48px;
   height: 48px;
   border: 0;
@@ -561,8 +562,8 @@ body.night-mode .back-top { background: #426f68; }
 @media (max-width: 700px) {
   .floating-calendar {
     right: 10px;
-    top: auto;
-    bottom: 188px;
+    top: 112px;
+    bottom: auto;
     transform: none;
     width: min(220px, calc(100vw - 20px));
     padding: 10px;
