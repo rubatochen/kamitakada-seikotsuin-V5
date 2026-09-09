@@ -47,7 +47,7 @@
         <p class="hero-copy" data-i18n="hero.copy">肩こり、腰痛、スポーツによるケガなど、お身体の悩みをお気軽にご相談ください。</p>
         <div class="hero-actions">
           <a class="btn btn-phone" href="tel:0353801963" data-i18n="hero.phone">電話 03-5380-1963</a>
-          <a class="btn btn-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="hero.line">LINEで予約</a>
+          <a class="btn btn-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="hero.line">公式LINE</a>
           <a class="btn btn-reserve" href="reserve.html" data-i18n="hero.webReserve">Webで予約</a>
           <a class="btn btn-manage" href="manage.html" data-i18n="hero.manageReserve">予約変更・キャンセル</a>
         </div>
@@ -212,6 +212,11 @@
   </footer>
 
   <div class="floating-actions">
+    <div class="floating-calendar" id="floatingCalendar" aria-label="予約カレンダー">
+      <div class="floating-calendar-title"><span data-i18n="calendar.title">予約カレンダー</span><span data-i18n="calendar.window">今後14日</span></div>
+      <div class="floating-calendar-grid" id="floatingCalendarGrid"></div>
+      <div class="floating-calendar-legend"><span>○ <span data-i18n="calendar.open">受付中</span></span><span><b>休</b> <span data-i18n="calendar.closed">休業日</span></span></div>
+    </div>
     <a class="floating-web" href="reserve.html" data-i18n="floating.web">Webで予約</a>
     <a class="floating-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="floating.line">公式LINE</a>
   </div>
@@ -219,6 +224,46 @@
 
   <script src="lang.js"></script>
   <script src="script.js"></script>
+  <script>
+    (function(){
+      const grid=document.getElementById('floatingCalendarGrid');
+      if(!grid)return;
+      const weekdays=['日','月','火','水','木','金','土'];
+      const zhWeekdays=['日','一','二','三','四','五','六'];
+      const enWeekdays=['S','M','T','W','T','F','S'];
+      const pad=n=>String(n).padStart(2,'0');
+      const tokyoToday=()=>{
+        const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+        const v=Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+        return `${v.year}-${v.month}-${v.day}`;
+      };
+      const dateFromKey=key=>{const [y,m,d]=key.split('-').map(Number);return new Date(Date.UTC(y,m-1,d,12));};
+      const fmt=d=>`${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`;
+      const todayKey=tokyoToday();
+      const today=dateFromKey(todayKey);
+      const dates=[];
+      for(let i=0;i<14;i++){const d=new Date(today);d.setUTCDate(today.getUTCDate()+i);dates.push(d);}
+      const render=(lang)=>{
+        const ws=lang==='zh'?zhWeekdays:lang==='en'?enWeekdays:weekdays;
+        grid.innerHTML=dates.map(d=>{const key=fmt(d); const isToday=key===todayKey; return `<a class="floating-calendar-day open${isToday?' today':''}" href="reserve.html?date=${key}" data-date="${key}"><span class="floating-calendar-weekday">${ws[d.getUTCDay()]}</span><strong>${d.getUTCDate()}</strong>${isToday?`<small class="today-label" data-i18n="calendar.today">今日</small>`:''}</a>`;}).join('');
+      };
+      render(window.getPreferredLanguage?window.getPreferredLanguage():'ja');
+      fetch('/api/calendar',{credentials:'same-origin',cache:'no-store'}).then(r=>r.ok?r.json():null).then(data=>{
+        if(!data?.dates)return;
+        data.dates.forEach(item=>{
+          const el=grid.querySelector(`[data-date="${item.date}"]`);
+          if(!el)return;
+          if(item.closed){
+            el.classList.remove('open');
+            el.classList.add('closed');
+            if(!el.querySelector('small')) el.querySelector('strong').insertAdjacentHTML('afterend','<small>休</small>');
+            el.removeAttribute('href');
+          }
+        });
+      }).catch(()=>{});
+      document.getElementById('language')?.addEventListener('change',e=>render(e.target.value));
+    })();
+  </script>
   <script>
     (function(){
       const heroBg=document.getElementById('heroBg');

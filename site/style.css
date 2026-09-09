@@ -134,7 +134,7 @@ button, select { font: inherit; }
 .btn:hover { transform: translateY(-2px); }
 .btn-phone { background: var(--paper); color: var(--green-dark); }
 .btn-line { background: var(--line); color: #fff; }
-.btn-reserve { background: var(--paper); color: var(--green-dark); }
+.btn-reserve { background: #a85d42; color: #fff; }
 .btn-manage { background: var(--paper); color: var(--green-dark); }
 .hero-info {
   display: flex;
@@ -314,11 +314,12 @@ button, select { font: inherit; }
 .floating-actions {
   position: fixed;
   right: 22px;
-  bottom: 22px;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 18;
   display: grid;
   gap: 8px;
-  width: min(150px, calc(100vw - 28px));
+  width: min(176px, calc(100vw - 28px));
 }
 .floating-actions a {
   display: flex;
@@ -334,8 +335,49 @@ button, select { font: inherit; }
   text-decoration: none;
   box-shadow: 0 12px 26px rgba(0, 0, 0, .20);
 }
-.floating-web { background: var(--green-dark); }
+.floating-web { background: #a85d42; }
 .floating-line { background: var(--line); }
+.floating-calendar {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,250,240,.96);
+  border: 1px solid rgba(168,93,66,.24);
+  box-shadow: 0 12px 28px rgba(0,0,0,.18);
+  backdrop-filter: blur(12px);
+}
+.floating-calendar-title {
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  margin:0 2px 8px; color:#5c4639; font-size:13px; font-weight:800;
+}
+.floating-calendar-title span:last-child { font-size:10px; font-weight:700; color:#8a7467; }
+.floating-calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.floating-calendar-weekday { text-align:center; font-size:9px; font-weight:800; color:#8a7467; line-height:1.2; }
+.floating-calendar-day {
+  min-width:0; min-height:38px; border:1px solid #e5d6c5; border-radius:6px;
+  background:#fffaf0; color:#5c4639; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:2px; line-height:1.05; font-size:11px; font-weight:800; text-decoration:none;
+}
+.floating-calendar-day.open { border-color:#d7c8b8; }
+.floating-calendar-day.today { outline:2px solid rgba(168,93,66,.48); outline-offset:-2px; background:#fff3df; }
+.floating-calendar-day.closed { background:#eee5da; color:#9b6753; border-color:#d7c2ae; }
+.floating-calendar-day .floating-calendar-weekday { font-size:8px; font-weight:700; color:#8a7467; }
+.floating-calendar-day strong { font-size:12px; }
+.floating-calendar-day small { margin-top:1px; font-size:8px; font-weight:800; }
+.floating-calendar-day.today .today-label { color:#a85d42; }
+.floating-calendar-legend { display:flex; justify-content:center; gap:10px; margin-top:8px; font-size:9px; color:#806f63; }
+.floating-calendar-legend b { color:#a85d42; }
+body.night-mode .floating-calendar { background:rgba(24,32,51,.96); border-color:#4a526a; }
+body.night-mode .floating-calendar-title { color:#f1eadf; }
+body.night-mode .floating-calendar-title span:last-child,
+body.night-mode .floating-calendar-weekday,
+body.night-mode .floating-calendar-legend { color:#aeb4c0; }
+body.night-mode .floating-calendar-day { background:#202a3d; color:#f1eadf; border-color:#46536a; }
+body.night-mode .floating-calendar-day .floating-calendar-weekday { color:#aeb4c0; }
+body.night-mode .floating-calendar-day.closed { background:#302a2b; color:#d8a18e; border-color:#614847; }
+body.night-mode .floating-calendar-day.today { outline-color:rgba(214,180,93,.75); background:#2a344a; }
+body.night-mode .floating-calendar-day.today .today-label { color:#e2c978; }
+body.night-mode .floating-calendar-legend b { color:#d6b45d; }
 .back-top {
   position: fixed;
   right: 22px;
@@ -405,7 +447,6 @@ button, select { font: inherit; }
   .gallery-grid { grid-template-columns: 1fr; }
   .gallery-grid .gallery-large, .gallery-grid img { grid-column: auto; height: 250px; }
   .map-area iframe { height: 300px; }
-  .floating-actions { left: 14px; right: 14px; bottom: 14px; width: auto; }
   .back-top { right: 14px; bottom: 130px; }
 }
 
@@ -508,9 +549,26 @@ body.night-mode .contact-card h3 { color: var(--accent); }
 body.night-mode .contact-card a { color: #e5c987; }
 body.night-mode .map-link { color: #9bc7bf; }
 body.night-mode .site-footer { background: #0a0f1b; }
-body.night-mode .floating-web { background: #426f68; }
+body.night-mode .floating-web { background: #a85d42; }
 body.night-mode .floating-line { background: #06c755; }
 body.night-mode .back-top { background: #426f68; }
+
+@media (max-width: 700px) {
+  .floating-actions {
+    left: 14px;
+    right: 14px;
+    top: auto;
+    bottom: 14px;
+    transform: none;
+    width: auto;
+  }
+  .floating-calendar {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .floating-calendar-grid { gap: 3px; }
+  .floating-calendar-day { min-height: 34px; }
+}
 
 @media (max-width: 960px) {
   body.night-mode .site-nav { background: #141c2d; border-bottom-color: #34445d; }
