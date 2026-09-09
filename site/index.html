@@ -226,6 +226,29 @@
         </div>`;
       document.documentElement.appendChild(root);
 
+      const backTop=document.getElementById('backToTop');
+      const calendar=root.querySelector('.fixed-calendar');
+      function positionBackTop(){
+        if(!backTop || !calendar)return;
+        const r=calendar.getBoundingClientRect();
+        const gap=window.innerWidth<=640 ? 10 : 12;
+        const bottom=Math.max(12, window.innerHeight-r.top+gap);
+        backTop.style.bottom=`${bottom}px`;
+      }
+      function updateBackTop(){
+        if(!backTop)return;
+        const show=window.scrollY>360;
+        backTop.style.display=show?'inline-flex':'none';
+        backTop.style.alignItems='center';
+        backTop.style.justifyContent='center';
+        if(show)positionBackTop();
+      }
+      window.addEventListener('scroll',updateBackTop,{passive:true});
+      window.addEventListener('resize',positionBackTop);
+      backTop?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+      positionBackTop();
+      updateBackTop();
+
       const grid=root.querySelector('#floatingCalendarGrid');
       const weekdays=['日','月','火','水','木','金','土'];
       const zhWeekdays=['日','一','二','三','四','五','六'];

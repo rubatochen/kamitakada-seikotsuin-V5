@@ -724,3 +724,93 @@ body.night-mode #fixedCalendarRoot .fixed-calendar-legend b { color:#d6b45d; }
 @media (max-width: 700px) {
   .back-top { bottom: 320px !important; }
 }
+
+/* Final fan-layout + calendar/back-to-top arrangement */
+@media (max-width: 640px) {
+  .hero-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(56px, auto));
+    gap: 10px 12px !important;
+    align-items: stretch !important;
+  }
+  .hero-actions .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 56px !important;
+    padding: 8px 10px !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    line-height: 1.22 !important;
+    box-shadow: 0 7px 18px rgba(0,0,0,.14) !important;
+    text-align: center;
+  }
+  /* Fan pattern: long / short / short / long */
+  .hero-actions .btn-phone { grid-column: 1; grid-row: 1; justify-self: stretch; }
+  .hero-actions .btn-line { grid-column: 2; grid-row: 1; justify-self: end; width: 72% !important; }
+  .hero-actions .btn-reserve { grid-column: 1; grid-row: 2; justify-self: start; width: 72% !important; }
+  .hero-actions .btn-manage { grid-column: 2; grid-row: 2; justify-self: stretch; }
+  .hero-actions .btn-phone,
+  .hero-actions .btn-manage { font-size: 15px !important; }
+  .hero-actions .btn-line,
+  .hero-actions .btn-reserve { font-size: 17px !important; }
+
+  #fixedCalendarRoot .fixed-calendar {
+    top: auto !important;
+    bottom: 8px !important;
+    left: 14px !important;
+    right: 14px !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 11px 12px 10px !important;
+  }
+  #fixedCalendarRoot .fixed-calendar-title {
+    font-size: 15px !important;
+    margin-bottom: 8px !important;
+  }
+  #fixedCalendarRoot .fixed-calendar-title span:last-child { font-size: 11px !important; }
+  #fixedCalendarRoot .fixed-calendar-grid { gap: 4px !important; }
+  #fixedCalendarRoot .fixed-calendar-day {
+    min-height: 40px !important;
+    padding: 3px 2px !important;
+    border-radius: 8px !important;
+  }
+  #fixedCalendarRoot .fixed-calendar-weekday { font-size: 9px !important; }
+  #fixedCalendarRoot .fixed-calendar-day strong { font-size: 15px !important; }
+  #fixedCalendarRoot .fixed-calendar-day small { font-size: 9px !important; }
+  #fixedCalendarRoot .fixed-calendar-legend { font-size: 10px !important; margin-top: 7px !important; }
+}
+
+/* Desktop: calendar remains in the lower-right corner. */
+@media (min-width: 641px) {
+  #fixedCalendarRoot .fixed-calendar {
+    top: auto !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 300px !important;
+  }
+}
+
+/* Back-to-top is positioned by JS immediately above the calendar. */
+.back-top {
+  position: fixed !important;
+  z-index: 10001 !important;
+  width: 52px !important;
+  height: 52px !important;
+  right: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  bottom: 220px !important;
+  border-radius: 9px !important;
+  background: #a85d42 !important;
+  color: #fff !important;
+  display: none;
+}
+@media (max-width: 640px) {
+  .back-top {
+    width: 48px !important;
+    height: 48px !important;
+    bottom: 210px !important;
+  }
+}
+
