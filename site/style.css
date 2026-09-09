@@ -832,3 +832,33 @@ body.night-mode #fixedCalendarRoot .fixed-calendar-legend b { color:#d6b45d; }
     bottom: 8px !important;
   }
 }
+
+
+/* Final mobile fan-layout refinements and floating calendar spacing. */
+@media (max-width: 640px) {
+  /* Put Web reservation and change/cancel together on the right. */
+  .hero-actions .btn-phone { grid-column: 1; grid-row: 1; justify-self: stretch; width: 100% !important; }
+  .hero-actions .btn-manage { grid-column: 2; grid-row: 2; justify-self: stretch; width: 100% !important; }
+  .hero-actions .btn-reserve { grid-column: 2; grid-row: 1; justify-self: end; width: 72% !important; }
+  .hero-actions .btn-line { grid-column: 1; grid-row: 2; justify-self: start; width: 72% !important; }
+
+  /* Lift the calendar slightly so the entire card is visible on first view. */
+  #fixedCalendarRoot .fixed-calendar { bottom: 44px !important; }
+
+  /* Center the arrow glyph inside its button. */
+  .back-top {
+    display: none;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+}
+
+.back-top {
+  display: none;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
