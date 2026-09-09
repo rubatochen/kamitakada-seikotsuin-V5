@@ -311,34 +311,13 @@ button, select { font: inherit; }
 .site-footer strong { display: block; margin-bottom: 10px; font-size: 24px; }
 .site-footer p { margin: 4px 0; }
 .site-footer small { display: block; margin-top: 18px; opacity: .78; }
-.floating-actions {
+.floating-calendar {
   position: fixed;
   right: 22px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 18;
-  display: grid;
-  gap: 8px;
-  width: min(176px, calc(100vw - 28px));
-}
-.floating-actions a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  box-sizing: border-box;
-  padding: 11px 16px;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: 800;
-  text-align: center;
-  text-decoration: none;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, .20);
-}
-.floating-web { background: #a85d42; }
-.floating-line { background: var(--line); }
-.floating-calendar {
-  width: 100%;
+  width: min(220px, calc(100vw - 28px));
   padding: 12px;
   border-radius: 12px;
   background: rgba(255,250,240,.96);
@@ -378,6 +357,32 @@ body.night-mode .floating-calendar-day.closed { background:#302a2b; color:#d8a18
 body.night-mode .floating-calendar-day.today { outline-color:rgba(214,180,93,.75); background:#2a344a; }
 body.night-mode .floating-calendar-day.today .today-label { color:#e2c978; }
 body.night-mode .floating-calendar-legend b { color:#d6b45d; }
+.floating-actions {
+  position: fixed;
+  right: 22px;
+  top: calc(50% + 190px);
+  transform: translateY(-50%);
+  z-index: 18;
+  display: grid;
+  gap: 8px;
+  width: min(220px, calc(100vw - 28px));
+}
+.floating-actions a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 11px 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, .20);
+}
+.floating-web { background: #a85d42; }
+.floating-line { background: var(--line); }
 .back-top {
   position: fixed;
   right: 22px;
@@ -554,20 +559,24 @@ body.night-mode .floating-line { background: #06c755; }
 body.night-mode .back-top { background: #426f68; }
 
 @media (max-width: 700px) {
-  .floating-actions {
-    left: 14px;
-    right: 14px;
-    top: auto;
-    bottom: 14px;
-    transform: none;
-    width: auto;
-  }
   .floating-calendar {
-    width: 100%;
-    box-sizing: border-box;
+    right: 10px;
+    top: auto;
+    bottom: 128px;
+    transform: none;
+    width: min(220px, calc(100vw - 20px));
+    padding: 10px;
   }
   .floating-calendar-grid { gap: 3px; }
   .floating-calendar-day { min-height: 34px; }
+  .floating-actions {
+    left: auto;
+    right: 10px;
+    top: auto;
+    bottom: 10px;
+    transform: none;
+    width: min(220px, calc(100vw - 20px));
+  }
 }
 
 @media (max-width: 960px) {
