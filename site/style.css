@@ -683,3 +683,44 @@ body.night-mode #fixedCalendarRoot .fixed-calendar-legend b { color:#d6b45d; }
     z-index: 10000 !important;
   }
 }
+
+/* Final mobile refinement: flatter two-column hero buttons and lower calendar. */
+@media (max-width: 640px) {
+  .hero-actions {
+    grid-template-columns: minmax(0, 1.18fr) minmax(0, .82fr);
+    gap: 12px 24px;
+    align-items: stretch;
+  }
+  .hero-actions .btn {
+    min-height: 64px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 17px;
+    line-height: 1.35;
+  }
+  .hero-actions .btn-phone,
+  .hero-actions .btn-manage {
+    white-space: nowrap;
+  }
+
+  /* Keep the calendar at the lower edge of the mobile viewport. */
+  #fixedCalendarRoot .fixed-calendar {
+    bottom: 4px !important;
+    left: 14px !important;
+    right: 14px !important;
+    width: auto !important;
+  }
+
+  /* Back-to-top stays above the calendar, never inside it. */
+  .back-top {
+    right: 14px !important;
+    bottom: 318px !important;
+    z-index: 10000 !important;
+  }
+}
+
+/* Final floating UI cleanup: calendar uses the dedicated fixed root; back-to-top stays low when no bottom action bar exists. */
+.back-top { bottom: 24px !important; }
+@media (max-width: 700px) {
+  .back-top { bottom: 320px !important; }
+}
