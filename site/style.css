@@ -814,3 +814,21 @@ body.night-mode #fixedCalendarRoot .fixed-calendar-legend b { color:#d6b45d; }
   }
 }
 
+
+/* Final floating calendar/back-to-top alignment: arrow sits directly above the calendar on the right. */
+.back-top {
+  left: auto !important;
+  right: 20px !important;
+  transform: none !important;
+  z-index: 10001 !important;
+}
+@media (max-width: 640px) {
+  .back-top {
+    right: 14px !important;
+    left: auto !important;
+    transform: none !important;
+  }
+  #fixedCalendarRoot .fixed-calendar {
+    bottom: 8px !important;
+  }
+}

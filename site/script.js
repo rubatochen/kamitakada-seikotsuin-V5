@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const nav = document.querySelector(".site-nav");
   const menuToggle = document.querySelector(".menu-toggle");
-  const backTop = document.getElementById("backToTop");
   const languageSelect = document.getElementById("language");
 
   menuToggle?.addEventListener("click", () => {
@@ -23,14 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".faq-item").forEach((faq) => faq.classList.remove("open"));
       if (shouldOpen) item.classList.add("open");
     });
-  });
-
-  window.addEventListener("scroll", () => {
-    backTop.style.display = window.scrollY > 360 ? "block" : "none";
-  });
-
-  backTop?.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   const sections = [...document.querySelectorAll("main section[id]")];

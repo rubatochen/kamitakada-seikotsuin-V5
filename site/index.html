@@ -12,10 +12,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <script>
-    fetch('/api/status',{credentials:'same-origin'}).then(r=>r.ok?r.json():null).then(s=>{if(s?.paused){location.replace('paused.html');}}).catch(()=>{});
-    setInterval(()=>fetch('/api/status',{credentials:'same-origin',cache:'no-store'}).then(r=>r.ok?r.json():null).then(s=>{if(s?.paused){location.replace('paused.html');}}).catch(()=>{}),60000);
-  </script>
   <header class="site-header">
     <div class="topbar">
       <a class="logo" href="#top" data-i18n="site.name">上高田整骨院</a>
@@ -213,16 +209,17 @@
 
   <button id="backToTop" class="back-top" type="button" aria-label="ページ上部へ">↑</button>
 
+  <script src="lang.js"></script>
+  <script src="script.js"></script>
   <script>
     (function(){
-      // Keep the calendar outside <body> so legacy body layout rules cannot affect fixed positioning.
       const root=document.createElement('div');
       root.id='fixedCalendarRoot';
       root.innerHTML=`
         <div class="fixed-calendar" id="floatingCalendar" aria-label="予約カレンダー">
-          <div class="fixed-calendar-title"><span data-i18n="calendar.title">予約カレンダー</span><span data-i18n="calendar.window">今後14日</span></div>
+          <div class="fixed-calendar-title"><span id="calendarTitle"></span><span id="calendarWindow"></span></div>
           <div class="fixed-calendar-grid" id="floatingCalendarGrid"></div>
-          <div class="fixed-calendar-legend"><span>○ <span data-i18n="calendar.open">受付中</span></span><span><b>休</b> <span data-i18n="calendar.closed">休業日</span></span></div>
+          <div class="fixed-calendar-legend"><span id="calendarOpenLegend"></span><span id="calendarClosedLegend"></span></div>
         </div>`;
       document.documentElement.appendChild(root);
 
@@ -231,7 +228,7 @@
       function positionBackTop(){
         if(!backTop || !calendar)return;
         const r=calendar.getBoundingClientRect();
-        const gap=window.innerWidth<=640 ? 10 : 12;
+        const gap=10;
         const bottom=Math.max(12, window.innerHeight-r.top+gap);
         backTop.style.bottom=`${bottom}px`;
       }
@@ -239,20 +236,23 @@
         if(!backTop)return;
         const show=window.scrollY>360;
         backTop.style.display=show?'inline-flex':'none';
-        backTop.style.alignItems='center';
-        backTop.style.justifyContent='center';
         if(show)positionBackTop();
       }
       window.addEventListener('scroll',updateBackTop,{passive:true});
       window.addEventListener('resize',positionBackTop);
       backTop?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
-      positionBackTop();
-      updateBackTop();
 
       const grid=root.querySelector('#floatingCalendarGrid');
-      const weekdays=['日','月','火','水','木','金','土'];
-      const zhWeekdays=['日','一','二','三','四','五','六'];
-      const enWeekdays=['S','M','T','W','T','F','S'];
+      const i18n={
+        ja:{title:'予約カレンダー',window:'今後14日',open:'受付中',closed:'休業日',today:'今日',closedShort:'休',closedDay:'休'},
+        zh:{title:'预约日历',window:'未来14天',open:'可预约',closed:'休息日',today:'今天',closedShort:'休',closedDay:'休'},
+        en:{title:'Reservation Calendar',window:'Next 14 days',open:'Available',closed:'Closed',today:'Today',closedShort:'×',closedDay:'Closed'}
+      };
+      const weekdays={
+        ja:['日','月','火','水','木','金','土'],
+        zh:['日','一','二','三','四','五','六'],
+        en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+      };
       const pad=n=>String(n).padStart(2,'0');
       const tokyoToday=()=>{
         const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
@@ -265,28 +265,44 @@
       const today=dateFromKey(todayKey);
       const dates=[];
       for(let i=0;i<14;i++){const d=new Date(today);d.setUTCDate(today.getUTCDate()+i);dates.push(d);}
-      const render=(lang)=>{
-        const ws=lang==='zh'?zhWeekdays:lang==='en'?enWeekdays:weekdays;
+
+      function render(lang='ja',closedDates=new Set()){
+        const t=i18n[lang]||i18n.ja;
+        const ws=weekdays[lang]||weekdays.ja;
+        document.getElementById('calendarTitle').textContent=t.title;
+        document.getElementById('calendarWindow').textContent=t.window;
+        document.getElementById('calendarOpenLegend').textContent=`○ ${t.open}`;
+        document.getElementById('calendarClosedLegend').textContent=`${t.closedShort} ${t.closed}`;
         grid.innerHTML=dates.map(d=>{
-          const key=fmt(d); const isToday=key===todayKey;
-          return `<a class="fixed-calendar-day open${isToday?' today':''}" href="reserve.html?date=${key}" data-date="${key}"><span class="fixed-calendar-weekday">${ws[d.getUTCDay()]}</span><strong>${d.getUTCDate()}</strong>${isToday?`<small class="today-label" data-i18n="calendar.today">今日</small>`:''}</a>`;
+          const key=fmt(d);
+          const isToday=key===todayKey;
+          const isClosed=closedDates.has(key);
+          const cls=`fixed-calendar-day ${isClosed?'closed':'open'}${isToday?' today':''}`;
+          const label=isToday?t.today:(isClosed?t.closedDay:'');
+          const inner=`<span class="fixed-calendar-weekday">${ws[d.getUTCDay()]}</span><strong>${d.getUTCDate()}</strong>${label?`<small class="${isToday?'today-label':''}">${label}</small>`:''}`;
+          return isClosed?`<span class="${cls}" data-date="${key}">${inner}</span>`:`<a class="${cls}" href="reserve.html?date=${key}" data-date="${key}">${inner}</a>`;
         }).join('');
-      };
-      render(window.getPreferredLanguage?window.getPreferredLanguage():'ja');
-      fetch('/api/calendar',{credentials:'same-origin',cache:'no-store'}).then(r=>r.ok?r.json():null).then(data=>{
-        if(!data?.dates)return;
-        data.dates.forEach(item=>{
-          const el=grid.querySelector(`[data-date="${item.date}"]`);
-          if(!el)return;
-          if(item.closed){
-            el.classList.remove('open');
-            el.classList.add('closed');
-            if(!el.querySelector('small')) el.querySelector('strong').insertAdjacentHTML('afterend','<small>休</small>');
-            el.removeAttribute('href');
+        positionBackTop();
+      }
+
+      let currentLang=window.getPreferredLanguage?window.getPreferredLanguage():'ja';
+      let closedDates=new Set();
+      render(currentLang,closedDates);
+      fetch('/api/calendar',{credentials:'same-origin',cache:'no-store'})
+        .then(r=>r.ok?r.json():null)
+        .then(data=>{
+          if(Array.isArray(data?.dates)){
+            closedDates=new Set(data.dates.filter(x=>x.closed).map(x=>String(x.date)));
+            render(currentLang,closedDates);
           }
-        });
-      }).catch(()=>{});
-      document.getElementById('language')?.addEventListener('change',e=>render(e.target.value));
+        }).catch(()=>{});
+
+      document.getElementById('language')?.addEventListener('change',e=>{
+        currentLang=e.target.value;
+        render(currentLang,closedDates);
+      });
+      positionBackTop();
+      updateBackTop();
     })();
   </script>
   <script>
