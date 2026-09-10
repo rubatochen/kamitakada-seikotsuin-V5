@@ -10,5 +10,11 @@ export async function onRequest(context) {
   if (!isWithinWebBookingWindow(date)) {
     return withCors(json({error:'Web予約は本日から14日先まで受け付けています。'},400),context.request);
   }
-  return withCors(json(await buildSlots(context.env,date,new Date(),occupiedMinutes)),context.request);
+  try {
+    const result = await buildSlots(context.env,date,new Date(),occupiedMinutes);
+    return withCors(json(result),context.request);
+  } catch (error) {
+    console.error('Unable to load availability', error);
+    return withCors(json({ok:false, code:'service_unavailable', error:'現在予約可能状況を取得できません。'},503),context.request);
+  }
 }

@@ -12,6 +12,7 @@ import {
   normalizeJapanesePhone
 } from '../lib/utils.js';
 import { rateLimit } from '../lib/rate-limit.js';
+import { readJsonObject } from '../lib/request-validation.js';
 
 function clean(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -69,9 +70,15 @@ export async function onRequest(context) {
       return withCors(json({ ok:false, code:'invalid_date', error:'予約日が正しくありません。' },400), context.request);
     }
 
-    const rows = await context.env.DB.prepare(
-      "SELECT time FROM appointments WHERE date = ? AND status = 'confirmed' ORDER BY time"
-    ).bind(date).all();
+    let rows;
+    try {
+      rows = await context.env.DB.prepare(
+        "SELECT time FROM appointments WHERE date = ? AND status = 'confirmed' ORDER BY time"
+      ).bind(date).all();
+    } catch (error) {
+      console.error('Unable to load management slots', error);
+      return withCors(json({ok:false, code:'service_unavailable', error:'現在予約情報を取得できません。'},503), context.request);
+    }
 
     return withCors(json({
       ok: true,
@@ -84,7 +91,11 @@ export async function onRequest(context) {
     return withCors(json({ ok:false, error:'Method not allowed' },405), context.request);
   }
 
-  const body = await context.request.json().catch(() => ({}));
+  const parsed = await readJsonObject(context.request, 16 * 1024);
+  if (!parsed.ok) {
+    return withCors(json({ok:false, code:parsed.tooLarge ? 'request_too_large' : 'invalid_json', error:parsed.tooLarge ? '入力内容が大きすぎます。' : '入力内容が正しくありません。'},400), context.request);
+  }
+  const body = parsed.value;
   const action = clean(body.action);
   let date = clean(body.date);
   let time = clean(body.time);
@@ -92,14 +103,14 @@ export async function onRequest(context) {
   let phone = clean(body.phone);
 
   if (action === 'update') {
-    const original = body.original && typeof body.original === 'object' ? body.original : {};
+    const original = body.original && typeof body.original === 'object' && !Array.isArray(body.original) ? body.original : {};
     date = clean(original.date);
     time = clean(original.time);
     name = clean(original.name);
     phone = clean(original.phone);
   }
 
-  if (!isValidDate(date) || !isValidTime(time) || !name || !phone || !isValidJapanesePhone(phone)) {
+  if (!['verify','update','cancel'].includes(action) || !isValidDate(date) || !isValidTime(time) || !name || !phone || !isValidJapanesePhone(phone)) {
     return withCors(invalidReservation(), context.request);
   }
   if (name.length > 80 || phone.length > 40) {
@@ -141,7 +152,7 @@ export async function onRequest(context) {
     const allowedExtensions = [0,10,20,30];
     const occupiedMinutes = 30 + extensionMinutes;
 
-    const original = body.original && typeof body.original === 'object' ? body.original : {};
+    const original = body.original && typeof body.original === 'object' && !Array.isArray(body.original) ? body.original : {};
     const originalDate = clean(original.date);
     const originalTime = clean(original.time);
     const originalName = clean(original.name);
@@ -161,7 +172,7 @@ export async function onRequest(context) {
     if (!isValidDate(newDate) || !isValidTime(newTime) || !newName || !isValidJapanesePhone(newPhone)) {
       return withCors(json({ ok:false, code:'invalid_input', error:'変更内容を正しく入力してください。' },400), context.request);
     }
-    if (!allowedExtensions.includes(extensionMinutes) || newName.length > 80 || newPhone.length > 40 || note.length > 500) {
+    if (!allowedExtensions.includes(extensionMinutes) || newName.length > 80 || newPhone.length > 40 || note.length > 500 || typeof body.name !== 'string' || typeof body.phone !== 'string' || typeof body.note !== 'string') {
       return withCors(json({ ok:false, code:'invalid_input', error:'変更内容が正しくありません。' },400), context.request);
     }
     if (!isWithinWebBookingWindow(newDate)) {
@@ -171,7 +182,13 @@ export async function onRequest(context) {
       return withCors(json({ ok:false, code:'past_time', error:'開始済みまたは過去の時間には変更できません。' },409), context.request);
     }
 
-    const availability = await buildSlots(context.env, newDate, new Date(), occupiedMinutes);
+    let availability;
+    try {
+      availability = await buildSlots(context.env, newDate, new Date(), occupiedMinutes);
+    } catch (error) {
+      console.error('Unable to check updated reservation availability', error);
+      return withCors(json({ ok:false, code:'service_unavailable', error:'現在予約可能状況を確認できません。' },503), context.request);
+    }
     if (availability.temporarilyClosed) {
       return withCors(json({ ok:false, code:'temporarily_closed', error:'現在は臨時休業中です。' },409), context.request);
     }
@@ -216,9 +233,15 @@ export async function onRequest(context) {
       return withCors(json({ ok:false, code:'update_failed', error:'予約を変更できませんでした。' },500), context.request);
     }
 
-    const updated = await context.env.DB.prepare(
-      "SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes FROM appointments WHERE id = ?"
-    ).bind(current.id).first();
+    let updated;
+    try {
+      updated = await context.env.DB.prepare(
+        "SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes FROM appointments WHERE id = ?"
+      ).bind(current.id).first();
+    } catch (error) {
+      console.error('Unable to reload updated customer appointment', error);
+      return withCors(json({ ok:false, code:'update_succeeded_reload_failed', error:'予約は変更されましたが、最新情報を取得できませんでした。' },503), context.request);
+    }
 
     return withCors(json({ ok:true, appointment:appointmentPayload(updated || {
       id:current.id,date:newDate,time:newTime,name:newName,phone:newPhone,email:current.email,note,duration_minutes:occupiedMinutes,status:'confirmed',created_at:current.created_at

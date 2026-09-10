@@ -6,6 +6,7 @@ import {
   randomId
 } from '../lib/utils.js';
 import { rateLimit } from '../lib/rate-limit.js';
+import { readJsonObject } from '../lib/request-validation.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') {
@@ -27,8 +28,15 @@ export async function onRequest(context) {
     );
   }
 
-  const body = await context.request.json().catch(() => ({}));
-  const password = typeof body?.password === 'string' ? body.password : '';
+  const parsed = await readJsonObject(context.request, 4 * 1024);
+  if (!parsed.ok) {
+    return withCors(json({ ok:false, code:parsed.tooLarge ? 'request_too_large' : 'invalid_json', error:'入力内容が正しくありません。' },400), context.request);
+  }
+  const body = parsed.value;
+  const password = typeof body.password === 'string' ? body.password : '';
+  if (body.password === undefined || typeof body.password !== 'string' || password.length > 256) {
+    return withCors(json({ ok:false, code:'invalid_input', error:'入力内容が正しくありません。' },400), context.request);
+  }
 
   // ① 先检查 Secret 是否真的进入当前 Worker
   if (typeof context.env.ADMIN_PASSWORD !== 'string' || !context.env.ADMIN_PASSWORD) {

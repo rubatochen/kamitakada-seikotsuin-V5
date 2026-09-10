@@ -12,6 +12,7 @@ import {
   isValidJapanesePhone
 } from '../lib/utils.js';
 import { rateLimit } from '../lib/rate-limit.js';
+import { readJsonObject, isReasonableEmail } from '../lib/request-validation.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') return optionResponse(context.request);
@@ -22,8 +23,12 @@ export async function onRequest(context) {
     return withCors(json({ ok:false, code:'rate_limited', error:'アクセスが集中しています。しばらくしてから再度お試しください。' },429,{ 'Retry-After': String(limit.retryAfter) }), context.request);
   }
 
-  const body = await context.request.json().catch(()=>null);
-  if (!body || !isValidDate(body.date) || !isValidTime(body.time)) {
+  const parsed = await readJsonObject(context.request, 16 * 1024);
+  if (!parsed.ok) {
+    return withCors(json({ok:false, code:parsed.tooLarge ? 'request_too_large' : 'invalid_json', error:parsed.tooLarge ? '入力内容が大きすぎます。' : '入力内容が正しくありません。'},400),context.request);
+  }
+  const body = parsed.value;
+  if (!isValidDate(body.date) || !isValidTime(body.time)) {
     return withCors(json({error:'予約日時が正しくありません。'},400),context.request);
   }
 
@@ -48,11 +53,18 @@ export async function onRequest(context) {
     return withCors(json({error:'Web予約は本日から14日先まで受け付けています。'},400),context.request);
   }
 
+  const email = typeof body.email === 'string' ? body.email.trim() : '';
+  const note = typeof body.note === 'string' ? body.note.trim() : '';
   if (
-    name.length>80 ||
-    phone.length>40 ||
-    String(body.email||'').length>120 ||
-    String(body.note||'').length>500
+    name.length > 80 ||
+    phone.length > 40 ||
+    email.length > 120 ||
+    note.length > 500 ||
+    !isReasonableEmail(email) ||
+    (body.name !== undefined && typeof body.name !== 'string') ||
+    (body.phone !== undefined && typeof body.phone !== 'string') ||
+    (body.email !== undefined && typeof body.email !== 'string') ||
+    (body.note !== undefined && typeof body.note !== 'string')
   ) {
     return withCors(json({error:'入力内容が長すぎます。'},400),context.request);
   }
@@ -61,7 +73,13 @@ export async function onRequest(context) {
     return withCors(json({error:'開始済みまたは過去の時間は予約できません。'},400),context.request);
   }
 
-  const availability = await buildSlots(context.env, body.date, new Date(), occupiedMinutes);
+  let availability;
+  try {
+    availability = await buildSlots(context.env, body.date, new Date(), occupiedMinutes);
+  } catch (error) {
+    console.error('Unable to check reservation availability', error);
+    return withCors(json({ok:false, code:'service_unavailable', error:'現在予約を確認できません。しばらくしてから再度お試しください。'},503),context.request);
+  }
   if (availability.temporarilyClosed) {
     return withCors(json({error:'現在は臨時休業中です。',code:'temporarily_closed',reopeningDate:availability.reopeningAt || null},409), context.request);
   }
@@ -76,9 +94,15 @@ export async function onRequest(context) {
   const requestedStart = minutesOf(body.time);
   const requestedEnd = requestedStart + occupiedMinutes;
 
-  const existing = await context.env.DB.prepare(
-    "SELECT time,duration_minutes FROM appointments WHERE date = ? AND status = 'confirmed'"
-  ).bind(body.date).all();
+  let existing;
+  try {
+    existing = await context.env.DB.prepare(
+      "SELECT time,duration_minutes FROM appointments WHERE date = ? AND status = 'confirmed'"
+    ).bind(body.date).all();
+  } catch (error) {
+    console.error('Unable to check reservation conflicts', error);
+    return withCors(json({ok:false, code:'service_unavailable', error:'現在予約を確認できません。しばらくしてから再度お試しください。'},503),context.request);
+  }
 
   const overlap = (existing.results || []).some(x => {
     const start = minutesOf(x.time);
@@ -100,8 +124,8 @@ export async function onRequest(context) {
         body.time,
         name,
         phone,
-        String(body.email||'').trim(),
-        String(body.note||'').trim(),
+        email,
+        note,
         'confirmed',
         new Date().toISOString(),
         occupiedMinutes
