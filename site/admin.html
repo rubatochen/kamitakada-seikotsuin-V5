@@ -78,6 +78,53 @@
     body.night-mode .schedule-tag.stop{background:#202622;color:#c3ccc8}
     body.night-mode .schedule-row,body.night-mode .appt,body.night-mode td,body.night-mode th{border-bottom-color:#2b3933}
     body.night-mode .pause-state{background:#241b18;color:#e0aaa0;border-color:#543b35}
+
+    /* Compact business-hours editor on mobile.
+       Desktop keeps the existing table layout. */
+    @media (max-width:700px){
+      #hours table{
+        width:100%;
+        table-layout:fixed;
+        font-size:14px;
+      }
+      #hours th,
+      #hours td{
+        padding:7px 4px;
+        vertical-align:middle;
+      }
+      #hours th:nth-child(1),
+      #hours td:nth-child(1){
+        width:42px;
+      }
+      #hours th:nth-child(2),
+      #hours td:nth-child(2){
+        width:42px;
+        text-align:center;
+      }
+      #hours th:nth-child(3),
+      #hours td:nth-child(3),
+      #hours th:nth-child(4),
+      #hours td:nth-child(4){
+        width:auto;
+      }
+      #hours input[type="time"]{
+        width:100%;
+        min-width:0;
+        box-sizing:border-box;
+        padding:7px 4px;
+        font-size:14px;
+      }
+      #hours input[type="checkbox"]{
+        width:18px;
+        height:18px;
+        margin:0;
+      }
+      #hours + .primary{
+        width:100%;
+        margin-top:10px;
+      }
+    }
+
     /* Final admin refinements */
     .extension-actions-inline .primary{background:var(--paper);color:var(--ink);border-color:var(--edge)}
     .extension-actions-inline .primary:hover{background:var(--soft);color:var(--ink);border-color:var(--green)}
@@ -303,7 +350,7 @@
   function renderBreaks(){const list=D.breaks.filter(x=>x.date===today()).slice().sort((a,b)=>a.startTime.localeCompare(b.startTime));document.getElementById('breaks').innerHTML=list.length?list.map(x=>`<div style="padding:7px 0">${x.date} ${x.startTime}–${x.endTime} <button class="danger" type="button" onclick="delBreak('${x.id}')">${t('delete')}</button></div>`).join(''):`<p class="muted">${t('noItems')}</p>`;}
   function toMinutes(value){const parts=String(value).split(':').map(Number);return parts[0]*60+parts[1];}
   async function extendToday(minutes){const todayValue=today();if(document.getElementById('date').value!==todayValue){document.getElementById('date').value=todayValue;await render();}try{await api('/api/admin/extend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:todayValue,minutes})});await render();alert(t('extendSuccess',minutes));}catch(e){alert(e.message||t('extendFailed'));}}
-  function renderHours(){const weekdayNames=I18N[adminLanguage].weekdays;document.getElementById('hours').innerHTML='<table><tr><th>'+ (adminLanguage==='zh'?'星期':'曜日') +'</th><th>'+ (adminLanguage==='zh'?'营业':'営業') +'</th><th>'+ (adminLanguage==='zh'?'开始':'開始') +'</th><th>'+ (adminLanguage==='zh'?'结束':'終了') +'</th></tr>'+weekdayNames.map((n,i)=>{const v=D.businessHours[i];return `<tr><td>${n}</td><td><input type="checkbox" id="e${i}" ${v?'checked':''}></td><td><input id="s${i}" type="time" value="${v?v[0]:'10:00'}"></td><td><input id="t${i}" type="time" value="${v?v[1]:'19:00'}"></td></tr>`;}).join('')+'</table><p class="muted">'+(adminLanguage==='zh'?'基本施术：25分钟・系统占用：30分钟。延长10/20/30分钟分别占用40/50/60分钟。开始时间可按1分钟选择。':'基本施術：25分・システム確保：30分。延長10/20/30分はそれぞれ40/50/60分を確保します。開始時間は1分単位で選択できます。')+'</p>';}
+  function renderHours(){const weekdayNames=I18N[adminLanguage].weekdays;document.getElementById('hours').innerHTML='<table><tr><th>'+ (adminLanguage==='zh'?'星期':'曜日') +'</th><th>'+ (adminLanguage==='zh'?'营业':'営業') +'</th><th>'+ (adminLanguage==='zh'?'开始':'開始') +'</th><th>'+ (adminLanguage==='zh'?'结束':'終了') +'</th></tr>'+weekdayNames.map((n,i)=>{const v=D.businessHours[i];return `<tr><td>${n}</td><td><input type="checkbox" id="e${i}" ${v?'checked':''}></td><td><input id="s${i}" type="time" value="${v?v[0]:'10:00'}"></td><td><input id="t${i}" type="time" value="${v?v[1]:'19:00'}"></td></tr>`;}).join('')+'</table>';}
 
   async function cancelA(id){const a=D.appointments.find(x=>x.id===id);if(!a)return;const message=a.status==='cancelled'?t('deleteReservationConfirm'):t('cancelReservationConfirm');if(!confirm(message))return;await api('/api/admin/'+(a.status==='cancelled'?'delete':'cancel'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});await render();alert(a.status==='cancelled'?t('reservationDeleted'):t('reservationCancelled'));}
   async function addBreak(){await api('/api/admin/breaks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({start:document.getElementById('bs').value,end:document.getElementById('be').value})});await render();alert(t('breakAdded'));}
