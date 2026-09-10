@@ -5,6 +5,7 @@ import {
   setSessionCookie,
   randomId
 } from '../lib/utils.js';
+import { rateLimit } from '../lib/rate-limit.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') {
@@ -14,6 +15,14 @@ export async function onRequest(context) {
   if (context.request.method !== 'POST') {
     return withCors(
       json({ error: 'Method not allowed' }, 405),
+      context.request
+    );
+  }
+
+  const limit = rateLimit(context.request, 'admin-login', 5, 10 * 60 * 1000);
+  if (!limit.allowed) {
+    return withCors(
+      json({ ok:false, code:'rate_limited', error:'試行回数が多すぎます。しばらくしてから再度お試しください。' },429,{ 'Retry-After': String(limit.retryAfter) }),
       context.request
     );
   }

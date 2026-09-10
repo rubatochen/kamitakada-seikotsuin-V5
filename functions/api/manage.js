@@ -11,6 +11,7 @@ import {
   isValidJapanesePhone,
   normalizeJapanesePhone
 } from '../lib/utils.js';
+import { rateLimit } from '../lib/rate-limit.js';
 
 function clean(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -55,6 +56,11 @@ function appointmentPayload(row) {
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') return optionResponse(context.request);
+
+  const limit = rateLimit(context.request, 'manage', 30, 60 * 1000);
+  if (!limit.allowed) {
+    return withCors(json({ ok:false, code:'rate_limited', error:'アクセスが集中しています。しばらくしてから再度お試しください。' },429,{ 'Retry-After': String(limit.retryAfter) }), context.request);
+  }
 
   if (context.request.method === 'GET') {
     const url = new URL(context.request.url);
