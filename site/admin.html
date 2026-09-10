@@ -57,74 +57,28 @@
     .phone-field input,.phone-field textarea{background:var(--paper);color:var(--ink)}
     .phone-modal{background:rgba(20,16,12,.48)}
 
-    /* Match the site's automatic 麻の葉 / 青海波 day-night treatment on admin. */
+    /* Match the site's automatic night treatment on admin. */
     body{transition:background-color .35s ease,color .35s ease}
     body.night-mode{
-      --green:#4aa88c;--green-dark:#226b58;--accent:#d6b45d;--ink:#f3f5ef;--muted:#adbbb5;--soft:#17221e;--paper:#121916;--edge:#30433b;--shadow:0 18px 45px rgba(0,0,0,.30);
-      background:#0a0f0d;color:#f3f5ef
+      --green:#f2d27a;--green-dark:#d6a24e;--accent:#f6e6b0;--ink:#f6e6b0;--muted:#b8c6d9;--soft:#1b3158;--paper:#14284b;--edge:#3d5f8c;--shadow:0 18px 45px rgba(3,10,30,.40);
+      background:#0d1833;color:#f6e6b0
     }
     body.night-mode .panel{background:var(--paper);border-color:var(--edge);box-shadow:var(--shadow)}
-    body.night-mode .top h1,body.night-mode .panel h1,body.night-mode .panel h2,body.night-mode th{color:#f3f5ef}
-    body.night-mode .muted,body.night-mode .schedule-summary-label{color:#adbbb5}
-    body.night-mode button.secondary{background:#151e1b;color:#f3f5ef;border-color:#34483f}
-    body.night-mode button.secondary:hover{background:#1d2b26;border-color:#4aa88c}
-    body.night-mode button.danger{background:#1b211f;color:#d8e0dc;border-color:#34413c}
-    body.night-mode button.danger:hover{background:#252d2a;border-color:#4b5d54}
-    body.night-mode .lang-switch{background:#151e1b;border-color:#34483f}
-    body.night-mode .lang-switch button{color:#f3f5ef}
-    body.night-mode input,body.night-mode select,body.night-mode textarea{background:#151e1b;color:#f3f5ef;border-color:#30433b;color-scheme:dark}
-    body.night-mode .schedule-summary{background:linear-gradient(135deg,#18221e,#121916);border-color:#30433b}
-    body.night-mode .schedule-tag{background:#17372f;color:#9be0cb}
-    body.night-mode .schedule-tag.stop{background:#202622;color:#c3ccc8}
-    body.night-mode .schedule-row,body.night-mode .appt,body.night-mode td,body.night-mode th{border-bottom-color:#2b3933}
-    body.night-mode .pause-state{background:#241b18;color:#e0aaa0;border-color:#543b35}
-
-    /* Compact business-hours editor on mobile.
-       Desktop keeps the existing table layout. */
-    @media (max-width:700px){
-      #hours table{
-        width:100%;
-        table-layout:fixed;
-        font-size:14px;
-      }
-      #hours th,
-      #hours td{
-        padding:7px 4px;
-        vertical-align:middle;
-      }
-      #hours th:nth-child(1),
-      #hours td:nth-child(1){
-        width:42px;
-      }
-      #hours th:nth-child(2),
-      #hours td:nth-child(2){
-        width:42px;
-        text-align:center;
-      }
-      #hours th:nth-child(3),
-      #hours td:nth-child(3),
-      #hours th:nth-child(4),
-      #hours td:nth-child(4){
-        width:auto;
-      }
-      #hours input[type="time"]{
-        width:100%;
-        min-width:0;
-        box-sizing:border-box;
-        padding:7px 4px;
-        font-size:14px;
-      }
-      #hours input[type="checkbox"]{
-        width:18px;
-        height:18px;
-        margin:0;
-      }
-      #hours + .primary{
-        width:100%;
-        margin-top:10px;
-      }
-    }
-
+    body.night-mode .top h1,body.night-mode .panel h1,body.night-mode .panel h2,body.night-mode th{color:#f6e6b0}
+    body.night-mode .muted,body.night-mode .schedule-summary-label{color:#b8c6d9}
+    body.night-mode button.secondary{background:#182f57;color:#f6e6b0;border-color:#456b99}
+    body.night-mode button.secondary:hover{background:#213c69;border-color:#f2d27a}
+    body.night-mode button.danger{background:#202f50;color:#d8e3f0;border-color:#45618a}
+    body.night-mode button.danger:hover{background:#29416a;border-color:#6c84a8}
+    body.night-mode .lang-switch{background:#182f57;border-color:#456b99}
+    body.night-mode .lang-switch button{color:#f6e6b0}
+    body.night-mode input,body.night-mode select,body.night-mode textarea{background:#182f57;color:#f6e6b0;border-color:#3d5f8c;color-scheme:dark}
+    body.night-mode input::placeholder,body.night-mode textarea::placeholder{color:#8fa5c1;opacity:1}
+    body.night-mode .schedule-summary{background:linear-gradient(135deg,#1b3158,#14284b);border-color:#3d5f8c}
+    body.night-mode .schedule-tag{background:#213c69;color:#f2d27a}
+    body.night-mode .schedule-tag.stop{background:#2a3150;color:#d8e3f0}
+    body.night-mode .schedule-row,body.night-mode .appt,body.night-mode td,body.night-mode th{border-bottom-color:#2e4b73}
+    body.night-mode .pause-state{background:#2a3150;color:#e4c989;border-color:#5a5570}
     /* Final admin refinements */
     .extension-actions-inline .primary{background:var(--paper);color:var(--ink);border-color:var(--edge)}
     .extension-actions-inline .primary:hover{background:var(--soft);color:var(--ink);border-color:var(--green)}
@@ -134,11 +88,11 @@
     .pause-date-row input[type="date"]{width:100%;min-width:0}
     .pause-direct-controls .pause-btn{grid-column:1/-1}
     @media(max-width:700px){.pause-date-row{grid-template-columns:64px minmax(0,1fr)}}
-    body.night-mode .extension-actions-inline .primary{background:#151e1b;color:#f3f5ef;border-color:#34483f}
-    body.night-mode .extension-actions-inline .primary:hover{background:#1d2b26;border-color:#4aa88c}
-    body.night-mode .phone-modal{background:rgba(0,0,0,.62)}
-    body.night-mode .phone-modal-box{background:#121916;border-color:#30433b}
-    body.night-mode .phone-field input,body.night-mode .phone-field textarea{background:#151e1b;color:#f3f5ef;border-color:#30433b}
+    body.night-mode .extension-actions-inline .primary{background:#182f57;color:#f6e6b0;border-color:#456b99}
+    body.night-mode .extension-actions-inline .primary:hover{background:#213c69;border-color:#f2d27a}
+    body.night-mode .phone-modal{background:rgba(4,10,28,.72)}
+    body.night-mode .phone-modal-box{background:#14284b;border-color:#3d5f8c}
+    body.night-mode .phone-field input,body.night-mode .phone-field textarea{background:#182f57;color:#f6e6b0;border-color:#3d5f8c}
 
     @media(max-width:700px){
       .admin{padding-top:28px}
@@ -157,6 +111,16 @@
       .extension-actions-inline .primary:nth-child(4),
       .extension-actions-inline .phone-reserve-btn{grid-column:span 3}
       .extension-actions-inline .phone-reserve-btn{width:100%;min-width:0;box-sizing:border-box}
+    }
+
+    /* Compact business-hours editor on mobile; desktop layout stays unchanged. */
+    @media(max-width:700px){
+      #hours table{width:100%;table-layout:fixed;font-size:14px}
+      #hours th,#hours td{padding:7px 4px;vertical-align:middle}
+      #hours th:nth-child(1),#hours td:nth-child(1){width:42px}
+      #hours th:nth-child(2),#hours td:nth-child(2){width:42px;text-align:center}
+      #hours input[type="time"]{width:100%;min-width:0;padding:7px 4px;font-size:14px}
+      #hours input[type="checkbox"]{width:18px;height:18px;margin:0}
     }
   </style>
 </head>

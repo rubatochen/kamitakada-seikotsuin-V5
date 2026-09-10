@@ -443,48 +443,48 @@ body.night-mode::before {
 body { transition: background-color .35s ease, color .35s ease; }
 .hero-bg { transition: opacity .35s ease; }
 
-/* Night palette: 深藍 + 暮紫 + 月色金，讓夜間版更像安靜的黃昏，而不是純黑綠。 */
+/* Night palette: Van Gogh-inspired Starry Night — deep blues, moonlight gold, and star cream. */
 body.night-mode {
-  --green: #79a99f;
-  --green-dark: #4f746f;
-  --accent: #d9ad5b;
-  --ink: #f3f0e8;
-  --muted: #b4b7bd;
-  --soft: #202a3d;
-  --paper: #182033;
-  --edge: #3a4961;
-  --shadow: 0 18px 45px rgba(4, 8, 18, .34);
-  background: #101625;
-  color: #f3f0e8;
+  --green: #f2d27a;
+  --green-dark: #d6a24e;
+  --accent: #f6e6b0;
+  --ink: #f6e6b0;
+  --muted: #b8c6d9;
+  --soft: #1b3158;
+  --paper: #14284b;
+  --edge: #3d5f8c;
+  --shadow: 0 18px 45px rgba(3, 10, 30, .40);
+  background: #0d1833;
+  color: #f6e6b0;
 }
 body.night-mode .site-header {
-  background: rgba(16, 22, 37, .95);
-  border-bottom-color: rgba(121,169,159,.20);
+  background: rgba(13, 24, 51, .95);
+  border-bottom-color: rgba(242,210,122,.22);
 }
-body.night-mode .site-nav { color: #e5e6e8; }
+body.night-mode .site-nav { color: #f6e6b0; }
 body.night-mode .language-selector {
-  background: #1b2539;
-  color: #f3f0e8;
-  border-color: #3d4c64;
+  background: #182f57;
+  color: #f6e6b0;
+  border-color: #456b99;
 }
 body.night-mode .menu-toggle {
-  background: #1b2539;
-  border-color: #3d4c64;
+  background: #182f57;
+  border-color: #456b99;
 }
-body.night-mode .menu-toggle span { background: #c2d0cf; }
+body.night-mode .menu-toggle span { background: #f2d27a; }
 body.night-mode .hero::after {
   background:
-    linear-gradient(90deg, rgba(8,12,24,.72), rgba(19,22,39,.50), rgba(32,24,39,.24)),
-    linear-gradient(0deg, rgba(6,10,20,.20), rgba(6,10,20,.20));
+    linear-gradient(90deg, rgba(6,15,39,.82), rgba(17,35,73,.56), rgba(38,40,83,.28)),
+    linear-gradient(0deg, rgba(5,12,31,.24), rgba(5,12,31,.24));
 }
-body.night-mode .section { background: #101625; }
-body.night-mode .section.soft { background: #171f32; }
-body.night-mode .section-heading h2 { color: #f3f0e8; }
+body.night-mode .section { background: #0d1833; }
+body.night-mode .section.soft { background: #122344; }
+body.night-mode .section-heading h2 { color: #f6e6b0; }
 body.night-mode .section-heading span,
 body.night-mode .copy-block h3,
 body.night-mode .feature-card h3,
 body.night-mode .service-item h3,
-body.night-mode .map-area h3 { color: var(--accent); }
+body.night-mode .map-area h3 { color: var(--green); }
 body.night-mode .about-grid img,
 body.night-mode .feature-card,
 body.night-mode .service-item,
@@ -492,31 +492,31 @@ body.night-mode .flow-grid article,
 body.night-mode .faq-item,
 body.night-mode .contact-card,
 body.night-mode .map-area {
-  background: #182033;
-  border-color: #34445d;
+  background: #14284b;
+  border-color: #385982;
 }
 body.night-mode .feature-card p,
 body.night-mode .service-item p,
 body.night-mode .flow-grid article p,
 body.night-mode .faq-answer p,
 body.night-mode .copy-block p,
-body.night-mode .map-area p { color: #b4b7bd; }
+body.night-mode .map-area p { color: #b8c6d9; }
 body.night-mode .faq-question {
-  background: #182033;
-  color: #f3f0e8;
+  background: #14284b;
+  color: #f6e6b0;
 }
 body.night-mode .faq-question::before { color: var(--green); }
 body.night-mode .contact {
-  background: linear-gradient(135deg, #263d4b, #25253a);
+  background: linear-gradient(135deg, #1d3d6a, #292d63);
 }
-body.night-mode .contact-card { color: #f3f0e8; }
-body.night-mode .contact-card h3 { color: var(--accent); }
-body.night-mode .contact-card a { color: #e5c987; }
-body.night-mode .map-link { color: #9bc7bf; }
-body.night-mode .site-footer { background: #0a0f1b; }
-body.night-mode .floating-web { background: #a85d42; }
-body.night-mode .floating-line { background: #06c755; }
-body.night-mode .back-top { background: #426f68; }
+body.night-mode .contact-card { color: #f6e6b0; }
+body.night-mode .contact-card h3 { color: var(--green); }
+body.night-mode .contact-card a { color: #f2d27a; }
+body.night-mode .map-link { color: #9fc4e5; }
+body.night-mode .site-footer { background: #081329; color: #f6e6b0; }
+body.night-mode .floating-web { background: #d6a24e; color: #101a32; }
+body.night-mode .floating-line { background: #315d91; color: #f6e6b0; }
+body.night-mode .back-top { background: #2f5d8a; color: #f6e6b0; }
 
 @media (max-width: 700px) {
   .floating-actions {
@@ -644,17 +644,17 @@ body.night-mode .back-top { background: #426f68; }
 #fixedCalendarRoot .fixed-calendar-day.closed { background:#eee5da; color:#9b6753; border-color:#d7c2ae; }
 #fixedCalendarRoot .fixed-calendar-legend { display:flex; justify-content:center; gap:14px; margin-top:9px; font-size:11px; color:#806f63; }
 #fixedCalendarRoot .fixed-calendar-legend b { color:#a85d42; }
-body.night-mode #fixedCalendarRoot .fixed-calendar { background:rgba(24,32,51,.97) !important; border-color:#4a526a !important; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-title { color:#f1eadf; }
+body.night-mode #fixedCalendarRoot .fixed-calendar { background:rgba(20,40,75,.97) !important; border-color:#456b99 !important; }
+body.night-mode #fixedCalendarRoot .fixed-calendar-title { color:#f6e6b0; }
 body.night-mode #fixedCalendarRoot .fixed-calendar-title span:last-child,
 body.night-mode #fixedCalendarRoot .fixed-calendar-weekday,
-body.night-mode #fixedCalendarRoot .fixed-calendar-legend { color:#aeb4c0; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-day { background:#202a3d; color:#f1eadf; border-color:#46536a; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-weekday { color:#aeb4c0; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-day.closed { background:#302a2b; color:#d8a18e; border-color:#614847; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-day.today { outline-color:rgba(214,180,93,.75); background:#2a344a; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-day.today .today-label { color:#e2c978; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-legend b { color:#d6b45d; }
+body.night-mode #fixedCalendarRoot .fixed-calendar-legend { color:#b8c6d9; }
+body.night-mode #fixedCalendarRoot .fixed-calendar-day { background:#1b3158; color:#f6e6b0; border-color:#456b99; }
+body.night-mode #fixedCalendarRoot .fixed-calendar-weekday { color:#b8c6d9; }
+body.night-mode #fixedCalendarRoot .fixed-calendar-day.closed { background:#2a3150; color:#d9b86f; border-color:#5a5570; }
+body.night-mode #fixedCalendarRoot .fixed-calendar-day.today { outline-color:rgba(242,210,122,.75); background:#213c69; }
+body.night-mode #fixedCalendarRoot .fixed-calendar-day.today .today-label { color:#f2d27a; }
+body.night-mode #fixedCalendarRoot .fixed-calendar-legend b { color:#f2d27a; }
 
 @media (max-width: 700px) {
   /* Mobile: keep the calendar as a viewport-fixed panel above the bottom actions. */
