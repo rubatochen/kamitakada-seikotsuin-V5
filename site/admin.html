@@ -100,6 +100,17 @@
       .extension-actions-inline button{flex:1 1 calc(50% - 8px)}
       .extension-actions-inline .phone-reserve-btn{flex-basis:100%}
     }
+    /* Mobile: compact extension controls — 30/40/50 on row 1, 60/manual on row 2. */
+    @media(max-width:700px){
+      .calendar{flex-direction:column;align-items:stretch}
+      .calendar-controls{width:100%;justify-content:center;box-sizing:border-box}
+      .extension-actions-inline{width:100%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;align-items:stretch;margin-left:0}
+      .extension-actions-inline .primary{flex:none;min-width:0;width:100%;box-sizing:border-box}
+      .extension-actions-inline .primary:nth-child(-n+3){grid-column:span 2}
+      .extension-actions-inline .primary:nth-child(4),
+      .extension-actions-inline .phone-reserve-btn{grid-column:span 3}
+      .extension-actions-inline .phone-reserve-btn{width:100%;min-width:0;box-sizing:border-box}
+    }
   </style>
 </head>
 <body>
