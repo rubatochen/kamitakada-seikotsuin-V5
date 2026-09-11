@@ -3,12 +3,12 @@ import { optionResponse, withCors, requireAdmin } from '../../lib/utils.js';
 function csvCell(value) {
   let s = value == null ? '' : String(value);
   // Prevent spreadsheet formula injection when opened in Excel/Sheets.
-  if (/^[=+\\-@]/.test(s)) s = "'" + s;
+  if (/^[=+\-@]/.test(s)) s = "'" + s;
   return '"' + s.replace(/"/g, '""') + '"';
 }
 
 function dateParam(value) {
-  return /^\\d{4}-\\d{2}-\\d{2}$/.test(value || '') ? value : '';
+  return /^\d{4}-\d{2}-\d{2}$/.test(value || '') ? value : '';
 }
 
 export async function onRequest(context) {
@@ -44,7 +44,7 @@ export async function onRequest(context) {
     ].map(csvCell).join(','));
   }
 
-  const body = '\\uFEFF' + lines.join('\\r\\n') + '\\r\\n';
+  const body = '\uFEFF' + lines.join('\r\n') + '\r\n';
   const filename = `appointments${start ? `_${start}` : ''}${end ? `_${end}` : ''}.csv`;
   return withCors(new Response(body, {
     status: 200,

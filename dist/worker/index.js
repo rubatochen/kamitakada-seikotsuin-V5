@@ -64,7 +64,7 @@ function tokyoDateParts() {
 function threeMonthsAgoTokyoDate() {
   const p = tokyoDateParts();
   const date = new Date(Date.UTC(Number(p.year), Number(p.month) - 1, Number(p.day)));
-  date.setUTCMonth(date.getUTCMonth() - 1);
+  date.setUTCMonth(date.getUTCMonth() - 3);
   return date.toISOString().slice(0, 10);
 }
 
