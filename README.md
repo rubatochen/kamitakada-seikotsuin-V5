@@ -56,7 +56,7 @@
 -   预约支持实际占用时长
 -   使用东京时间处理日期和预约时间
 -   管理员 Session 使用 HttpOnly / Secure Cookie
--   Cloudflare Cron 每天自动清理一个月以前的历史预约
+-   Cloudflare Cron 每天自动清理三个月以前的历史预约
 
 ------------------------------------------------------------------------
 
@@ -201,7 +201,7 @@ Cloudflare Cron 使用 UTC，因此：
 03:00 JST（日本时间，次日）
 ```
 
-定时任务会调用 Worker 的 `scheduled()`，删除一个月以前的预约记录。
+定时任务会调用 Worker 的 `scheduled()`，删除三个月以前的预约记录。
 
 当前逻辑相当于：
 
@@ -210,7 +210,7 @@ DELETE FROM appointments
 WHERE date < ?
 ```
 
-其中 `?` 是根据东京时间计算得到的一个月前日期。
+其中 `?` 是根据东京时间计算得到的三个月前日期。
 
 如果你不需要自动清理，可以删除 `[triggers]` 配置以及 Worker 中对应的
 `scheduled()` 逻辑。

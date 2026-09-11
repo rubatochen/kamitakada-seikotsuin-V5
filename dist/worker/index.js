@@ -9,6 +9,7 @@ import { onRequest as adminCancel } from '../../functions/api/admin/cancel.js';
 import { onRequest as adminData } from '../../functions/api/admin/data.js';
 import { onRequest as adminDelete } from '../../functions/api/admin/delete.js';
 import { onRequest as adminExtend } from '../../functions/api/admin/extend.js';
+import { onRequest as adminExport } from '../../functions/api/admin/export.js';
 import { onRequest as adminHolidayDelete } from '../../functions/api/admin/holiday-delete.js';
 import { onRequest as adminHoliday } from '../../functions/api/admin/holiday.js';
 import { onRequest as adminHours } from '../../functions/api/admin/hours.js';
@@ -28,6 +29,7 @@ const ROUTES = {
   '/api/admin/data': adminData,
   '/api/admin/delete': adminDelete,
   '/api/admin/extend': adminExtend,
+  '/api/admin/export': adminExport,
   '/api/admin/holiday-delete': adminHolidayDelete,
   '/api/admin/holiday': adminHoliday,
   '/api/admin/hours': adminHours,
@@ -59,7 +61,7 @@ function tokyoDateParts() {
   );
 }
 
-function oneMonthAgoTokyoDate() {
+function threeMonthsAgoTokyoDate() {
   const p = tokyoDateParts();
   const date = new Date(Date.UTC(Number(p.year), Number(p.month) - 1, Number(p.day)));
   date.setUTCMonth(date.getUTCMonth() - 1);
@@ -67,7 +69,7 @@ function oneMonthAgoTokyoDate() {
 }
 
 async function cleanupOldAppointments(env) {
-  const cutoff = oneMonthAgoTokyoDate();
+  const cutoff = threeMonthsAgoTokyoDate();
   const result = await env.DB.prepare(
     "DELETE FROM appointments WHERE date < ?"
   ).bind(cutoff).run();
