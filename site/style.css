@@ -340,18 +340,22 @@ button, select { font: inherit; }
 .floating-line { background: var(--line); }
 .back-top {
   position: fixed;
-  right: 22px;
-  bottom: 140px;
-  z-index: 32;
-  width: 56px;
-  height: 56px;
+  right: 20px;
+  bottom: 220px;
+  z-index: 10001;
+  width: 52px;
+  height: 52px;
+  padding: 0;
   border: 0;
-  border-radius: 8px;
-  background: var(--green-dark);
+  border-radius: 9px;
+  background: #a85d42;
   color: #fff;
   font-size: 22px;
+  line-height: 1;
   cursor: pointer;
   display: none;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 12px 26px rgba(0, 0, 0, .2);
 }
 
@@ -412,7 +416,6 @@ button, select { font: inherit; }
   .gallery-grid { grid-template-columns: 1fr; }
   .gallery-grid .gallery-large, .gallery-grid img { grid-column: auto; height: 250px; }
   .map-area iframe { height: 300px; }
-  .back-top { right: 14px; bottom: 140px; }
 }
 
 .btn-primary{background:var(--green);color:#fff}
@@ -443,199 +446,87 @@ body.night-mode::before {
 body { transition: background-color .35s ease, color .35s ease; }
 .hero-bg { transition: opacity .35s ease; }
 
-/* Night palette: Van Gogh-inspired Starry Night — deep blues, moonlight gold, and star cream. */
+/* Night palette: warm charcoal and muted brass, keeping the daytime site's calm Japanese tone. */
 body.night-mode {
-  --green: #f2d27a;
-  --green-dark: #d6a24e;
-  --accent: #f6e6b0;
-  --ink: #f6e6b0;
-  --muted: #b8c6d9;
-  --soft: #1b3158;
-  --paper: #14284b;
-  --edge: #3d5f8c;
-  --shadow: 0 18px 45px rgba(3, 10, 30, .40);
-  background: #0d1833;
-  color: #f6e6b0;
+  --green: #d0b27b;
+  --green-dark: #b58f59;
+  --accent: #dbc79f;
+  --ink: #eee8de;
+  --muted: #b8b0a4;
+  --soft: #30352f;
+  --paper: #252825;
+  --edge: #454a42;
+  --shadow: 0 18px 45px rgba(0, 0, 0, .28);
+  background: #1b1e1c;
+  color: #eee8de;
 }
-body.night-mode .site-header {
-  background: rgba(13, 24, 51, .95);
-  border-bottom-color: rgba(242,210,122,.22);
-}
-body.night-mode .site-nav { color: #f6e6b0; }
-body.night-mode .language-selector {
-  background: #182f57;
-  color: #f6e6b0;
-  border-color: #456b99;
-}
-body.night-mode .menu-toggle {
-  background: #182f57;
-  border-color: #456b99;
-}
-body.night-mode .menu-toggle span { background: #f2d27a; }
+body.night-mode::before { opacity: .055; }
+body.night-mode .site-header { background: rgba(27,30,28,.95); border-bottom-color: rgba(208,178,123,.18); }
+body.night-mode .site-nav { color: #e8e1d6; }
+body.night-mode .language-selector,
+body.night-mode .menu-toggle { background: #2b2f2b; color: #eee8de; border-color: #4b5048; }
+body.night-mode .menu-toggle span { background: #d0b27b; }
 body.night-mode .hero::after {
-  background:
-    linear-gradient(90deg, rgba(6,15,39,.82), rgba(17,35,73,.56), rgba(38,40,83,.28)),
-    linear-gradient(0deg, rgba(5,12,31,.24), rgba(5,12,31,.24));
+  background: linear-gradient(90deg, rgba(20,24,21,.82), rgba(32,37,32,.55), rgba(48,46,38,.24)), linear-gradient(0deg, rgba(12,14,13,.20), rgba(12,14,13,.20));
 }
-body.night-mode .section { background: #0d1833; }
-body.night-mode .section.soft { background: #122344; }
-body.night-mode .section-heading h2 { color: #f6e6b0; }
+body.night-mode .section { background: #1b1e1c; }
+body.night-mode .section.soft { background: #222622; }
+body.night-mode .section-heading h2 { color: #f0ebe2; }
 body.night-mode .section-heading span,
 body.night-mode .copy-block h3,
 body.night-mode .feature-card h3,
 body.night-mode .service-item h3,
-body.night-mode .map-area h3 { color: var(--green); }
+body.night-mode .map-area h3 { color: #d0b27b; }
 body.night-mode .about-grid img,
 body.night-mode .feature-card,
 body.night-mode .service-item,
 body.night-mode .flow-grid article,
 body.night-mode .faq-item,
 body.night-mode .contact-card,
-body.night-mode .map-area {
-  background: #14284b;
-  border-color: #385982;
-}
+body.night-mode .map-area { background: #252925; border-color: #41463f; }
 body.night-mode .feature-card p,
 body.night-mode .service-item p,
 body.night-mode .flow-grid article p,
 body.night-mode .faq-answer p,
 body.night-mode .copy-block p,
-body.night-mode .map-area p { color: #b8c6d9; }
-body.night-mode .faq-question {
-  background: #14284b;
-  color: #f6e6b0;
-}
-body.night-mode .faq-question::before { color: var(--green); }
-body.night-mode .contact {
-  background: linear-gradient(135deg, #1d3d6a, #292d63);
-}
-body.night-mode .contact-card { color: #f6e6b0; }
-body.night-mode .contact-card h3 { color: var(--green); }
-body.night-mode .contact-card a { color: #f2d27a; }
-body.night-mode .map-link { color: #9fc4e5; }
-body.night-mode .site-footer { background: #081329; color: #f6e6b0; }
-body.night-mode .floating-web { background: #d6a24e; color: #101a32; }
-body.night-mode .floating-line { background: #315d91; color: #f6e6b0; }
-body.night-mode .back-top { background: #2f5d8a; color: #f6e6b0; }
-
-@media (max-width: 700px) {
-  .floating-actions {
-    left: auto;
-    right: 10px;
-    top: auto;
-    bottom: 10px;
-    transform: none;
-    width: min(230px, calc(100vw - 20px));
-  }
-  .back-top {
-    right: 10px;
-    bottom: 126px;
-  }
-}
+body.night-mode .map-area p { color: #b8b0a4; }
+body.night-mode .faq-question { background: #252925; color: #eee8de; }
+body.night-mode .faq-question::before { color: #d0b27b; }
+body.night-mode .contact { background: linear-gradient(135deg, #30362f, #3a382f); }
+body.night-mode .contact-card { color: #eee8de; }
+body.night-mode .contact-card h3 { color: #d0b27b; }
+body.night-mode .contact-card a { color: #dcc28e; }
+body.night-mode .map-link { color: #c9b98f; }
+body.night-mode .site-footer { background: #151715; color: #e9e3d9; }
+body.night-mode .floating-web { background: #a96c4d; color: #fff; }
+body.night-mode .floating-line { background: #34734f; color: #fff; }
+body.night-mode .back-top { background: #675a45; color: #fff; }
 
 @media (max-width: 960px) {
-  body.night-mode .site-nav { background: #141c2d; border-bottom-color: #34445d; }
-}
-
-.floating-actions {
-  position: fixed !important;
-  right: 24px !important;
-  bottom: 22px !important;
-  top: auto !important;
-  left: auto !important;
-  transform: none !important;
-  z-index: 9999 !important;
-  width: 220px !important;
-  max-width: calc(100vw - 48px) !important;
-}
-
-.back-top {
-  position: fixed !important;
-  right: 24px !important;
-  bottom: 142px !important;
-  top: auto !important;
-  left: auto !important;
-  transform: none !important;
-  z-index: 10000 !important;
+  body.night-mode .site-nav { background: #222622; border-bottom-color: #41463f; }
 }
 
 @media (max-width: 700px) {
-  .floating-actions {
-    position: fixed !important;
-    right: 14px !important;
-    bottom: 10px !important;
-    top: auto !important;
-    left: 14px !important;
-    width: auto !important;
-    max-width: none !important;
-    z-index: 9999 !important;
-  }
-
-  .floating-actions a {
-    min-height: 52px;
-    padding: 12px 16px;
-  }
+  .floating-actions { right: 14px; left: 14px; bottom: 10px; width: auto; max-width: none; }
+  .floating-actions a { min-height: 52px; padding: 12px 16px; }
 }
 
-
-/* Fixed reservation calendar: mounted outside <body> so it is independent from page flow. */
+/* Fixed reservation calendar: one authoritative layout block. */
 #fixedCalendarRoot {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 9998 !important;
-  pointer-events: none !important;
+  position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important;
+  z-index: 9998 !important; pointer-events: none !important;
 }
 #fixedCalendarRoot .fixed-calendar {
-  position: absolute !important;
-  top: 92px !important;
-  right: 20px !important;
-  width: 300px !important;
-  max-width: calc(100vw - 40px) !important;
-  padding: 14px !important;
-  box-sizing: border-box !important;
-  border: 1px solid rgba(168,93,66,.28) !important;
-  border-radius: 12px !important;
-  background: rgba(255,250,240,.97) !important;
-  box-shadow: 0 14px 32px rgba(87,57,34,.18) !important;
-  backdrop-filter: blur(10px) !important;
-  pointer-events: auto !important;
+  position: absolute !important; right: 20px !important; bottom: 20px !important; width: 300px !important;
+  max-width: calc(100vw - 40px) !important; padding: 14px !important; box-sizing: border-box !important;
+  border: 1px solid rgba(168,93,66,.28) !important; border-radius: 12px !important;
+  background: rgba(255,250,240,.97) !important; box-shadow: 0 14px 32px rgba(87,57,34,.18) !important;
+  backdrop-filter: blur(10px) !important; pointer-events: auto !important;
 }
-#fixedCalendarRoot .fixed-calendar-title {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  margin:0 2px 10px;
-  color:#5c4639;
-  font-size:16px;
-  font-weight:800;
-}
+#fixedCalendarRoot .fixed-calendar-title { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 2px 10px; color:#5c4639; font-size:16px; font-weight:800; }
 #fixedCalendarRoot .fixed-calendar-title span:last-child { font-size:12px; color:#8a7467; }
-#fixedCalendarRoot .fixed-calendar-grid {
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:5px;
-}
-#fixedCalendarRoot .fixed-calendar-day {
-  min-width:0;
-  min-height:44px;
-  padding:3px 2px;
-  border:1px solid #dfcfbf;
-  border-radius:7px;
-  background:#fffaf0;
-  color:#5c4639;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:1px;
-  line-height:1.08;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:800;
-}
+#fixedCalendarRoot .fixed-calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; }
+#fixedCalendarRoot .fixed-calendar-day { min-width:0; min-height:44px; padding:3px 2px; border:1px solid #dfcfbf; border-radius:7px; background:#fffaf0; color:#5c4639; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; line-height:1.08; text-decoration:none; font-size:13px; font-weight:800; }
 #fixedCalendarRoot .fixed-calendar-weekday { font-size:10px; font-weight:700; color:#8a7467; }
 #fixedCalendarRoot .fixed-calendar-day strong { font-size:15px; }
 #fixedCalendarRoot .fixed-calendar-day small { font-size:10px; font-weight:800; }
@@ -644,221 +535,37 @@ body.night-mode .back-top { background: #2f5d8a; color: #f6e6b0; }
 #fixedCalendarRoot .fixed-calendar-day.closed { background:#eee5da; color:#9b6753; border-color:#d7c2ae; }
 #fixedCalendarRoot .fixed-calendar-legend { display:flex; justify-content:center; gap:14px; margin-top:9px; font-size:11px; color:#806f63; }
 #fixedCalendarRoot .fixed-calendar-legend b { color:#a85d42; }
-body.night-mode #fixedCalendarRoot .fixed-calendar { background:rgba(20,40,75,.97) !important; border-color:#456b99 !important; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-title { color:#f6e6b0; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-title span:last-child,
-body.night-mode #fixedCalendarRoot .fixed-calendar-weekday,
-body.night-mode #fixedCalendarRoot .fixed-calendar-legend { color:#b8c6d9; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-day { background:#1b3158; color:#f6e6b0; border-color:#456b99; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-weekday { color:#b8c6d9; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-day.closed { background:#2a3150; color:#d9b86f; border-color:#5a5570; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-day.today { outline-color:rgba(242,210,122,.75); background:#213c69; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-day.today .today-label { color:#f2d27a; }
-body.night-mode #fixedCalendarRoot .fixed-calendar-legend b { color:#f2d27a; }
 
-@media (max-width: 700px) {
-  /* Mobile: keep the calendar as a viewport-fixed panel above the bottom actions. */
-  #fixedCalendarRoot .fixed-calendar {
-    top: auto !important;
-    bottom: 126px !important;
-    left: 14px !important;
-    right: 14px !important;
-    width: auto !important;
-    max-width: none !important;
-    padding: 12px !important;
-  }
-  #fixedCalendarRoot .fixed-calendar-title { font-size:15px; margin-bottom:9px; }
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar { background:rgba(37,41,37,.97) !important; border-color:#50564d !important; box-shadow:0 14px 32px rgba(0,0,0,.30) !important; }
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar-title { color:#eee8de; }
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar-title span:last-child,
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar-weekday,
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar-legend { color:#b8b0a4; }
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar-day { background:#2d312d; color:#eee8de; border-color:#4c5249; }
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar-day.closed { background:#33312d; color:#c8aa7c; border-color:#554f44; }
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar-day.today { outline-color:rgba(208,178,123,.68); background:#3a3d35; }
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar-day.today .today-label,
+html:has(body.night-mode) #fixedCalendarRoot .fixed-calendar-legend b { color:#d0b27b; }
+
+/* Back-to-top vertical position is calculated by index.html so it always clears the calendar. */
+
+@media (max-width: 640px) {
+  /* Preserve the existing fan-shaped four-button hero layout. */
+  .hero-actions { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; grid-template-rows:repeat(2,minmax(56px,auto)); gap:10px 12px !important; align-items:stretch !important; }
+  .hero-actions .btn { width:100% !important; min-width:0 !important; min-height:56px !important; padding:8px 10px !important; border-radius:8px !important; font-size:16px !important; line-height:1.22 !important; box-shadow:0 7px 18px rgba(0,0,0,.14) !important; text-align:center; }
+  .hero-actions .btn-phone { grid-column:1; grid-row:1; justify-self:stretch; width:100% !important; font-size:15px !important; }
+  .hero-actions .btn-reserve { grid-column:2; grid-row:1; justify-self:end; width:72% !important; font-size:17px !important; }
+  .hero-actions .btn-line { grid-column:1; grid-row:2; justify-self:start; width:72% !important; font-size:17px !important; }
+  .hero-actions .btn-manage { grid-column:2; grid-row:2; justify-self:stretch; width:100% !important; font-size:15px !important; }
+
+  #fixedCalendarRoot .fixed-calendar { right:14px !important; left:14px !important; bottom:44px !important; width:auto !important; max-width:none !important; padding:11px 12px 10px !important; }
+  #fixedCalendarRoot .fixed-calendar-title { font-size:15px; margin-bottom:8px; }
   #fixedCalendarRoot .fixed-calendar-title span:last-child { font-size:11px; }
-  #fixedCalendarRoot .fixed-calendar-grid { gap:5px; }
-  #fixedCalendarRoot .fixed-calendar-day { min-height:42px; border-radius:8px; font-size:12px; }
+  #fixedCalendarRoot .fixed-calendar-grid { gap:4px; }
+  #fixedCalendarRoot .fixed-calendar-day { min-height:40px; padding:3px 2px; border-radius:8px; font-size:12px; }
   #fixedCalendarRoot .fixed-calendar-weekday { font-size:9px; }
-  #fixedCalendarRoot .fixed-calendar-day strong { font-size:16px; }
+  #fixedCalendarRoot .fixed-calendar-day strong { font-size:15px; }
   #fixedCalendarRoot .fixed-calendar-day small { font-size:9px; }
-  #fixedCalendarRoot .fixed-calendar-legend { font-size:10px; margin-top:8px; }
-
-  /* Keep the back-to-top control clearly above the calendar instead of overlapping it. */
-  .back-top {
-    right: 14px !important;
-    bottom: 322px !important;
-    z-index: 10000 !important;
-  }
-}
-
-/* Final mobile refinement: flatter two-column hero buttons and lower calendar. */
-@media (max-width: 640px) {
-  .hero-actions {
-    grid-template-columns: minmax(0, 1.18fr) minmax(0, .82fr);
-    gap: 12px 24px;
-    align-items: stretch;
-  }
-  .hero-actions .btn {
-    min-height: 64px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    font-size: 17px;
-    line-height: 1.35;
-  }
-  .hero-actions .btn-phone,
-  .hero-actions .btn-manage {
-    white-space: nowrap;
-  }
-
-  /* Keep the calendar at the lower edge of the mobile viewport. */
-  #fixedCalendarRoot .fixed-calendar {
-    bottom: 4px !important;
-    left: 14px !important;
-    right: 14px !important;
-    width: auto !important;
-  }
-
-  /* Back-to-top stays above the calendar, never inside it. */
-  .back-top {
-    right: 14px !important;
-    bottom: 318px !important;
-    z-index: 10000 !important;
-  }
-}
-
-/* Final floating UI cleanup: calendar uses the dedicated fixed root; back-to-top stays low when no bottom action bar exists. */
-.back-top { bottom: 24px !important; }
-@media (max-width: 700px) {
-  .back-top { bottom: 320px !important; }
-}
-
-/* Final fan-layout + calendar/back-to-top arrangement */
-@media (max-width: 640px) {
-  .hero-actions {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    grid-template-rows: repeat(2, minmax(56px, auto));
-    gap: 10px 12px !important;
-    align-items: stretch !important;
-  }
-  .hero-actions .btn {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 56px !important;
-    padding: 8px 10px !important;
-    border-radius: 8px !important;
-    font-size: 16px !important;
-    line-height: 1.22 !important;
-    box-shadow: 0 7px 18px rgba(0,0,0,.14) !important;
-    text-align: center;
-  }
-  /* Fan pattern: long / short / short / long */
-  .hero-actions .btn-phone { grid-column: 1; grid-row: 1; justify-self: stretch; }
-  .hero-actions .btn-line { grid-column: 2; grid-row: 1; justify-self: end; width: 72% !important; }
-  .hero-actions .btn-reserve { grid-column: 1; grid-row: 2; justify-self: start; width: 72% !important; }
-  .hero-actions .btn-manage { grid-column: 2; grid-row: 2; justify-self: stretch; }
-  .hero-actions .btn-phone,
-  .hero-actions .btn-manage { font-size: 15px !important; }
-  .hero-actions .btn-line,
-  .hero-actions .btn-reserve { font-size: 17px !important; }
-
-  #fixedCalendarRoot .fixed-calendar {
-    top: auto !important;
-    bottom: 8px !important;
-    left: 14px !important;
-    right: 14px !important;
-    width: auto !important;
-    max-width: none !important;
-    padding: 11px 12px 10px !important;
-  }
-  #fixedCalendarRoot .fixed-calendar-title {
-    font-size: 15px !important;
-    margin-bottom: 8px !important;
-  }
-  #fixedCalendarRoot .fixed-calendar-title span:last-child { font-size: 11px !important; }
-  #fixedCalendarRoot .fixed-calendar-grid { gap: 4px !important; }
-  #fixedCalendarRoot .fixed-calendar-day {
-    min-height: 40px !important;
-    padding: 3px 2px !important;
-    border-radius: 8px !important;
-  }
-  #fixedCalendarRoot .fixed-calendar-weekday { font-size: 9px !important; }
-  #fixedCalendarRoot .fixed-calendar-day strong { font-size: 15px !important; }
-  #fixedCalendarRoot .fixed-calendar-day small { font-size: 9px !important; }
-  #fixedCalendarRoot .fixed-calendar-legend { font-size: 10px !important; margin-top: 7px !important; }
-}
-
-/* Desktop: calendar remains in the lower-right corner. */
-@media (min-width: 641px) {
-  #fixedCalendarRoot .fixed-calendar {
-    top: auto !important;
-    bottom: 20px !important;
-    right: 20px !important;
-    width: 300px !important;
-  }
-}
-
-/* Back-to-top is positioned by JS immediately above the calendar. */
-.back-top {
-  position: fixed !important;
-  z-index: 10001 !important;
-  width: 52px !important;
-  height: 52px !important;
-  right: auto !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  bottom: 220px !important;
-  border-radius: 9px !important;
-  background: #a85d42 !important;
-  color: #fff !important;
-  display: none;
-}
-@media (max-width: 640px) {
-  .back-top {
-    width: 48px !important;
-    height: 48px !important;
-    bottom: 210px !important;
-  }
-}
-
-
-/* Final floating calendar/back-to-top alignment: arrow sits directly above the calendar on the right. */
-.back-top {
-  left: auto !important;
-  right: 20px !important;
-  transform: none !important;
-  z-index: 10001 !important;
-}
-@media (max-width: 640px) {
-  .back-top {
-    right: 14px !important;
-    left: auto !important;
-    transform: none !important;
-  }
-  #fixedCalendarRoot .fixed-calendar {
-    bottom: 8px !important;
-  }
-}
-
-
-/* Final mobile fan-layout refinements and floating calendar spacing. */
-@media (max-width: 640px) {
-  /* Put Web reservation and change/cancel together on the right. */
-  .hero-actions .btn-phone { grid-column: 1; grid-row: 1; justify-self: stretch; width: 100% !important; }
-  .hero-actions .btn-manage { grid-column: 2; grid-row: 2; justify-self: stretch; width: 100% !important; }
-  .hero-actions .btn-reserve { grid-column: 2; grid-row: 1; justify-self: end; width: 72% !important; }
-  .hero-actions .btn-line { grid-column: 1; grid-row: 2; justify-self: start; width: 72% !important; }
-
-  /* Lift the calendar slightly so the entire card is visible on first view. */
-  #fixedCalendarRoot .fixed-calendar { bottom: 44px !important; }
-
-  /* Center the arrow glyph inside its button. */
-  .back-top {
-    display: none;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-    line-height: 1 !important;
-  }
-}
-
-.back-top {
-  display: none;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 !important;
-  line-height: 1 !important;
+  #fixedCalendarRoot .fixed-calendar-legend { font-size:10px; margin-top:7px; }
+  .back-top { right:14px !important; width:48px !important; height:48px !important; }
 }
