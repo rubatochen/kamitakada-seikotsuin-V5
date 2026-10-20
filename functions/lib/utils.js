@@ -125,7 +125,7 @@ export function timeString(n) {
 }
 
 export async function settings(env) {
-  const rows = await env.DB.prepare("SELECT key,value FROM settings").all();
+  const rows = await env.DB.prepare("SELECT key,value FROM settings WHERE key IN ('business_hours','slot_minutes','temporary_pause_periods')").all();
   const out = {};
   for (const r of rows.results || []) out[r.key] = r.value;
 
@@ -189,6 +189,15 @@ export async function buildSlots(env, date, currentTime = new Date(), requestedD
       paused: true,
       reopeningAt: pausePeriod.reopeningDate,
       temporarilyClosed: true
+    };
+  }
+
+  // One-day closures configured in the existing holidays table are authoritative.
+  const holidayRow = await env.DB.prepare('SELECT date FROM holidays WHERE date = ?').bind(date).first();
+  if (holidayRow) {
+    return {
+      slots: [], holiday: true, past: false, breaks: [], booked: [],
+      unavailable: [], settings: s, paused: false, reopeningAt: null
     };
   }
 

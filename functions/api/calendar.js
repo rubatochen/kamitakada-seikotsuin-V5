@@ -24,8 +24,11 @@ export async function onRequest(context) {
     dates.push(dateKey(d));
   }
 
-  let rows;
+  let rows, holidays;
   try {
+    holidays = await context.env.DB.prepare(
+      'SELECT date FROM holidays WHERE date >= ? AND date <= ?'
+    ).bind(dates[0], dates[dates.length - 1]).all();
     rows = await context.env.DB.prepare(
       "SELECT date, COUNT(*) AS count FROM appointments WHERE status = 'confirmed' AND date >= ? AND date <= ? GROUP BY date"
     ).bind(dates[0], dates[dates.length-1]).all();
@@ -33,17 +36,19 @@ export async function onRequest(context) {
     console.error('Unable to load calendar bookings', error);
     return withCors(json({ok:false, code:'service_unavailable', error:'現在カレンダーを取得できません。'},503), context.request);
   }
+  const holidayDates = new Set((holidays.results || []).map(x => String(x.date)));
   const bookedCounts = new Map((rows.results || []).map(r => [String(r.date), Number(r.count)||0]));
   const pauses = Array.isArray(s.temporaryPausePeriods) ? s.temporaryPausePeriods : [];
 
   const result = dates.map(date => {
     const weekday = new Date(`${date}T12:00:00Z`).getUTCDay();
+    const holiday = holidayDates.has(date);
     const closedByHours = !s.businessHours[String(weekday)];
     const pause = pauses.find(p => date >= String(p.startDate||'') && date < String(p.reopeningDate||''));
     return {
       date,
-      closed: closedByHours || !!pause,
-      reason: pause ? 'temporary_pause' : (closedByHours ? 'closed_day' : null),
+      closed: closedByHours || !!pause || holiday,
+      reason: pause ? 'temporary_pause' : (holiday ? 'holiday' : (closedByHours ? 'closed_day' : null)),
       bookedCount: bookedCounts.get(date) || 0
     };
   });

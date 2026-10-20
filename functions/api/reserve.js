@@ -13,6 +13,7 @@ import {
 } from '../lib/utils.js';
 import { rateLimit } from '../lib/rate-limit.js';
 import { readJsonObject, isReasonableEmail } from '../lib/request-validation.js';
+import { NON_OVERLAP_INSERT_SQL, atomicAppointmentWrite, eventInsertStatement } from '../lib/reservation-events.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') return optionResponse(context.request);
@@ -114,28 +115,25 @@ export async function onRequest(context) {
     return withCors(json({error:'この時間はすでに予約済みです。別の時間を選択してください。'},409),context.request);
   }
 
+  const appointmentId = randomId();
   try {
-    await context.env.DB.prepare(
-      'INSERT INTO appointments(id,date,time,name,phone,email,note,status,created_at,duration_minutes) VALUES(?,?,?,?,?,?,?,?,?,?)'
-    )
-      .bind(
-        randomId(),
-        body.date,
-        body.time,
-        name,
-        phone,
-        email,
-        note,
-        'confirmed',
-        new Date().toISOString(),
-        occupiedMinutes
-      )
-      .run();
-  } catch (e) {
-    return withCors(
-      json({error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。'},409),
-      context.request
+    const inserted = await atomicAppointmentWrite(context.env,
+      context.env.DB.prepare(NON_OVERLAP_INSERT_SQL).bind(
+        appointmentId,body.date,body.time,name,phone,email,note,
+        'confirmed',new Date().toISOString(),occupiedMinutes,
+        body.date,requestedEnd,requestedStart
+      ),
+      eventInsertStatement(context.env,'created',body.date,body.time,null,null,appointmentId)
     );
+    if (!inserted) {
+      return withCors(json({ok:false,code:'already_booked',error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。'},409),context.request);
+    }
+  } catch (error) {
+    console.error('Unable to save reservation',error);
+    const msg=String(error?.message||'');
+    if (/UNIQUE|constraint/i.test(msg))
+      return withCors(json({ok:false,code:'already_booked',error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。'},409),context.request);
+    return withCors(json({ok:false,code:'reservation_failed',error:'現在予約を保存できません。しばらくしてから再度お試しください。'},503),context.request);
   }
 
   return withCors(json({ok:true,date:body.date,time:body.time,extensionMinutes:extension,occupiedMinutes}),context.request);

@@ -10,6 +10,7 @@ import {
   minutesOf,
   isValidJapanesePhone
 } from '../../lib/utils.js';
+import { NON_OVERLAP_UPDATE_SQL, atomicAppointmentWrite, eventInsertStatement } from '../../lib/reservation-events.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') {
@@ -113,16 +114,19 @@ export async function onRequest(context) {
   }
 
   try {
-    await context.env.DB.prepare(
-      "UPDATE appointments SET date = ?, time = ?, name = ?, phone = ?, note = ?, duration_minutes = ? WHERE id = ? AND status = 'confirmed'"
-    ).bind(date, time, name, phone, finalNote, occupiedMinutes, id).run();
+    const changed = await atomicAppointmentWrite(context.env,
+      context.env.DB.prepare(NON_OVERLAP_UPDATE_SQL).bind(
+        date,time,name,phone,finalNote,occupiedMinutes,id,
+        date,id,requestedEnd,requestedStart
+      ),
+      eventInsertStatement(context.env,(current.date !== date || current.time !== time) ? 'moved' : 'updated',current.date,current.time,date,time,id)
+    );
+    if (!changed) return withCors(json({ok:false,code:'already_booked',error:'この時間はすでに予約されています。'},409),context.request);
   } catch (error) {
-    console.error('Unable to update admin appointment', error);
-    const message = String(error && error.message ? error.message : '');
-    if (message.includes('UNIQUE') || message.includes('unique')) {
-      return withCors(json({ ok:false, code:'already_booked', error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。' },409),context.request);
-    }
-    return withCors(json({ ok:false, code:'update_failed', error:'予約を変更できませんでした。' },500),context.request);
+    console.error('Unable to update admin appointment',error);
+    if (/UNIQUE|constraint/i.test(String(error?.message||'')))
+      return withCors(json({ok:false,code:'already_booked',error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。'},409),context.request);
+    return withCors(json({ok:false,code:'update_failed',error:'予約を変更できませんでした。'},503),context.request);
   }
 
   return withCors(json({

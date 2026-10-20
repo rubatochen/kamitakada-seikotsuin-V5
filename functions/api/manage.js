@@ -13,6 +13,7 @@ import {
 } from '../lib/utils.js';
 import { rateLimit } from '../lib/rate-limit.js';
 import { readJsonObject } from '../lib/request-validation.js';
+import { NON_OVERLAP_UPDATE_SQL, atomicAppointmentWrite, eventInsertStatement } from '../lib/reservation-events.js';
 
 function clean(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -132,9 +133,10 @@ export async function onRequest(context) {
 
   if (action === 'cancel') {
     try {
-      await context.env.DB.prepare(
-        "UPDATE appointments SET status = 'cancelled' WHERE id = ? AND status = 'confirmed'"
-      ).bind(current.id).run();
+      await atomicAppointmentWrite(context.env,
+        context.env.DB.prepare("UPDATE appointments SET status = 'cancelled' WHERE id = ? AND status = 'confirmed'").bind(current.id),
+        eventInsertStatement(context.env,'cancelled',current.date,current.time,null,null,current.id,'cancelled')
+      );
     } catch (error) {
       console.error('Unable to cancel customer appointment', error);
       return withCors(json({ ok:false, code:'cancel_failed', error:'予約をキャンセルできませんでした。' },500), context.request);
@@ -221,9 +223,14 @@ export async function onRequest(context) {
     }
 
     try {
-      await context.env.DB.prepare(
-        "UPDATE appointments SET date = ?, time = ?, name = ?, phone = ?, note = ?, duration_minutes = ? WHERE id = ? AND status = 'confirmed'"
-      ).bind(newDate,newTime,newName,newPhone,note,occupiedMinutes,current.id).run();
+      const updated = await atomicAppointmentWrite(context.env,
+        context.env.DB.prepare(NON_OVERLAP_UPDATE_SQL).bind(
+          newDate,newTime,newName,newPhone,note,occupiedMinutes,current.id,
+          newDate,current.id,requestedEnd,requestedStart
+        ),
+        eventInsertStatement(context.env,(current.date !== newDate || current.time !== newTime) ? 'moved' : 'updated',current.date,current.time,newDate,newTime,current.id)
+      );
+      if (!updated) return withCors(json({ok:false,code:'already_booked',error:'この時間はすでに予約されています。別の時間を選択してください。'},409),context.request);
     } catch (error) {
       console.error('Unable to update customer appointment', error);
       const message = String(error && error.message ? error.message : '');

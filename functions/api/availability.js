@@ -12,7 +12,19 @@ export async function onRequest(context) {
   }
   try {
     const result = await buildSlots(context.env,date,new Date(),occupiedMinutes);
-    return withCors(json(result),context.request);
+    // Never expose patient records on a public endpoint. Only slot status and
+    // anonymous busy intervals are needed by the booking page.
+    const publicResult = {
+      slots: result.slots,
+      holiday: result.holiday,
+      past: result.past,
+      unavailable: result.unavailable,
+      temporarilyClosed: Boolean(result.temporarilyClosed),
+      paused: Boolean(result.paused),
+      reopeningAt: result.reopeningAt,
+      businessHours: result.settings.businessHours,
+    };
+    return withCors(json(publicResult,200,{'Cache-Control':'no-store'}),context.request);
   } catch (error) {
     console.error('Unable to load availability', error);
     return withCors(json({ok:false, code:'service_unavailable', error:'現在予約可能状況を取得できません。'},503),context.request);

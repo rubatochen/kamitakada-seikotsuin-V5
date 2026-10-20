@@ -11,6 +11,7 @@ import {
   minutesOf,
   isValidJapanesePhone
 } from '../../lib/utils.js';
+import { NON_OVERLAP_INSERT_SQL, atomicAppointmentWrite, eventInsertStatement } from '../../lib/reservation-events.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') {
@@ -196,52 +197,22 @@ export async function onRequest(context) {
     : '電話受付';
 
   try {
-    await context.env.DB
-      .prepare(
-        'INSERT INTO appointments ' +
-        '(id,date,time,name,phone,email,note,status,created_at,duration_minutes) ' +
-        'VALUES (?,?,?,?,?,?,?,?,?,?)'
-      )
-      .bind(
-        id,
-        date,
-        time,
-        name,
-        phone,
-        email || null,
-        finalNote,
-        'confirmed',
-        createdAt,
-        occupiedMinutes
-      )
-      .run();
-  } catch (error) {
-    console.error('Unable to create admin appointment', error);
-
-    const message = String(error && error.message ? error.message : '');
-
-    if (
-      message.includes('UNIQUE') ||
-      message.includes('unique')
-    ) {
-      return withCors(
-        json({
-          ok: false,
-          code: 'already_booked',
-          error: 'この時間は先ほど予約された可能性があります。別の時間を選択してください。'
-        }, 409),
-        context.request
-      );
-    }
-
-    return withCors(
-      json({
-        ok: false,
-        code: 'reservation_failed',
-        error: '予約を登録できませんでした。'
-      }, 500),
-      context.request
+    const inserted = await atomicAppointmentWrite(context.env,
+      context.env.DB.prepare(NON_OVERLAP_INSERT_SQL).bind(
+        id,date,time,name,phone,email || null,finalNote,'confirmed',createdAt,occupiedMinutes,
+        date,requestedEnd,requestedStart
+      ),
+      eventInsertStatement(context.env,'created',date,time,null,null,id)
     );
+    if (!inserted) {
+      return withCors(json({ok:false,code:'already_booked',error:'この時間はすでに予約されています。'},409),context.request);
+    }
+  } catch (error) {
+    console.error('Unable to create admin appointment',error);
+    if (/UNIQUE|constraint/i.test(String(error?.message||''))) {
+      return withCors(json({ok:false,code:'already_booked',error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。'},409),context.request);
+    }
+    return withCors(json({ok:false,code:'reservation_failed',error:'予約を登録できませんでした。'},503),context.request);
   }
 
   return withCors(

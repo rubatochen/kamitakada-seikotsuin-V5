@@ -2,11 +2,14 @@ import { onRequest as availability } from '../../functions/api/availability.js';
 import { onRequest as login } from '../../functions/api/login.js';
 import { onRequest as logout } from '../../functions/api/logout.js';
 import { onRequest as reserve } from '../../functions/api/reserve.js';
+import { onRequest as manage } from '../../functions/api/manage.js';
+import { onRequest as calendar } from '../../functions/api/calendar.js';
 import { onRequest as status } from '../../functions/api/status.js';
 import { onRequest as adminBreaksDelete } from '../../functions/api/admin/breaks-delete.js';
 import { onRequest as adminBreaks } from '../../functions/api/admin/breaks.js';
 import { onRequest as adminCancel } from '../../functions/api/admin/cancel.js';
 import { onRequest as adminData } from '../../functions/api/admin/data.js';
+import { onRequest as adminEvents } from '../../functions/api/admin/events.js';
 import { onRequest as adminDelete } from '../../functions/api/admin/delete.js';
 import { onRequest as adminExtend } from '../../functions/api/admin/extend.js';
 import { onRequest as adminExport } from '../../functions/api/admin/export.js';
@@ -22,11 +25,14 @@ const ROUTES = {
   '/api/login': login,
   '/api/logout': logout,
   '/api/reserve': reserve,
+  '/api/manage': manage,
+  '/api/calendar': calendar,
   '/api/status': status,
   '/api/admin/breaks-delete': adminBreaksDelete,
   '/api/admin/breaks': adminBreaks,
   '/api/admin/cancel': adminCancel,
   '/api/admin/data': adminData,
+  '/api/admin/events': adminEvents,
   '/api/admin/delete': adminDelete,
   '/api/admin/extend': adminExtend,
   '/api/admin/export': adminExport,

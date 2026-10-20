@@ -160,6 +160,20 @@
       .extension-actions-inline .phone-reserve-btn{grid-column:span 3}
       .extension-actions-inline .phone-reserve-btn{width:100%;min-width:0;box-sizing:border-box}
     }
+
+    /* Staff-only, no patient details in the sound/notification panel. */
+    .notice-panel{display:flex;gap:14px;justify-content:space-between;align-items:center;flex-wrap:wrap;border:1px solid #d8dfd4;background:#f4f7f2;padding:14px 18px;border-radius:12px;margin-bottom:18px}
+    .notice-panel strong{display:block;color:#2c493d;margin-bottom:3px}
+    .notice-panel small{display:block;color:#56685c;line-height:1.5}
+    .notice-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    #notifyToggle{min-width:145px}
+    #notifyEvents{max-height:112px;overflow-y:auto;font-size:12px;color:#49544e;margin-top:6px}
+    #notifyEvents div{padding:3px 0;border-bottom:1px solid #e1e5df}
+    .sync-offline{color:#a24135!important;font-weight:700}
+    body.night-mode .notice-panel{background:#30362f;border-color:#636b60}
+    body.night-mode .notice-panel strong,body.night-mode .notice-panel small,body.night-mode #notifyEvents{color:#e1e5da}
+    body.night-mode #notifyEvents div{border-color:#555e51}
+    @media(max-width:700px){.notice-actions,#notifyToggle{width:100%}}
   </style>
 </head>
 <body>
@@ -181,6 +195,18 @@
           <button id="langJa" type="button" onclick="setAdminLanguage('ja')">日本語</button>
         </div>
         <button class="secondary" type="button" onclick="logout()" data-i18n="logout">退出登录</button>
+      </div>
+    </div>
+
+    <div class="notice-panel" id="notificationPanel">
+      <div style="flex:1;min-width:210px">
+        <strong id="notifyTitle">予約の音声通知</strong>
+        <small id="notifyHint">新規予約・キャンセル・日時変更を、名前を読み上げずにお知らせします。</small>
+        <small id="notifySync" role="status">接続確認中…</small>
+        <div id="notifyEvents" aria-live="polite" aria-atomic="false"></div>
+      </div>
+      <div class="notice-actions">
+        <button type="button" class="secondary" id="notifyToggle">音声通知を有効にする</button>
       </div>
     </div>
 
@@ -306,6 +332,11 @@
     document.getElementById('langJa').classList.toggle('active', adminLanguage === 'ja');
     renderPausePeriods();
     document.title = `${t('adminTitle')} | 上高田整骨院`;
+    const noticeTitle=document.getElementById('notifyTitle');
+    if(noticeTitle)noticeTitle.textContent=adminLanguage==='ja'?'予約の音声通知':'预约语音提醒';
+    const noticeHint=document.getElementById('notifyHint');
+    if(noticeHint)noticeHint.textContent=adminLanguage==='ja'?'新規予約・キャンセル・日時変更を、名前を読み上げずにお知らせします。':'新预约、取消及改期时播报日期和时间，不朗读姓名。';
+    if(typeof updateNotifyToggle==='function')updateNotifyToggle();
     if (D) { renderSchedule(); renderBreaks(); renderHours(); renderPausePeriods(); }
     if (phoneModalMode === 'edit') { document.getElementById('phoneReserveModalTitle').textContent = t('edit'); document.getElementById('phoneReserveSubmit').textContent = t('saveChanges'); }
     else { document.getElementById('phoneReserveModalTitle').textContent = t('registerManual'); document.getElementById('phoneReserveSubmit').textContent = t('registerManual'); }
@@ -329,10 +360,10 @@
   async function api(path,opt={}){ const r=await fetch(path,{...opt,credentials:'same-origin'}); const j=await r.json().catch(()=>({error:'error'})); if(!r.ok){const error=new Error(j.error||'error');error.code=j.code;error.status=r.status;throw error;}return j; }
   function loginErrorMessage(e){ if(e.code==='admin_password_not_configured')return t('loginPasswordNotConfigured'); if(e.code==='session_creation_failed')return t('sessionCreationFailed'); if(e.code==='invalid_password')return t('invalidPassword'); return t('loginFailed'); }
   async function login(){ const errorBox=document.getElementById('err'); const passwordInput=document.getElementById('pw'); errorBox.textContent=''; try{await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:passwordInput.value})});}catch(e){errorBox.textContent=loginErrorMessage(e);return;} passwordInput.value=''; showApp(); }
-  function showApp(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('date').value=today();applyAdminLanguage();render().catch(handleAdminLoadError);}
+  function showApp(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('date').value=today();applyAdminLanguage();render().catch(handleAdminLoadError);pollReservationEvents();}
   function showLogin(){document.getElementById('login').style.display='block';document.getElementById('app').style.display='none';}
   function handleAdminLoadError(e){const errorBox=document.getElementById('err'); if(e.status===401||e.status===403)errorBox.textContent=t('sessionInvalid');else if(e.status>=500)errorBox.textContent=t('dataLoadFailed');else errorBox.textContent=t('dataGetFailed');showLogin();}
-  async function render(){D=await api('/api/admin/data');renderSchedule();renderBreaks();renderHours();renderPausePeriods();}
+  async function render(){D=await api('/api/admin/data?date='+encodeURIComponent(document.getElementById('date').value||today()));renderSchedule();renderBreaks();renderHours();renderPausePeriods();}
 
   function renderSchedule(){
     const box=document.getElementById('schedule');const selectedDate=document.getElementById('date').value;const items=[];
@@ -435,6 +466,108 @@
   updateAdminTheme();
   setInterval(updateAdminTheme,60000);
 
+  // Background event feed contains only date/time/type (never patient data).
+  const EVENT_CURSOR_STORAGE = 'kamitakada-admin-event-cursor-v1';
+  let notificationsEnabled = false;
+  let eventPollRunning = false;
+  let eventInitialized = false;
+  let scheduleSyncOK = true;
+  let eventSyncOK = true;
+  const notificationLog = [];
+  const notifyToggle = document.getElementById('notifyToggle');
+  const notifySync = document.getElementById('notifySync');
+  function notificationText(event){
+    const ja=adminLanguage==='ja';
+    const d=String(event.date||'').replaceAll('-','/');
+    const time=String(event.time||'');
+    if(event.type==='created') return ja?`${d} ${time} に新しい予約が入りました。`:`${d} ${time} 新预约。`;
+    if(event.type==='cancelled') return ja?`${d} ${time} の予約がキャンセルされました。`:`${d} ${time} 的预约已取消。`;
+    if(event.type==='moved'){
+      const next=String(event.nextDate||'').replaceAll('-','/');
+      return ja?`${d} ${time} の予約が ${next} ${event.nextTime||''} に変更されました。`:`${d} ${time} 的预约改为 ${next} ${event.nextTime||''}。`;
+    }
+    return '';
+  }
+  function renderNotificationList(){
+    const el=document.getElementById('notifyEvents');
+    el.replaceChildren();
+    for(const entry of notificationLog){
+      const line=document.createElement('div');line.textContent=entry;el.appendChild(line);
+    }
+  }
+  function updateNotifyToggle(){
+    notifyToggle.textContent=notificationsEnabled
+      ?(adminLanguage==='ja'?'音声通知：オン':'语音提醒：开启')
+      :(adminLanguage==='ja'?'音声通知を有効にする':'开启语音提醒');
+    notifyToggle.setAttribute('aria-pressed',String(notificationsEnabled));
+  }
+  notifyToggle.addEventListener('click',()=>{
+    if(!('speechSynthesis' in window)){
+      notifySync.classList.add('sync-offline');
+      notifySync.textContent=adminLanguage==='ja'?'このブラウザーは音声読み上げに対応していません。':'此浏览器不支持语音播报。';
+      return;
+    }
+    notificationsEnabled=!notificationsEnabled;
+    updateNotifyToggle();
+    if(notificationsEnabled && 'speechSynthesis' in window){
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(adminLanguage==='ja'?'音声通知を有効にしました。':'语音提醒已开启。');
+      u.lang=adminLanguage==='ja'?'ja-JP':'zh-CN';u.rate=1.05;
+      window.speechSynthesis.speak(u); // explicit user gesture unlocks playback
+    }
+  });
+  function announceEvent(message){
+    if(!notificationsEnabled || !('speechSynthesis' in window))return;
+    const u=new SpeechSynthesisUtterance(message);
+    u.lang=adminLanguage==='ja'?'ja-JP':'zh-CN';u.rate=1.0;u.volume=1;
+    window.speechSynthesis.speak(u);
+  }
+  function cursorRead(){try{return localStorage.getItem(EVENT_CURSOR_STORAGE);}catch{return null;}}
+  function cursorWrite(cursor){if(!cursor)return;try{localStorage.setItem(EVENT_CURSOR_STORAGE,cursor);}catch{}}
+  function notifyConnection(ok,source='events'){
+    if(source==='schedule')scheduleSyncOK=ok;
+    else eventSyncOK=ok;
+    const healthy=scheduleSyncOK && eventSyncOK;
+    notifySync.classList.toggle('sync-offline',!healthy);
+    notifySync.textContent=healthy?(adminLanguage==='ja'?'予約情報を確認しています（約30秒ごと）':'预约同步正常（约30秒检查一次）')
+      :(adminLanguage==='ja'?'通信エラー：最新の予約を取得できません':'网络异常：无法获取最新预约');
+  }
+  async function pollReservationEvents(){
+    if(eventPollRunning || document.getElementById('app').style.display==='none')return;
+    eventPollRunning=true;
+    try{
+      const cursor=cursorRead();
+      const path='/api/admin/events'+(cursor?'?after='+encodeURIComponent(cursor):'');
+      const result=await api(path);
+      notifyConnection(true);
+      // An absent cursor means this browser has never received notifications;
+      // establish baseline but do not narrate historical reservations.
+      if(!cursor){cursorWrite(result.cursor);eventInitialized=true;return;}
+      if(Array.isArray(result.events)){
+        for(const e of result.events){
+          const latest=cursorRead();
+          if(latest && e.id<=latest)continue;
+          const message=notificationText(e);
+          cursorWrite(e.id); // acknowledge BEFORE playing, to prevent repeats
+          if(!message)continue;
+          notificationLog.unshift(message);
+          notificationLog.length=Math.min(5,notificationLog.length);
+          announceEvent(message);
+        }
+        if(result.events.length){renderNotificationList();refreshAdminScheduleSilently();}
+      }
+      cursorWrite(result.cursor);
+      eventInitialized=true;
+    }catch(e){
+      notifyConnection(false);
+      if(e.status===401||e.status===403){showLogin();}
+    }finally{eventPollRunning=false;}
+  }
+  updateNotifyToggle();
+  setInterval(pollReservationEvents,30000);
+  // Backend data should never be assumed fresh when event polling fails.
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollReservationEvents();});
+
   // 后台预约自动刷新：只更新预约/休息列表和统计，不重绘营业时间编辑区，
   // 避免管理员正在修改营业时间时被轮询覆盖输入内容。
   let adminRefreshRunning=false;
@@ -444,12 +577,16 @@
     if(!app || app.style.display==='none')return;
     adminRefreshRunning=true;
     try{
-      const fresh=await api('/api/admin/data');
+      const activeDate=document.getElementById('date').value||today();
+      const fresh=await api('/api/admin/data?date='+encodeURIComponent(activeDate));
+      if(activeDate!==document.getElementById('date').value)return;
       D=fresh;
+      notifyConnection(true,'schedule');
       renderSchedule();
       renderBreaks();
       renderPausePeriods();
     }catch(e){
+      notifyConnection(false,'schedule');
       if(e.status===401||e.status===403)showLogin();
     }finally{
       adminRefreshRunning=false;
