@@ -193,8 +193,8 @@
         <div class="sound-controls" role="group" aria-label="予約通知の音声設定" id="soundControls">
           <button type="button" class="secondary sound-toggle" id="notifyToggle" aria-pressed="false">通知：オフ</button>
           <label class="sound-volume-label" for="notifyVolume" data-i18n="notificationVolume">音量</label>
-          <input id="notifyVolume" type="range" min="0" max="100" step="5" value="70" data-i18n-aria-label="notificationVolume" aria-label="音量">
-          <output id="notifyVolumeValue" for="notifyVolume">70%</output>
+          <input id="notifyVolume" type="range" min="0" max="100" step="5" value="100" data-i18n-aria-label="notificationVolume" aria-label="音量">
+          <output id="notifyVolumeValue" for="notifyVolume">100%</output>
           <span id="notifySync" class="visually-hidden" role="status">接続確認中…</span>
         </div>
         <button class="secondary" type="button" onclick="logout()" data-i18n="logout">退出登录</button>
@@ -465,8 +465,10 @@
   const notifySync = document.getElementById('notifySync');
   const notifyVolume = document.getElementById('notifyVolume');
   const notifyVolumeValue = document.getElementById('notifyVolumeValue');
-  const NOTIFY_VOLUME_STORAGE = 'kamitakada-admin-speech-volume-v1';
-  let notificationVolume = 70;
+  // v2 starts at full speech volume; the old 70% default and saved value
+  // are intentionally not carried over. Staff can still turn it down.
+  const NOTIFY_VOLUME_STORAGE = 'kamitakada-admin-speech-volume-v2';
+  let notificationVolume = 100;
   try {
     const savedVolume = localStorage.getItem(NOTIFY_VOLUME_STORAGE);
     if(savedVolume !== null && /^\d{1,3}$/.test(savedVolume)) notificationVolume = Math.min(100, Number(savedVolume));
@@ -478,17 +480,129 @@
     notifyVolumeValue.textContent = notificationVolume + '%';
     try { localStorage.setItem(NOTIFY_VOLUME_STORAGE, String(notificationVolume)); } catch {}
   });
+
+  // Only announce appointments affecting TODAY in Asia/Tokyo.
+  // The computer or browser timezone must not change which events are spoken.
+  function tokyoToday(){
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(new Date());
+    const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+    return `${values.year}-${values.month}-${values.day}`;
+  }
+  function spokenTime(time){
+    const match = /^(\d{2}):(\d{2})$/.exec(String(time || ''));
+    if(!match) return '';
+    const h = Number(match[1]);
+    const m = Number(match[2]);
+    if(h > 23 || m > 59) return '';
+    if(adminLanguage === 'ja') return `${h}時${m ? `${m}分` : ''}`;
+    return `${h}点${m ? `${m}分` : '整'}`;
+  }
   function notificationText(event){
-    const ja=adminLanguage==='ja';
-    const d=String(event.date||'').replaceAll('-','/');
-    const time=String(event.time||'');
-    if(event.type==='created') return ja?`${d} ${time} に新しい予約が入りました。`:`${d} ${time} 新预约。`;
-    if(event.type==='cancelled') return ja?`${d} ${time} の予約がキャンセルされました。`:`${d} ${time} 的预约已取消。`;
-    if(event.type==='moved'){
-      const next=String(event.nextDate||'').replaceAll('-','/');
-      return ja?`${d} ${time} の予約が ${next} ${event.nextTime||''} に変更されました。`:`${d} ${time} 的预约改为 ${next} ${event.nextTime||''}。`;
+    if(!event || typeof event !== 'object')return '';
+    const todayJst = tokyoToday();
+    const oldIsToday = event.date === todayJst;
+    const newIsToday = event.nextDate === todayJst;
+    const ja = adminLanguage === 'ja';
+    const time = spokenTime(event.time);
+    if(event.type === 'created' && oldIsToday && time)
+      return ja ? `${time}、新しい予約が入りました。` : `${time}，有新预约。`;
+    if(event.type === 'cancelled' && oldIsToday && time)
+      return ja ? `${time}の予約がキャンセルされました。` : `${time}的预约已取消。`;
+    if(event.type === 'moved' && (oldIsToday || newIsToday)) {
+      const nextTime = spokenTime(event.nextTime);
+      if(oldIsToday && newIsToday && time && nextTime && event.time !== event.nextTime)
+        return ja ? `${time}から${nextTime}に予約が変更されました。`
+          : `${time}的预约改到了${nextTime}。`;
+      if(oldIsToday && time)
+        return ja ? `${time}の予約が変更されました。` : `${time}的预约已变更。`;
+      if(newIsToday && nextTime)
+        return ja ? `${nextTime}に予約が変更されました。` : `预约已变更为${nextTime}。`;
     }
+    // Future/past appointments do not generate audible notifications.
     return '';
+  }
+
+  // A single soft, short bell note; unlike the former double-alert it has
+  // no aggressive attack. Playback level follows the same volume slider.
+  let gentleAudioContext = null;
+  function unlockGentleAudio(){
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx)return;
+    try {
+      if(!gentleAudioContext)gentleAudioContext=new Ctx();
+      if(gentleAudioContext.state === 'suspended')gentleAudioContext.resume().catch(()=>{});
+    } catch {} // Speech still works if Web Audio is unavailable.
+  }
+  function gentleChime(){
+    if(!gentleAudioContext || gentleAudioContext.state !== 'running' || notificationVolume === 0)return 0;
+    try {
+      const ctx=gentleAudioContext;
+      const now=ctx.currentTime;
+      const volume=notificationVolume/100;
+      // Two gentle partials combine into ONE warm bell sound (not two beeps).
+      for(const [frequency,peak] of [[523.25,0.052],[784.0,0.012]]){
+        const oscillator=ctx.createOscillator();
+        const gain=ctx.createGain();
+        oscillator.type='sine';
+        oscillator.frequency.setValueAtTime(frequency,now);
+        gain.gain.setValueAtTime(0.0001,now);
+        gain.gain.linearRampToValueAtTime(peak*volume,now+0.025);
+        gain.gain.exponentialRampToValueAtTime(0.0001,now+0.28);
+        oscillator.connect(gain);gain.connect(ctx.destination);
+        oscillator.start(now);oscillator.stop(now+0.29);
+      }
+      return 320;
+    } catch {return 0;}
+  }
+
+  // Serialize event pairs (chime -> speech) to avoid a batch of simultaneous
+  // chimes when several reservations change during the same polling interval.
+  const announcementQueue=[];
+  let announcementActive=false;
+  let announcementTimer=null;
+  let announcementWatchdog=null;
+  let announcementSerial=0;
+  function clearAnnouncements(){
+    announcementSerial++;
+    announcementQueue.length=0;
+    announcementActive=false;
+    if(announcementTimer!==null)clearTimeout(announcementTimer);
+    if(announcementWatchdog!==null)clearTimeout(announcementWatchdog);
+    announcementTimer=null;announcementWatchdog=null;
+    if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  }
+  function playNextAnnouncement(){
+    if(announcementActive || !notificationsEnabled || !announcementQueue.length)return;
+    announcementActive=true;
+    const serial=++announcementSerial;
+    const item=announcementQueue.shift();
+    const wait=gentleChime();
+    announcementTimer=setTimeout(()=>{
+      announcementTimer=null;
+      if(serial!==announcementSerial || !notificationsEnabled)return;
+      const utterance=new SpeechSynthesisUtterance(item.message);
+      utterance.lang=item.lang;utterance.rate=0.94;
+      utterance.volume=notificationVolume/100;
+      let done=false;
+      const finish=()=>{
+        if(done || serial!==announcementSerial)return;
+        done=true;
+        if(announcementWatchdog!==null)clearTimeout(announcementWatchdog);
+        announcementWatchdog=null;
+        announcementActive=false;
+        playNextAnnouncement();
+      };
+      utterance.onend=finish;utterance.onerror=finish;
+      // Browsers occasionally omit onend; avoid holding later events forever.
+      announcementWatchdog=setTimeout(()=>{
+        if(serial!==announcementSerial || done)return;
+        window.speechSynthesis.cancel();
+        finish();
+      },Math.max(8000,item.message.length*300));
+      try {window.speechSynthesis.speak(utterance);} catch {finish();}
+    },wait);
   }
   function updateNotifyToggle(){
     notifyToggle.textContent=notificationsEnabled
@@ -505,18 +619,25 @@
     }
     notificationsEnabled=!notificationsEnabled;
     updateNotifyToggle();
-    if(notificationsEnabled && 'speechSynthesis' in window){
-      window.speechSynthesis.cancel();
-      const u=new SpeechSynthesisUtterance(adminLanguage==='ja'?'音声通知を有効にしました。':'语音提醒已开启。');
-      u.lang=adminLanguage==='ja'?'ja-JP':'zh-CN';u.rate=1.05;u.volume=notificationVolume/100;
-      window.speechSynthesis.speak(u); // explicit user gesture unlocks playback
+    if(notificationsEnabled){
+      // Initialize audio in the button-click gesture for browser autoplay rules.
+      unlockGentleAudio();
+      // Some browsers require speechSynthesis.speak() inside a direct click.
+      // A zero-volume utterance unlocks future notifications without making
+      // an audible "notifications enabled" announcement in the clinic.
+      try {
+        const unlock=new SpeechSynthesisUtterance('通知');
+        unlock.lang='ja-JP';unlock.volume=0;
+        window.speechSynthesis.speak(unlock);
+      } catch {}
+    } else {
+      clearAnnouncements();
     }
   });
   function announceEvent(message){
-    if(!notificationsEnabled || !('speechSynthesis' in window))return;
-    const u=new SpeechSynthesisUtterance(message);
-    u.lang=adminLanguage==='ja'?'ja-JP':'zh-CN';u.rate=1.0;u.volume=notificationVolume/100;
-    window.speechSynthesis.speak(u);
+    if(!message || !notificationsEnabled || !('speechSynthesis' in window))return;
+    announcementQueue.push({message,lang:adminLanguage==='ja'?'ja-JP':'zh-CN'});
+    playNextAnnouncement();
   }
   function cursorRead(){try{return localStorage.getItem(EVENT_CURSOR_STORAGE);}catch{return null;}}
   function cursorWrite(cursor){if(!cursor)return;try{localStorage.setItem(EVENT_CURSOR_STORAGE,cursor);}catch{}}
