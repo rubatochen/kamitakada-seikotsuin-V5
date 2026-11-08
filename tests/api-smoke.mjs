@@ -1,69 +1,51 @@
+// Public/admin API smoke test against real SQLite (see tests/_d1.mjs).
 import assert from 'node:assert/strict';
-import { onRequest as availability } from '../functions/api/availability.js';
-import { onRequest as events } from '../functions/api/admin/events.js';
-import { tokyoNow } from '../functions/lib/utils.js';
-// The fake DB below has Sunday closed, so pick the first non-Sunday date
-// at least n days ahead (the old fixed +2 days failed whenever it hit a Sunday).
-function future(n=2) {
-  const today=tokyoNow().date;
-  const d=new Date(today+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);
-  while(d.getUTCDay()===0) d.setUTCDate(d.getUTCDate()+1);
-  return d.toISOString().slice(0,10);
-}
-class FakeDB {
-  constructor({holiday=false,appointments=[]}={}){this.holiday=holiday;this.appointments=appointments;}
-  prepare(query){const b={params:[],bind(...args){this.params=args;return this},all:async()=>{
-    if(query.includes('FROM settings WHERE key IN'))return {results:[{key:'business_hours',value:JSON.stringify({'0':null,...Object.fromEntries([1,2,3,4,5,6].map(i=>[i,['10:00','19:00']]))})},{key:'slot_minutes',value:'30'}]};
-    if(query.includes('FROM breaks'))return {results:[]};
-    if(query.includes('FROM appointments'))return {results:this.appointments};
-    return {results:[]};
-  },first:async()=>{
-    if(query.includes('FROM holidays'))return this.holiday?{date:b.params[0]}:null;
-    if(query.includes('FROM sessions'))return null;
-    return null;
-  }};b.owner=this;return b}
-}
-const date=future(2);
-const db=new FakeDB({appointments:[{id:'SHOULD_HIDE_ID',name:'SHOULD_HIDE_NAME',time:'14:30',duration_minutes:30}]});
-const request=new Request('https://example.test/api/availability?date='+date+'&extension=0');
-const response=await availability({request,env:{DB:db}});
-assert.equal(response.status,200);
-const payload=await response.json();
-assert.equal('booked' in payload,false);
-assert.equal('breaks' in payload,false);
-assert.equal('settings' in payload,false);
+import { readFileSync } from 'node:fs';
+import { createD1, nextWeekday } from './_d1.mjs';
+
+const schema = readFileSync(new URL('../schema.sql', import.meta.url), 'utf8');
+const worker = (await import('../dist/worker/index.js')).default;
+const ctx = { waitUntil() {}, passThroughOnException() {} };
+const ASSETS = { fetch: () => { throw new Error('route missing'); } };
+const call = (db, path, init) => worker.fetch(new Request('https://example.test' + path, init), { DB: db, ASSETS }, ctx);
+
+// The fake DB has Sunday closed, so pick a non-Sunday date (the old fixed
+// +2 days failed whenever it hit a Sunday).
+const date = nextWeekday(2);
+const db = createD1(schema);
+db.raw.prepare("INSERT INTO appointments(id,date,time,name,phone,status,created_at,duration_minutes) VALUES('SHOULD_HIDE_ID',?,'14:30','SHOULD_HIDE_NAME','09000000000','confirmed','x',30)").run(date);
+
+const response = await call(db, `/api/availability?date=${date}&extension=0`);
+assert.equal(response.status, 200);
+const payload = await response.json();
+assert.equal('booked' in payload, false);
+assert.equal('breaks' in payload, false);
+assert.equal('settings' in payload, false);
 assert(!JSON.stringify(payload).includes('SHOULD_HIDE'));
-assert.equal(payload.slots.find(x=>x.time==='14:30')?.status,'booked');
-console.log('PASS: public availability preserves booked state without patient info');
-const holidayDB=new FakeDB({holiday:true});
-const holidayResponse=await availability({request,env:{DB:holidayDB}});
-const holiday=await holidayResponse.json();
-assert.equal(holiday.holiday,true);
-assert.equal(holiday.slots.length,0);
+assert(!JSON.stringify(payload.slots).includes('lanes'));
+assert.equal(payload.slots.find(x => x.time === '14:30')?.status, 'booked');
+console.log('PASS: public availability preserves booked state without patient info or lanes');
+
+const holidayDB = createD1(schema);
+holidayDB.raw.prepare('INSERT INTO holidays(date) VALUES(?)').run(date);
+const holiday = await (await call(holidayDB, `/api/availability?date=${date}`)).json();
+assert.equal(holiday.holiday, true);
+assert.equal(holiday.slots.length, 0);
 console.log('PASS: configured holiday has no available times');
-const eventRes=await events({request:new Request('https://example.test/api/admin/events'),env:{DB:db}});
-assert.equal(eventRes.status,401);
+
+assert.equal((await call(db, '/api/admin/events')).status, 401);
 console.log('PASS: anonymous access to notification feed denied');
-const seed='reservation_event:0000000000000:00000000-0000-0000-0000-000000000000';
-const fakeEventId='reservation_event:1790000000000:123e4567-e89b-12d3-a456-426614174000';
-const eventDB={ prepare(query){return {
- params:[], bind(...args){this.params=args;return this},
- async first(){if(query.includes('FROM sessions'))return {token:'valid'};if(query.includes('MAX(key)'))return {cursor:null};return null},
- async all(){return {results:[{id:fakeEventId,value:JSON.stringify({type:'cancelled',date:'2026-11-02',time:'14:00'})}]}}
- }} };
-const headers={Cookie:'session=valid'};
-const baseline=await events({request:new Request('https://example.test/api/admin/events',{headers}),env:{DB:eventDB}});
-const baseData=await baseline.json();
-assert.equal(baseData.cursor,seed);assert.equal(baseData.events.length,0);
-const next=await events({request:new Request('https://example.test/api/admin/events?after='+encodeURIComponent(seed),{headers}),env:{DB:eventDB}});
-assert.equal(next.status,200);const nextData=await next.json();
-assert.deepEqual(nextData.events.map(e=>e.type),['cancelled']);
-assert(!JSON.stringify(nextData).includes('valid'));
-console.log('PASS: first-open baseline then authorized cancellation event, no PII');
-const worker=(await import('../dist/worker/index.js')).default;
-const fakeCtx={waitUntil:()=>{},passThroughOnException:()=>{}};
-const routed=await worker.fetch(new Request('https://example.test/api/availability?date='+date),{DB:db,ASSETS:{fetch:()=>{throw new Error('route missing')}}},fakeCtx);
-assert.equal(routed.status,200);
-const routedEvents=await worker.fetch(new Request('https://example.test/api/admin/events'),{DB:db,ASSETS:{fetch:()=>{throw new Error('route missing')}}},fakeCtx);
-assert.equal(routedEvents.status,401);
-console.log('PASS: packaged Worker routes /api/availability + /api/admin/events');
+
+// Notification feed: baseline, then an event with no patient data.
+db.raw.prepare('INSERT INTO sessions(token,expires_at) VALUES(?,?)').run('valid', Date.now() + 3600e3);
+const headers = { Cookie: 'session=valid' };
+const base = await (await call(db, '/api/admin/events', { headers })).json();
+assert.equal(base.events.length, 0);
+const res = await call(db, '/api/reserve', { method: 'POST', headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ date, time: '11:00', name: '通知テスト', phone: '090-1111-2222' }) });
+assert.equal(res.status, 200);
+const next = await (await call(db, '/api/admin/events?after=' + encodeURIComponent(base.cursor), { headers })).json();
+assert.deepEqual(next.events.map(e => e.type), ['created']);
+assert.equal(next.events[0].menuId, 'seikotsu');
+assert(!JSON.stringify(next).includes('通知テスト'));
+console.log('PASS: first-open baseline then authorized booking event, no PII');

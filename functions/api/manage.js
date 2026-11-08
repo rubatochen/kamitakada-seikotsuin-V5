@@ -9,11 +9,14 @@ import {
   minutesOf,
   isWithinWebBookingWindow,
   isValidJapanesePhone,
-  normalizeJapanesePhone
+  normalizeJapanesePhone,
+  settings,
+  findMenu
 } from '../lib/utils.js';
+import { occupiedMinutes as menuOccupied, DEFAULT_MENU_ID } from '../lib/config.js';
 import { rateLimit } from '../lib/rate-limit.js';
 import { readJsonObject } from '../lib/request-validation.js';
-import { NON_OVERLAP_UPDATE_SQL, atomicAppointmentWrite, eventInsertStatement } from '../lib/reservation-events.js';
+import { atomicAppointmentWrite, eventInsertStatement, updateIntoFreeLane } from '../lib/reservation-events.js';
 
 function clean(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -30,7 +33,7 @@ function invalidReservation() {
 async function findAppointment(env, { date, time, name, phone }) {
   const normalizedPhone = normalizeJapanesePhone(phone);
   const rows = await env.DB.prepare(
-    "SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes FROM appointments WHERE date = ? AND time = ? AND status = 'confirmed'"
+    "SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes,menu_id,lane_id FROM appointments WHERE date = ? AND time = ? AND status = 'confirmed'"
   ).bind(date, time).all();
 
   const found = (rows.results || []).find(row =>
@@ -41,8 +44,16 @@ async function findAppointment(env, { date, time, name, phone }) {
   return found || null;
 }
 
-function appointmentPayload(row) {
+function appointmentPayload(row, menus = []) {
+  const menu = menus.find(m => m.id === (row.menu_id || DEFAULT_MENU_ID));
+  // With only one menu on offer (the usual case), the customer never chose a
+  // menu, so its name ("通常") is not shown back to them.
+  const several = menus.filter(m => m.offered && m.web).length > 1;
   return {
+    menu_id: row.menu_id || DEFAULT_MENU_ID,
+    menu_name: menu && (several || menu.id !== DEFAULT_MENU_ID) ? menu.name : null,
+    menu_extensions: menu ? menu.extensions : [0],
+    menu_base_minutes: menu ? menu.treatMinutes + menu.bufferMinutes : 30,
     id: row.id,
     date: row.date,
     time: row.time,
@@ -84,7 +95,7 @@ export async function onRequest(context) {
     return withCors(json({
       ok: true,
       date,
-      slots: (rows.results || []).map(row => row.time).filter(isValidTime)
+      slots: [...new Set((rows.results || []).map(row => row.time).filter(isValidTime))]
     }), context.request);
   }
 
@@ -127,21 +138,24 @@ export async function onRequest(context) {
   const current = await findAppointment(context.env, { date, time, name, phone });
   if (!current) return withCors(invalidReservation(), context.request);
 
+  let menus = [];
+  try { menus = (await settings(context.env)).menus; } catch (error) { console.error('Unable to load menus', error); }
+
   if (action === 'verify') {
-    return withCors(json({ ok:true, appointment:appointmentPayload(current) }), context.request);
+    return withCors(json({ ok:true, appointment:appointmentPayload(current, menus) }), context.request);
   }
 
   if (action === 'cancel') {
     try {
       await atomicAppointmentWrite(context.env,
         context.env.DB.prepare("UPDATE appointments SET status = 'cancelled' WHERE id = ? AND status = 'confirmed'").bind(current.id),
-        eventInsertStatement(context.env,'cancelled',current.date,current.time,null,null,current.id,'cancelled')
+        eventInsertStatement(context.env,'cancelled',current.date,current.time,null,null,current.id,'cancelled',current.menu_id || null)
       );
     } catch (error) {
       console.error('Unable to cancel customer appointment', error);
       return withCors(json({ ok:false, code:'cancel_failed', error:'予約をキャンセルできませんでした。' },500), context.request);
     }
-    return withCors(json({ ok:true, date:current.date, time:current.time }), context.request);
+    return withCors(json({ ok:true, date:current.date, time:current.time, menu_id:current.menu_id || DEFAULT_MENU_ID }), context.request);
   }
 
   if (action === 'update') {
@@ -151,8 +165,13 @@ export async function onRequest(context) {
     const newPhone = clean(body.phone);
     const extensionMinutes = Number(body.extensionMinutes || 0);
     const note = clean(body.note);
-    const allowedExtensions = [0,10,20,30];
-    const occupiedMinutes = 30 + extensionMinutes;
+    // Customers keep their menu; only date, time, details and extension change.
+    const menu = menus.find(m => m.id === (current.menu_id || DEFAULT_MENU_ID));
+    if (!menu || !menu.offered) {
+      return withCors(json({ ok:false, code:'menu_unavailable', error:'このメニューはWebで変更できません。お電話でご連絡ください。' },409), context.request);
+    }
+    const allowedExtensions = menu.extensions;
+    const occupiedMinutes = menuOccupied(menu, extensionMinutes);
 
     const original = body.original && typeof body.original === 'object' && !Array.isArray(body.original) ? body.original : {};
     const originalDate = clean(original.date);
@@ -186,7 +205,7 @@ export async function onRequest(context) {
 
     let availability;
     try {
-      availability = await buildSlots(context.env, newDate, new Date(), occupiedMinutes);
+      availability = await buildSlots(context.env, newDate, new Date(), { menuId: menu.id, extension: extensionMinutes, excludeId: current.id });
     } catch (error) {
       console.error('Unable to check updated reservation availability', error);
       return withCors(json({ ok:false, code:'service_unavailable', error:'現在予約可能状況を確認できません。' },503), context.request);
@@ -196,54 +215,35 @@ export async function onRequest(context) {
     }
 
     const slot = (availability.slots || []).find(s => s.time === newTime);
-    if (!slot) {
-      return withCors(json({ ok:false, code:'unavailable', error:'この時間は予約できません。' },409), context.request);
+    if (slot && slot.status === 'notice') {
+      return withCors(json({ ok:false, code:'too_soon', error:'このメニューはもう少し先の時間でご予約ください。' },409), context.request);
+    }
+    if (!slot || slot.status !== 'available') {
+      const code = slot && slot.status === 'break' ? 'break_time' : (slot && slot.status === 'booked' ? 'already_booked' : 'unavailable');
+      const error = code === 'break_time' ? '休憩時間のため変更できません。' : (code === 'already_booked' ? 'この時間はすでに予約されています。別の時間を選択してください。' : 'この時間は予約できません。');
+      return withCors(json({ ok:false, code, error },409), context.request);
     }
 
-    const requestedStart = minutesOf(newTime);
-    const requestedEnd = requestedStart + occupiedMinutes;
-    const otherAppointments = (availability.booked || []).filter(x => String(x.id) !== String(current.id));
-    const overlap = otherAppointments.some(x => {
-      const start = minutesOf(x.time);
-      const occupied = Number(x.duration_minutes) || 30;
-      return requestedStart < start + occupied && requestedEnd > start;
-    });
-
-    if (overlap) {
-      return withCors(json({ ok:false, code:'already_booked', error:'この時間はすでに予約されています。別の時間を選択してください。' },409), context.request);
-    }
-
-    const breakOverlap = (availability.breaks || []).some(x => {
-      const start = minutesOf(x.start_time);
-      const end = minutesOf(x.end_time);
-      return requestedStart < end && requestedEnd > start;
-    });
-    if (breakOverlap) {
-      return withCors(json({ ok:false, code:'break_time', error:'休憩時間のため変更できません。' },409), context.request);
-    }
-
+    // Keep the current lane if it is still free, otherwise any free lane.
+    const currentLane = current.lane_id || 'L1';
+    const lanes = slot.lanes.includes(currentLane) ? [currentLane, ...slot.lanes.filter(x => x !== currentLane)] : slot.lanes;
     try {
-      const updated = await atomicAppointmentWrite(context.env,
-        context.env.DB.prepare(NON_OVERLAP_UPDATE_SQL).bind(
-          newDate,newTime,newName,newPhone,note,occupiedMinutes,current.id,
-          newDate,current.id,requestedEnd,requestedStart
-        ),
-        eventInsertStatement(context.env,(current.date !== newDate || current.time !== newTime) ? 'moved' : 'updated',current.date,current.time,newDate,newTime,current.id)
-      );
-      if (!updated) return withCors(json({ok:false,code:'already_booked',error:'この時間はすでに予約されています。別の時間を選択してください。'},409),context.request);
+      const laneId = await updateIntoFreeLane(context.env, lanes, {
+        id: current.id, date: newDate, time: newTime, name: newName, phone: newPhone, note,
+        duration: occupiedMinutes, menuId: menu.id, startMinutes: minutesOf(newTime),
+        eventType: (current.date !== newDate || current.time !== newTime) ? 'moved' : 'updated',
+        fromDate: current.date, fromTime: current.time,
+      });
+      if (!laneId) return withCors(json({ok:false,code:'already_booked',error:'この時間はすでに予約されています。別の時間を選択してください。'},409),context.request);
     } catch (error) {
       console.error('Unable to update customer appointment', error);
-      const message = String(error && error.message ? error.message : '');
-      if (message.includes('UNIQUE') || message.includes('unique')) {
-        return withCors(json({ ok:false, code:'already_booked', error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。' },409), context.request);
-      }
       return withCors(json({ ok:false, code:'update_failed', error:'予約を変更できませんでした。' },500), context.request);
     }
 
     let updated;
     try {
       updated = await context.env.DB.prepare(
-        "SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes FROM appointments WHERE id = ?"
+        "SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes,menu_id,lane_id FROM appointments WHERE id = ?"
       ).bind(current.id).first();
     } catch (error) {
       console.error('Unable to reload updated customer appointment', error);
@@ -251,8 +251,8 @@ export async function onRequest(context) {
     }
 
     return withCors(json({ ok:true, appointment:appointmentPayload(updated || {
-      id:current.id,date:newDate,time:newTime,name:newName,phone:newPhone,email:current.email,note,duration_minutes:occupiedMinutes,status:'confirmed',created_at:current.created_at
-    }) }), context.request);
+      id:current.id,date:newDate,time:newTime,name:newName,phone:newPhone,email:current.email,note,duration_minutes:occupiedMinutes,status:'confirmed',created_at:current.created_at,menu_id:menu.id
+    }, menus) }), context.request);
   }
 
   return withCors(json({ ok:false, code:'invalid_action', error:'操作を指定してください。' },400), context.request);

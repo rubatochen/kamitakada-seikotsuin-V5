@@ -1,4 +1,4 @@
-import { optionResponse, withCors, requireAdmin } from '../../lib/utils.js';
+import { optionResponse, withCors, requireAdmin, settings } from '../../lib/utils.js';
 
 function csvCell(value) {
   let s = value == null ? '' : String(value);
@@ -31,16 +31,20 @@ export async function onRequest(context) {
   if (end) { conditions.push('date <= ?'); binds.push(end); }
   const where = conditions.length ? ` WHERE ${conditions.join(' AND ')}` : '';
 
-  const query = `SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes FROM appointments${where} ORDER BY date,time,id`;
+  const query = `SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes,menu_id,lane_id FROM appointments${where} ORDER BY date,time,id`;
   const result = await context.env.DB.prepare(query).bind(...binds).all();
   const rows = result.results || [];
 
-  const header = ['ID','予約日','予約時間','氏名','電話番号','メールアドレス','備考','状態','登録日時','占用時間(分)'];
+  const s = await settings(context.env);
+  const menuName = id => (s.menus.find(m => m.id === id)?.name?.ja) || id || '';
+  const laneName = id => (s.lanes.find(l => l.id === id)?.name) || id || '';
+  const header = ['ID','予約日','予約時間','氏名','電話番号','メールアドレス','備考','状態','登録日時','占用時間(分)','メニュー','枠'];
   const lines = [header.map(csvCell).join(',')];
   for (const x of rows) {
     lines.push([
       x.id, x.date, x.time, x.name, x.phone, x.email, x.note,
-      x.status === 'cancelled' ? 'キャンセル' : '確定', x.created_at, x.duration_minutes ?? 30
+      x.status === 'cancelled' ? 'キャンセル' : '確定', x.created_at, x.duration_minutes ?? 30,
+      menuName(x.menu_id), laneName(x.lane_id)
     ].map(csvCell).join(','));
   }
 

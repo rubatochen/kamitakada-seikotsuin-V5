@@ -13,17 +13,21 @@ CREATE TABLE IF NOT EXISTS appointments (
   note TEXT,
   status TEXT NOT NULL DEFAULT 'confirmed',
   created_at TEXT NOT NULL,
-  duration_minutes INTEGER NOT NULL DEFAULT 30
+  duration_minutes INTEGER NOT NULL DEFAULT 30,
+  menu_id TEXT NOT NULL DEFAULT 'seikotsu',
+  lane_id TEXT NOT NULL DEFAULT 'L1'
 );
 CREATE INDEX IF NOT EXISTS idx_appointments_date ON appointments(date);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_active_slot ON appointments(date, time) WHERE status = 'confirmed';
+-- One confirmed booking per start time per lane (枠).
+CREATE UNIQUE INDEX IF NOT EXISTS idx_active_slot_lane ON appointments(date, time, lane_id) WHERE status = 'confirmed';
 
 CREATE TABLE IF NOT EXISTS breaks (
   id TEXT PRIMARY KEY,
   date TEXT NOT NULL,
   start_time TEXT NOT NULL,
   end_time TEXT NOT NULL,
-  created_at TEXT NOT NULL
+  created_at TEXT NOT NULL,
+  lane_id TEXT  -- NULL = applies to every lane
 );
 CREATE INDEX IF NOT EXISTS idx_breaks_date ON breaks(date);
 

@@ -1,34 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 0 172 160">
-  <!-- a round panda waving goodbye ("またね") -->
-  <g stroke="#1c1c1c" stroke-width="3.5" stroke-linejoin="round">
-    <ellipse cx="80" cy="118" rx="54" ry="38" fill="#fff"/>
-    <ellipse cx="44" cy="145" rx="21" ry="13" fill="#1c1c1c"/>
-    <ellipse cx="116" cy="145" rx="21" ry="13" fill="#1c1c1c"/>
-  </g>
-  <ellipse cx="44" cy="146" rx="8" ry="5.5" fill="#fff" opacity=".22"/>
-  <ellipse cx="116" cy="146" rx="8" ry="5.5" fill="#fff" opacity=".22"/>
-  <!-- resting arm -->
-  <ellipse cx="52" cy="112" rx="16" ry="22" transform="rotate(-20 52 112)" fill="#1c1c1c"/>
-  <!-- raised, waving arm -->
-  <ellipse cx="134" cy="80" rx="15" ry="25" transform="rotate(38 134 80)" fill="#1c1c1c"/>
-  <ellipse cx="148" cy="62" rx="7" ry="5.5" transform="rotate(38 148 62)" fill="#fff" opacity=".22"/>
-  <path d="M158 40q8 8 4 20M150 34q6 4 6 10" fill="none" stroke="#9cc47f" stroke-width="3" stroke-linecap="round"/>
-  <!-- ears -->
-  <circle cx="38" cy="32" r="16" fill="#1c1c1c"/>
-  <circle cx="122" cy="32" r="16" fill="#1c1c1c"/>
-  <!-- head -->
-  <ellipse cx="80" cy="64" rx="52" ry="42" fill="#fff" stroke="#1c1c1c" stroke-width="3.5"/>
-  <ellipse cx="56" cy="60" rx="14" ry="10.5" transform="rotate(-32 56 60)" fill="#1c1c1c"/>
-  <ellipse cx="104" cy="60" rx="14" ry="10.5" transform="rotate(32 104 60)" fill="#1c1c1c"/>
-  <!-- open eyes with a little shine -->
-  <circle cx="58" cy="59" r="4" fill="#fff"/>
-  <circle cx="102" cy="59" r="4" fill="#fff"/>
-  <circle cx="59.5" cy="57.5" r="1.4" fill="#1c1c1c"/>
-  <circle cx="100.5" cy="57.5" r="1.4" fill="#1c1c1c"/>
-  <!-- muzzle, small "o" mouth as if saying bye -->
-  <ellipse cx="80" cy="82" rx="19" ry="13.5" fill="#f1f1ee"/>
-  <path d="M73 76.5q7-4 14 0q-1.5 6-7 7.5q-5.5-1.5-7-7.5Z" fill="#1c1c1c"/>
-  <ellipse cx="80" cy="89" rx="3.6" ry="3" fill="#1c1c1c"/>
-  <ellipse cx="38" cy="80" rx="7.5" ry="4.5" fill="#f3b4ae" opacity=".7"/>
-  <ellipse cx="122" cy="80" rx="7.5" ry="4.5" fill="#f3b4ae" opacity=".7"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 166 164">
+  <!-- the same panda waving goodbye ("またね") -->
+  <ellipse cx="46" cy="30" rx="15" ry="14" fill="#1c1c1c"/>
+  <ellipse cx="114" cy="30" rx="15" ry="14" fill="#1c1c1c"/>
+  <path d="M80 20C114 20 128 44 134 74C141 104 156 128 150 144C144 158 118 160 80 160C42 160 16 158 10 144C4 128 19 104 26 74C32 44 46 20 80 20Z" fill="#fff" stroke="#1c1c1c" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- the black "shawl": both front legs meet across the chest under the chin -->
+  <clipPath id="pandaBodyWave"><path d="M80 20C114 20 128 44 134 74C141 104 156 128 150 144C144 158 118 160 80 160C42 160 16 158 10 144C4 128 19 104 26 74C32 44 46 20 80 20Z"/></clipPath>
+  <path clip-path="url(#pandaBodyWave)" d="M8 76Q80 124 152 76L156 102Q80 128 4 102Z" fill="#1c1c1c"/>
+  <path d="M14 140C14 128 30 122 50 124C66 126 72 136 70 146C68 156 52 160 34 158C20 157 14 150 14 140Z" fill="#1c1c1c"/>
+  <path d="M146 140C146 128 130 122 110 124C94 126 88 136 90 146C92 156 108 160 126 158C140 157 146 150 146 140Z" fill="#1c1c1c"/>
+  <path d="M24 94C34 86 52 88 62 96C70 103 68 114 58 118C46 122 30 118 22 110C17 104 18 98 24 94Z" fill="#1c1c1c" stroke="#fff" stroke-width="5" stroke-linejoin="round" paint-order="stroke"/>
+  <ellipse cx="58" cy="108" rx="6" ry="4.6" transform="rotate(-30 58 108)" fill="#fff" opacity=".28"/>
+  <path d="M124 102L140 64" stroke="#fff" stroke-width="32" stroke-linecap="round"/>
+  <path d="M124 102L140 64" stroke="#1c1c1c" stroke-width="27" stroke-linecap="round"/>
+  <ellipse cx="141" cy="62" rx="6" ry="5" fill="#fff" opacity=".25"/>
+  <path d="M158 40q7 7 4 18M150 32q6 3 7 10" fill="none" stroke="#8fbd6c" stroke-width="3" stroke-linecap="round"/>
+  <!-- face after the logo: tilted eye patches, small nose, smile -->
+  <ellipse cx="63" cy="58" rx="10.5" ry="8" transform="rotate(-28 63 58)" fill="#1c1c1c"/>
+  <ellipse cx="97" cy="58" rx="10.5" ry="8" transform="rotate(28 97 58)" fill="#1c1c1c"/>
+  <circle cx="65" cy="56" r="2.5" fill="#fff"/>
+  <circle cx="95" cy="56" r="2.5" fill="#fff"/>
+  <ellipse cx="80" cy="70" rx="4.8" ry="3.6" fill="#1c1c1c"/>
+  <path d="M80 73.4V78" stroke="#1c1c1c" stroke-width="2.7" stroke-linecap="round"/>
+  <ellipse cx="80" cy="82.6" rx="3.6" ry="3.2" fill="#1c1c1c"/>
 </svg>

@@ -7,7 +7,8 @@ import {
   tokyoNow,
   minutesOf,
   timeString,
-  randomId
+  randomId,
+  settings
 } from '../../lib/utils.js';
 
 export async function onRequest(context) {
@@ -26,6 +27,15 @@ export async function onRequest(context) {
   const body = await context.request.json().catch(() => ({}));
   const date = typeof body.date === 'string' ? body.date.trim() : '';
   const minutes = Number(body.minutes);
+  // Optional: stop only one lane (e.g. a walk-in on 枠1 while 鍼灸 keeps running).
+  let laneId = null;
+  if (body.laneId) {
+    const s = await settings(context.env);
+    if (!s.lanes.some(l => l.id === body.laneId)) {
+      return withCors(json({ ok: false, code: 'invalid_lane', error: '枠が正しくありません。' }, 400), context.request);
+    }
+    laneId = String(body.laneId);
+  }
 
   if (!isValidDate(date)) {
     return withCors(json({ ok: false, code: 'invalid_date', error: '予約日が正しくありません。' }, 400), context.request);
@@ -43,8 +53,8 @@ export async function onRequest(context) {
   // 延長は「現在時刻」から指定分だけ予約停止にする。
   // 既存の一時停止時間と重なる場合は、その区間を維持したまま結合する。
   const breaks = await context.env.DB.prepare(
-    "SELECT id,start_time,end_time FROM breaks WHERE date = ? ORDER BY start_time"
-  ).bind(date).all();
+    "SELECT id,start_time,end_time FROM breaks WHERE date = ? AND lane_id IS ? ORDER BY start_time"
+  ).bind(date, laneId).all();
 
   const nowMinutes = minutesOf(now.time);
   const start = nowMinutes;
@@ -97,13 +107,14 @@ export async function onRequest(context) {
     const id = randomId();
 
     await context.env.DB.prepare(
-      "INSERT INTO breaks(id,date,start_time,end_time,created_at) VALUES(?,?,?,?,?)"
+      "INSERT INTO breaks(id,date,start_time,end_time,created_at,lane_id) VALUES(?,?,?,?,?,?)"
     ).bind(
       id,
       date,
       timeString(start),
       timeString(newEnd),
-      new Date().toISOString()
+      new Date().toISOString(),
+      laneId
     ).run();
 
     return withCors(json({

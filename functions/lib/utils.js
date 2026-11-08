@@ -1,3 +1,5 @@
+import { parseConfig, laneWindow, occupiedMinutes, isOffered, planForDate, poolClosedSpans, DEFAULT_MENU_ID, DEFAULT_LANE_ID } from './config.js';
+
 export function json(data, status = 200, extra = {}) {
   return new Response(JSON.stringify(data), {
     status,
@@ -125,15 +127,25 @@ export function timeString(n) {
 }
 
 export async function settings(env) {
-  const rows = await env.DB.prepare("SELECT key,value FROM settings WHERE key IN ('business_hours','slot_minutes','temporary_pause_periods')").all();
+  const rows = await env.DB.prepare("SELECT key,value FROM settings WHERE key IN ('business_hours','slot_minutes','temporary_pause_periods','lanes','menus','capacity')").all();
   const out = {};
   for (const r of rows.results || []) out[r.key] = r.value;
+  const { lanes, menus: rawMenus, capacity } = parseConfig(out.lanes, out.menus, out.capacity);
+  // `offered` is derived, never stored: on, and one of its lanes is on.
+  const menus = rawMenus.map(m => ({ ...m, offered: isOffered(m, lanes) }));
 
   return {
     businessHours: JSON.parse(out.business_hours || '{}'),
     slotMinutes: Number(out.slot_minutes || 30),
     temporaryPausePeriods: (() => { try { const v = JSON.parse(out.temporary_pause_periods || '[]'); return Array.isArray(v) ? v : []; } catch { return []; } })(),
+    lanes,
+    menus,
+    capacity,
   };
+}
+
+export function findMenu(s, menuId) {
+  return s.menus.find(m => m.id === menuId) || null;
 }
 
 function mergeIntervals(intervals) {
@@ -156,138 +168,126 @@ function mergeIntervals(intervals) {
   return merged;
 }
 
-export async function buildSlots(env, date, currentTime = new Date(), requestedDuration = 30) {
+/**
+ * Bookable start times for one menu on one date.
+ *
+ * opts.menuId     menu to book (default: the first active menu / 'seikotsu')
+ * opts.extension  extra minutes on top of the menu's own length
+ * opts.excludeId  appointment to ignore (when moving an existing booking)
+ * opts.laneId     only consider this lane (admin picking a lane by hand)
+ * opts.staff      true for the admin page: ignores "book N minutes ahead"
+ *
+ * A start time is available when at least one of the menu's lanes is open
+ * and free (no booking in that lane, no break for that lane or for all
+ * lanes) for the whole occupied length. slot.lanes lists those lanes in
+ * preference order; callers try them one by one with an atomic insert.
+ */
+export async function buildSlots(env, date, currentTime = new Date(), opts = {}) {
+  if (typeof opts === 'number') opts = { occupied: opts };
   const s = await settings(env);
   const now = tokyoNow(currentTime);
+  const menu = findMenu(s, opts.menuId) || findMenu(s, DEFAULT_MENU_ID) || s.menus[0];
+  const extension = Number(opts.extension || 0);
+  const occupied = Number(opts.occupied) || occupiedMinutes(menu, extension);
   const pausePeriods = Array.isArray(s.temporaryPausePeriods) ? s.temporaryPausePeriods : [];
   const pausePeriod = pausePeriods.find(p => date >= String(p.startDate || '') && date < String(p.reopeningDate || ''));
   const pauseActive = !!pausePeriod;
+  const base = { slots: [], holiday: false, past: false, breaks: [], booked: [], unavailable: [], settings: s, menu, occupied,
+    paused: pauseActive, reopeningAt: pauseActive ? pausePeriod.reopeningDate : null, laneWindows: {} };
 
-  if (date < now.date) {
-    return {
-      slots: [],
-      holiday: false,
-      past: true,
-      breaks: [],
-      booked: [],
-      unavailable: [],
-      settings: s,
-      paused: pauseActive,
-      reopeningAt: pauseActive ? pausePeriod.reopeningDate : null
-    };
-  }
-
-  if (pauseActive) {
-    return {
-      slots: [],
-      holiday: false,
-      past: false,
-      breaks: [],
-      booked: [],
-      unavailable: [],
-      settings: s,
-      paused: true,
-      reopeningAt: pausePeriod.reopeningDate,
-      temporarilyClosed: true
-    };
-  }
+  if (date < now.date) return { ...base, past: true };
+  if (pauseActive) return { ...base, paused: true, temporarilyClosed: true };
 
   // One-day closures configured in the existing holidays table are authoritative.
   const holidayRow = await env.DB.prepare('SELECT date FROM holidays WHERE date = ?').bind(date).first();
-  if (holidayRow) {
-    return {
-      slots: [], holiday: true, past: false, breaks: [], booked: [],
-      unavailable: [], settings: s, paused: false, reopeningAt: null
-    };
-  }
+  if (holidayRow) return { ...base, holiday: true };
 
   const weekday = new Date(`${date}T12:00:00Z`).getUTCDay();
 
-  const breaksResult = await env.DB
-    .prepare("SELECT id,start_time,end_time FROM breaks WHERE date = ? ORDER BY start_time")
-    .bind(date)
-    .all();
-
-  const bookedResult = await env.DB
-    .prepare("SELECT id,time,name,duration_minutes FROM appointments WHERE date = ? AND status = 'confirmed' ORDER BY time")
-    .bind(date)
-    .all();
-
+  const [breaksResult, bookedResult] = await Promise.all([
+    env.DB.prepare("SELECT id,start_time,end_time,lane_id FROM breaks WHERE date = ? ORDER BY start_time").bind(date).all(),
+    env.DB.prepare("SELECT id,time,name,duration_minutes,menu_id,lane_id FROM appointments WHERE date = ? AND status = 'confirmed' ORDER BY time").bind(date).all(),
+  ]);
   const breaks = breaksResult.results || [];
   const booked = bookedResult.results || [];
 
-  if (!s.businessHours[String(weekday)]) {
-    return {
-      slots: [],
-      holiday: false,
-      past: false,
-      breaks,
-      booked,
-      unavailable: [],
-      settings: s,
-      paused: pauseActive,
-      reopeningAt: pauseActive ? pausePeriod.reopeningDate : null
-    };
+  const laneWindows = {};
+  for (const lane of s.lanes) {
+    const w = laneWindow(lane, weekday, s.businessHours);
+    if (w) laneWindows[lane.id] = { start: minutesOf(w[0]), end: minutesOf(w[1]) };
+  }
+  const candidates = menu.lanes
+    .filter(id => laneWindows[id] && (!opts.laneId || opts.laneId === id));
+
+  if (!s.businessHours[String(weekday)] || !candidates.length) {
+    return { ...base, breaks, booked, laneWindows };
   }
 
-  const [start, end] = s.businessHours[String(weekday)];
-  const businessStart = minutesOf(start);
-  const businessEnd = minutesOf(end);
+  // Pool lanes (枠1〜3) beyond the day's capacity plan count as closed.
+  const plan = planForDate(s.capacity, date);
+  const bh = s.businessHours[String(weekday)];
+  const closedSpans = poolClosedSpans(plan, minutesOf(bh[0]), minutesOf(bh[1]));
+  const busy = {};
+  for (const id of candidates) {
+    busy[id] = [
+      ...(closedSpans[id] || []).map(x => ({ ...x, type: 'closed' })),
+      ...booked.filter(x => (x.lane_id || DEFAULT_LANE_ID) === id && String(x.id) !== String(opts.excludeId || ''))
+        .map(x => ({ start: minutesOf(x.time), end: minutesOf(x.time) + (Number(x.duration_minutes) || 30), type: 'booked' })),
+      ...breaks.filter(x => !x.lane_id || x.lane_id === id)
+        .map(x => ({ start: minutesOf(x.start_time), end: minutesOf(x.end_time), type: 'break' })),
+    ];
+  }
 
-  // 基本预约占用30分钟；延长预约可占用40/50/60分钟。
-  const appointmentDuration = [30, 40, 50, 60].includes(Number(requestedDuration)) ? Number(requestedDuration) : 30;
-
-  const bookedIntervals = booked.map(x => ({
-    start: minutesOf(x.time),
-    end: minutesOf(x.time) + (Number(x.duration_minutes) || 30),
-    type: 'booked'
-  }));
-
-  const breakIntervals = breaks.map(x => ({
-    start: minutesOf(x.start_time),
-    end: minutesOf(x.end_time),
-    type: 'break'
-  }));
-
-  const allIntervals = mergeIntervals([
-    ...bookedIntervals,
-    ...breakIntervals
-  ]);
+  const dayStart = Math.min(...candidates.map(id => laneWindows[id].start));
+  const dayEnd = Math.max(...candidates.map(id => laneWindows[id].end));
+  const nowAbs = minutesOf(now.time);
+  const dayOffset = daysFromTokyoToday(date, currentTime) * 1440;
+  const notice = opts.staff ? 0 : menu.noticeMinutes;
 
   const result = [];
-
-  for (let t = businessStart; t + appointmentDuration <= businessEnd; t += 1) {
+  for (let t = dayStart; t + occupied <= dayEnd; t += 1) {
     const time = timeString(t);
+    const abs = dayOffset + t;
+    if (abs <= nowAbs) { result.push({ time, status: 'past', lanes: [] }); continue; }
+    if (abs < nowAbs + notice) { result.push({ time, status: 'notice', lanes: [] }); continue; }
 
-    let status = "available";
-
-    if (date === now.date && t <= minutesOf(now.time)) {
-      status = "past";
-    } else if (
-      bookedIntervals.some(x => t < x.end && t + appointmentDuration > x.start)
-    ) {
-      status = "booked";
-    } else if (
-      breakIntervals.some(x => t < x.end && t + appointmentDuration > x.start)
-    ) {
-      status = "break";
+    const free = [];
+    let blockedByBreakOnly = false;
+    for (const id of candidates) {
+      const w = laneWindows[id];
+      if (t < w.start || t + occupied > w.end) continue;
+      const hits = busy[id].filter(x => t < x.end && t + occupied > x.start);
+      if (!hits.length) free.push(id);
+      else if (hits.every(x => x.type === 'break')) blockedByBreakOnly = true;
     }
-
-    result.push({ time, status });
+    result.push({
+      time,
+      status: free.length ? 'available' : (blockedByBreakOnly ? 'break' : 'booked'),
+      lanes: free,
+    });
   }
 
+  // Minutes in which every lane for this menu is booked, on a break or closed.
+  const fullyBusy = [];
+  let runStart = null;
+  for (let m = dayStart; m <= dayEnd; m++) {
+    const idle = m < dayEnd && candidates.some(id => {
+      const w = laneWindows[id];
+      return m >= w.start && m < w.end && !busy[id].some(x => m >= x.start && m < x.end);
+    });
+    if (!idle && m < dayEnd && runStart === null) runStart = m;
+    if ((idle || m === dayEnd) && runStart !== null) { fullyBusy.push({ start: runStart, end: m }); runStart = null; }
+  }
+  // Only report spans caused by bookings/breaks, not a lane simply being closed all day.
+  const unavailable = mergeIntervals(fullyBusy).filter(x => candidates.some(id => busy[id].some(b => b.type !== 'closed' && b.start < x.end && b.end > x.start)));
+
   return {
+    ...base,
     slots: result,
-    holiday: false,
-    past: false,
     breaks,
     booked,
-    unavailable: allIntervals.map(x => ({
-      startTime: timeString(x.start),
-      endTime: timeString(x.end)
-    })),
-    settings: s,
-    paused: pauseActive,
-    reopeningAt: pauseActive ? pausePeriod.reopeningDate : null
+    laneWindows,
+    closedSpans,
+    unavailable: unavailable.map(x => ({ startTime: timeString(x.start), endTime: timeString(x.end) })),
   };
 }

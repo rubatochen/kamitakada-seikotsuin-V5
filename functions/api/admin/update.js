@@ -8,140 +8,87 @@ import {
   isValidDate,
   isValidTime,
   minutesOf,
-  isValidJapanesePhone
+  isValidJapanesePhone,
+  settings,
+  findMenu
 } from '../../lib/utils.js';
-import { NON_OVERLAP_UPDATE_SQL, atomicAppointmentWrite, eventInsertStatement } from '../../lib/reservation-events.js';
+import { occupiedMinutes as menuOccupied, DEFAULT_MENU_ID, DEFAULT_LANE_ID } from '../../lib/config.js';
+import { updateIntoFreeLane } from '../../lib/reservation-events.js';
+
+function fail(request, status, code, error) {
+  return withCors(json({ ok: false, code, error }, status), request);
+}
 
 export async function onRequest(context) {
-  if (context.request.method === 'OPTIONS') {
-    return optionResponse(context.request);
-  }
+  const { request, env } = context;
+  if (request.method === 'OPTIONS') return optionResponse(request);
+  if (request.method !== 'POST') return fail(request, 405, 'method_not_allowed', 'Method not allowed');
+  if (!await requireAdmin(request, env)) return fail(request, 401, 'unauthorized', 'Unauthorized');
 
-  if (context.request.method !== 'POST') {
-    return withCors(json({ ok: false, error: 'Method not allowed' }, 405), context.request);
-  }
-
-  if (!await requireAdmin(context.request, context.env)) {
-    return withCors(json({ ok: false, code: 'unauthorized', error: 'Unauthorized' }, 401), context.request);
-  }
-
-  const body = await context.request.json().catch(() => ({}));
-  const id = typeof body.id === 'string' ? body.id.trim() : '';
-  const date = typeof body.date === 'string' ? body.date.trim() : '';
-  const time = typeof body.time === 'string' ? body.time.trim() : '';
-  const name = typeof body.name === 'string' ? body.name.trim() : '';
-  const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
-  const note = typeof body.note === 'string' ? body.note.trim() : '';
+  const body = await request.json().catch(() => ({}));
+  const str = v => typeof v === 'string' ? v.trim() : '';
+  const id = str(body.id), date = str(body.date), time = str(body.time), name = str(body.name), phone = str(body.phone), note = str(body.note);
   const extensionMinutes = Number(body.extensionMinutes || 0);
-  const allowedExtensions = [0, 10, 20, 30];
-  const occupiedMinutes = 30 + extensionMinutes;
 
-  if (!id) {
-    return withCors(json({ ok:false, code:'invalid_id', error:'予約IDが正しくありません。' },400),context.request);
-  }
-  if (!allowedExtensions.includes(extensionMinutes)) {
-    return withCors(json({ ok:false, code:'invalid_extension', error:'延長時間が正しくありません。' },400),context.request);
-  }
-  if (!isValidDate(date)) {
-    return withCors(json({ ok:false, code:'invalid_date', error:'予約日が正しくありません。' },400),context.request);
-  }
-  if (!isValidTime(time)) {
-    return withCors(json({ ok:false, code:'invalid_time', error:'予約時間が正しくありません。' },400),context.request);
-  }
-  if (!name) {
-    return withCors(json({ ok:false, code:'invalid_name', error:'お名前を入力してください。' },400),context.request);
-  }
-  if (!phone || !isValidJapanesePhone(phone)) {
-    return withCors(json({ ok:false, code:'invalid_phone', error:'電話番号の形式が正しくありません。例：090-1234-5678' },400),context.request);
-  }
-  if (name.length > 80 || phone.length > 40 || note.length > 500) {
-    return withCors(json({ ok:false, code:'input_too_long', error:'入力内容が長すぎます。' },400),context.request);
-  }
+  if (!id) return fail(request, 400, 'invalid_id', '予約IDが正しくありません。');
+  if (!isValidDate(date)) return fail(request, 400, 'invalid_date', '予約日が正しくありません。');
+  if (!isValidTime(time)) return fail(request, 400, 'invalid_time', '予約時間が正しくありません。');
+  if (!name) return fail(request, 400, 'invalid_name', 'お名前を入力してください。');
+  if (!phone || !isValidJapanesePhone(phone)) return fail(request, 400, 'invalid_phone', '電話番号の形式が正しくありません。例：090-1234-5678');
+  if (name.length > 80 || phone.length > 40 || note.length > 500) return fail(request, 400, 'input_too_long', '入力内容が長すぎます。');
 
-  const current = await context.env.DB.prepare(
-    "SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes FROM appointments WHERE id = ?"
+  const current = await env.DB.prepare(
+    "SELECT id,date,time,name,phone,email,note,status,created_at,duration_minutes,menu_id,lane_id FROM appointments WHERE id = ?"
   ).bind(id).first();
+  if (!current) return fail(request, 404, 'not_found', '予約が見つかりません。');
+  if (current.status !== 'confirmed') return fail(request, 409, 'not_editable', 'キャンセル済みの予約は変更できません。');
+  if (hasSlotStartedInTokyo(date, time)) return fail(request, 409, 'past_time', '開始済みまたは過去の時間は変更できません。');
 
-  if (!current) {
-    return withCors(json({ ok:false, code:'not_found', error:'予約が見つかりません。' },404),context.request);
-  }
-  if (current.status !== 'confirmed') {
-    return withCors(json({ ok:false, code:'not_editable', error:'キャンセル済みの予約は変更できません。' },409),context.request);
-  }
+  const s = await settings(env);
+  const menu = findMenu(s, str(body.menuId) || current.menu_id || DEFAULT_MENU_ID);
+  if (!menu) return fail(request, 400, 'invalid_menu', 'メニューが正しくありません。');
+  if (!menu.extensions.includes(extensionMinutes)) return fail(request, 400, 'invalid_extension', '延長時間が正しくありません。');
+  const laneChoice = str(body.laneId) || 'auto';
+  if (laneChoice !== 'auto' && !menu.lanes.includes(laneChoice)) return fail(request, 400, 'invalid_lane', 'このメニューはその枠では予約できません。');
 
-  if (hasSlotStartedInTokyo(date, time)) {
-    return withCors(json({ ok:false, code:'past_time', error:'開始済みまたは過去の時間は変更できません。' },409),context.request);
-  }
-
-  const availability = await buildSlots(context.env, date, new Date(), occupiedMinutes);
-  const slot = availability.slots.find(s => s.time === time);
-
-  if (!slot) {
-    return withCors(json({ ok:false, code:'unavailable', error:'この時間は予約できません。' },409),context.request);
-  }
-
-  if (slot.status === 'past') {
-    return withCors(json({ ok:false, code:'past_time', error:'開始済みまたは過去の時間は変更できません。' },409),context.request);
-  }
-
-  const requestedStart = minutesOf(time);
-  const requestedEnd = requestedStart + occupiedMinutes;
-  const otherAppointments = (availability.booked || []).filter(x => String(x.id) !== id);
-  const overlap = otherAppointments.some(x => {
-    const start = minutesOf(x.time);
-    const occupied = Number(x.duration_minutes) || 30;
-    return requestedStart < start + occupied && requestedEnd > start;
+  const availability = await buildSlots(env, date, new Date(), {
+    menuId: menu.id, extension: extensionMinutes, excludeId: id, staff: true,
+    laneId: laneChoice === 'auto' ? null : laneChoice,
   });
-
-  if (overlap) {
-    return withCors(json({ ok:false, code:'already_booked', error:'この時間はすでに予約されています。' },409),context.request);
-  }
-
-  const breakOverlap = (availability.breaks || []).some(x => {
-    const start = minutesOf(x.start_time);
-    const end = minutesOf(x.end_time);
-    return requestedStart < end && requestedEnd > start;
-  });
-
-  if (breakOverlap) {
-    return withCors(json({ ok:false, code:'break_time', error:'休憩時間のため変更できません。' },409),context.request);
+  const slot = availability.slots.find(x => x.time === time);
+  if (!slot) return fail(request, 409, 'unavailable', 'この時間は予約できません。');
+  if (slot.status !== 'available') {
+    const code = slot.status === 'past' ? 'past_time' : slot.status === 'booked' ? 'already_booked' : slot.status === 'break' ? 'break_time' : 'unavailable';
+    return fail(request, 409, code, 'この時間は予約できません。');
   }
 
   let finalNote = note;
-  const oldNote = String(current.note || '');
-  if (oldNote.startsWith('電話受付')) {
+  if (String(current.note || '').startsWith('電話受付')) {
     finalNote = note.startsWith('電話受付') ? note : (note ? `電話受付 · ${note}` : '電話受付');
   }
+  const occupied = menuOccupied(menu, extensionMinutes);
+  const currentLane = current.lane_id || DEFAULT_LANE_ID;
+  const lanes = slot.lanes.includes(currentLane) ? [currentLane, ...slot.lanes.filter(x => x !== currentLane)] : slot.lanes;
 
+  let laneId;
   try {
-    const changed = await atomicAppointmentWrite(context.env,
-      context.env.DB.prepare(NON_OVERLAP_UPDATE_SQL).bind(
-        date,time,name,phone,finalNote,occupiedMinutes,id,
-        date,id,requestedEnd,requestedStart
-      ),
-      eventInsertStatement(context.env,(current.date !== date || current.time !== time) ? 'moved' : 'updated',current.date,current.time,date,time,id)
-    );
-    if (!changed) return withCors(json({ok:false,code:'already_booked',error:'この時間はすでに予約されています。'},409),context.request);
+    laneId = await updateIntoFreeLane(env, lanes, {
+      id, date, time, name, phone, note: finalNote, duration: occupied, menuId: menu.id,
+      startMinutes: minutesOf(time),
+      eventType: (current.date !== date || current.time !== time) ? 'moved' : 'updated',
+      fromDate: current.date, fromTime: current.time,
+    });
   } catch (error) {
-    console.error('Unable to update admin appointment',error);
-    if (/UNIQUE|constraint/i.test(String(error?.message||'')))
-      return withCors(json({ok:false,code:'already_booked',error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。'},409),context.request);
-    return withCors(json({ok:false,code:'update_failed',error:'予約を変更できませんでした。'},503),context.request);
+    console.error('Unable to update admin appointment', error);
+    return fail(request, 503, 'update_failed', '予約を変更できませんでした。');
   }
+  if (!laneId) return fail(request, 409, 'already_booked', 'この時間は先ほど予約された可能性があります。別の時間を選択してください。');
 
   return withCors(json({
     ok: true,
     appointment: {
-      id,
-      date,
-      time,
-      name,
-      phone,
-      email: current.email || null,
-      note: finalNote,
-      status: 'confirmed',
-      created_at: current.created_at,
-      duration_minutes: occupiedMinutes
+      id, date, time, name, phone, email: current.email || null, note: finalNote, status: 'confirmed',
+      created_at: current.created_at, duration_minutes: occupied, menu_id: menu.id, lane_id: laneId,
     }
-  }), context.request);
+  }), request);
 }

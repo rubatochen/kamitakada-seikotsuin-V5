@@ -19,6 +19,10 @@ import { onRequest as adminHours } from '../../functions/api/admin/hours.js';
 import { onRequest as adminReserve } from '../../functions/api/admin/reserve.js';
 import { onRequest as adminUpdate } from '../../functions/api/admin/update.js';
 import { onRequest as adminPause } from '../../functions/api/admin/pause.js';
+import { onRequest as adminConfig } from '../../functions/api/admin/config.js';
+import { onRequest as adminSearch } from '../../functions/api/admin/search.js';
+import { onRequest as adminCapacity } from '../../functions/api/admin/capacity.js';
+import { ensureSchema } from '../../functions/lib/schema.js';
 
 const ROUTES = {
   '/api/availability': availability,
@@ -42,6 +46,9 @@ const ROUTES = {
   '/api/admin/reserve': adminReserve,
   '/api/admin/update': adminUpdate,
   '/api/admin/pause': adminPause,
+  '/api/admin/config': adminConfig,
+  '/api/admin/search': adminSearch,
+  '/api/admin/capacity': adminCapacity,
 };
 
 // API responses carry reservation data: never cache, never index, never frame.
@@ -104,6 +111,12 @@ export default {
     const handler = ROUTES[url.pathname];
 
     if (handler) {
+      try {
+        await ensureSchema(env);
+      } catch (error) {
+        console.error('Schema upgrade failed', error);
+        return withSecurityHeaders(new Response(JSON.stringify({ ok: false, code: 'service_unavailable', error: '現在ご利用いただけません。' }), { status: 503, headers: { 'content-type': 'application/json; charset=UTF-8' } }));
+      }
       return withSecurityHeaders(await handler(contextFor(request, env, ctx)));
     }
 
@@ -111,6 +124,6 @@ export default {
   },
 
   async scheduled(controller, env, ctx) {
-    ctx.waitUntil(cleanupOldAppointments(env));
+    ctx.waitUntil(ensureSchema(env).then(() => cleanupOldAppointments(env)));
   },
 };

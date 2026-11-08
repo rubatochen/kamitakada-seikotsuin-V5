@@ -5,454 +5,1179 @@
   <meta name="robots" content="noindex,nofollow">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>予約管理 | 上高田整骨院</title>
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .admin{max-width:1100px;margin:auto;padding:45px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}.panel{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:24px;margin-bottom:20px}.panel-heading-row{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}.panel-heading-row h2{margin-bottom:4px}.extension-actions-inline{display:flex;gap:8px;align-items:center;margin-left:auto}.extension-actions-inline .primary{min-height:42px;font-weight:800;padding:8px 14px}.schedule-list{margin-top:8px}.schedule-summary{display:flex;min-width:360px;background:linear-gradient(135deg,#f7f8f5,#f1f3ee);border-radius:12px;padding:14px 8px;text-align:center;box-sizing:border-box}.schedule-summary-item{flex:1;padding:4px 18px}.schedule-summary-item+.schedule-summary-item{border-left:1px solid #ddd}.schedule-summary-label{font-size:.9rem;font-weight:700;color:#777;margin-bottom:4px}.schedule-summary-value{display:flex;align-items:baseline;justify-content:center;gap:4px;white-space:nowrap;font-size:1.75rem;line-height:1.1;font-weight:900;color:var(--green-dark)}.schedule-summary-unit{font-size:.8rem;font-weight:700;margin-left:0}.schedule-summary-value #reservationTotalMinutes{font-size:1.75rem;line-height:1.1}@media(max-width:700px){.schedule-summary{width:100%;min-width:0;margin-top:8px}.schedule-summary-item{padding:4px 8px}}.schedule-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end}.schedule-actions button{white-space:nowrap}.schedule-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #eee}.schedule-row:last-child{border-bottom:0}.schedule-time{font-weight:800;font-size:1.05rem}.schedule-tag{display:inline-block;margin-right:8px;font-size:.82rem;font-weight:800;padding:3px 8px;border-radius:999px;background:#eef7f5}.schedule-tag.stop{background:#f3f3f3}.extension-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}.extension-actions .primary{min-height:48px;font-weight:800}.secondary-tools{margin-top:0}.login{max-width:420px;margin:100px auto}.login input{width:100%;box-sizing:border-box;margin:12px 0}.calendar{display:flex;gap:10px;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button,.daybtn{border:0;border-radius:8px;padding:10px 14px;background:#eef3ef;cursor:pointer}.tabs .active,.daybtn.active{background:var(--green);color:#fff}.appt{display:grid;grid-template-columns:80px 1fr auto;gap:15px;padding:14px 0;border-bottom:1px solid #eee;align-items:center}.muted{color:#777}.danger{border:0;border-radius:7px;padding:8px 12px;cursor:pointer;background:#eee}.danger:hover{background:#ddd}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}.compact-panel{padding:20px}.compact-panel h2{margin-bottom:14px}.compact-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.break-controls{display:grid;grid-template-columns:1fr;gap:8px}.break-controls input[type="date"],.break-controls input[type="time"]{width:100%;box-sizing:border-box}.break-controls .break-range{display:grid;grid-template-columns:1fr;gap:8px}.break-time-row{display:grid;grid-template-columns:56px 1fr;gap:8px;align-items:center}.break-time-row label{font-size:13px;font-weight:700;color:#666}.break-controls .primary{width:100%}.pause-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pause-actions .pause-btn{margin-top:0}.compact-controls input[type="date"]{flex:1 1 145px;min-width:140px}.compact-controls input[type="time"]{flex:1 1 95px;min-width:90px}.compact-panel .primary{min-height:40px;padding:8px 12px}.pause-panel .pause-btn{margin-top:10px}.pause-direct-controls{display:grid;gap:8px;margin-top:14px}.pause-direct-controls input[type="date"]{width:100%;box-sizing:border-box}.pause-btn{border:0;border-radius:8px;padding:9px 13px;background:#b64d3d;color:#fff;font-weight:800;cursor:pointer}.pause-btn:hover{background:#9f3f31}.pause-btn.resume{background:var(--green)}.pause-state{margin:12px 0 0;padding:10px 12px;border-radius:9px;background:#f7ebe7;color:#8f3c30;font-size:13px;line-height:1.6}.pause-state strong{display:block;margin-bottom:2px}.pause-periods{margin-top:14px}.pause-period{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:9px 0;border-top:1px solid #eee}.pause-period-dates{font-weight:700}.pause-period-actions{display:flex;gap:6px}.pause-period-actions button{white-space:nowrap}.pause-btn:disabled{opacity:.5;cursor:not-allowed}@media(max-width:900px){.grid3{grid-template-columns:1fr}}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid #eee}select{padding:8px}.phone-reserve-btn{border:0;border-radius:8px;padding:10px 16px;background:var(--green);color:#fff;font-weight:800;cursor:pointer}.phone-reserve-btn:hover{background:var(--green-dark)}.phone-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)}.phone-modal.open{display:flex}.phone-modal-box{width:min(480px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:12px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.25);box-sizing:border-box}.phone-modal-box h2{margin:0;color:var(--green-dark)}.phone-field{margin-bottom:14px}.phone-field label{display:block;margin-bottom:5px;font-weight:700}.phone-field input,.phone-field textarea{width:100%;padding:10px;border:1px solid var(--edge);border-radius:8px;box-sizing:border-box;font:inherit}.phone-error{color:#c0392b;margin:10px 0 0;min-height:1.5em}.phone-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.lang-switch{display:inline-flex;align-items:center;border:1px solid var(--edge);border-radius:8px;overflow:hidden;background:#fff}.lang-switch button{border:0;background:transparent;padding:9px 11px;font-weight:700;cursor:pointer;color:var(--text)}.lang-switch button.active{background:var(--green);color:#fff}.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}@media(max-width:700px){.grid2{grid-template-columns:1fr}.panel-heading-row{align-items:flex-start;flex-direction:column}.panel-heading-row .phone-reserve-btn{width:100%}.extension-actions-inline{flex-wrap:wrap;justify-content:flex-end}.extension-actions-inline .primary{flex:1 1 70px}.schedule-row{grid-template-columns:1fr auto}.schedule-time{grid-column:1/-1}.appt{grid-template-columns:60px 1fr}.appt button{grid-column:2}.top{align-items:flex-start;flex-direction:column}.top-actions{width:100%;flex-wrap:wrap}.top-actions>*{flex:0 0 auto}}
-    
-    .export-btn{white-space:nowrap;flex:0 0 auto}
-    @media(max-width:700px){.export-btn{width:100%}}
-    /* Admin UI consistency */
-    .admin{max-width:1100px;padding:42px 20px 60px}
-    .panel{border:1px solid var(--edge);border-radius:14px;background:var(--paper);box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
-    .top{margin-bottom:22px}
-    .top h1,.panel h1,.panel h2{color:var(--ink)}
-    .top-actions,.calendar-controls,.extension-actions-inline,.schedule-actions,.phone-modal-actions{gap:8px}
-    button.primary,button.secondary,button.danger,button.phone-reserve-btn,button.pause-btn,.tabs button,.daybtn{
-      min-height:42px;padding:9px 14px;border:1px solid transparent;border-radius:8px;font-weight:700;line-height:1.2;cursor:pointer;box-sizing:border-box;transition:background .18s ease,border-color .18s ease,color .18s ease,transform .08s ease
-    }
-    button.primary:active,button.secondary:active,button.danger:active,button.phone-reserve-btn:active,button.pause-btn:active{transform:translateY(1px)}
-    button.primary{background:var(--green);color:#fff;border-color:var(--green)}
-    button.primary:hover{background:var(--green-dark);border-color:var(--green-dark)}
-    button.secondary{background:var(--paper);color:var(--ink);border-color:var(--edge)}
-    button.secondary:hover{background:var(--soft);border-color:var(--green)}
-    button.danger{background:#f1eeea;color:#4f463f;border-color:#ddd5cb}
-    button.danger:hover{background:#e8e2db;border-color:#cfc3b6}
-    button.phone-reserve-btn{background:var(--green);color:#fff;border-color:var(--green)}
-    button.phone-reserve-btn:hover{background:var(--green-dark);border-color:var(--green-dark)}
-    button.pause-btn{background:var(--green);color:#fff;border-color:var(--green);width:100%;margin-top:0}
-    button.pause-btn:hover{background:var(--green-dark);border-color:var(--green-dark)}
-    .lang-switch{border-color:var(--edge);border-radius:8px;background:var(--paper)}
-    .lang-switch button{min-height:42px;padding:9px 13px}
-    .lang-switch button.active{background:var(--green);color:#fff}
-    input,select,textarea{border:1px solid var(--edge);border-radius:8px;background:var(--paper);color:var(--ink);padding:9px 10px;min-height:40px;box-sizing:border-box}
-    input[type=checkbox]{min-height:auto;width:16px;height:16px;accent-color:var(--green)}
-    input:focus,select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--green) 24%,transparent);outline-offset:1px;border-color:var(--green)}
-    .calendar{background:var(--paper)}
-    .schedule-summary{background:linear-gradient(135deg,var(--soft),var(--paper));border:1px solid var(--edge);border-radius:12px}
-    .schedule-summary-item+.schedule-summary-item{border-left-color:var(--edge)}
-    .schedule-summary-label,.muted{color:var(--muted)}
-    .schedule-tag{background:#eef7f5;color:var(--green-dark)}
-    .schedule-tag.stop{background:#f1eeea;color:#5f554d}
-    .schedule-row,.appt,td,th{border-bottom-color:var(--edge)}
-    table{background:transparent}
-    th{font-weight:800;color:var(--ink)}
-    .grid2{gap:18px}
-    .secondary-tools .panel{height:100%;box-sizing:border-box}
-    .compact-panel{padding:22px}
-    .compact-panel h2{margin-top:0}
-    .break-controls,.pause-direct-controls{gap:10px}
-    .break-time-row{grid-template-columns:48px 1fr}
-    .break-controls .primary{width:100%;margin-top:2px}
-    .pause-period{border-top-color:var(--edge)}
-    .pause-state{background:color-mix(in srgb,#b64d3d 10%,var(--paper));color:#8f3c30;border:1px solid color-mix(in srgb,#b64d3d 18%,var(--edge))}
-    .phone-modal-box{background:var(--paper);border:1px solid var(--edge);border-radius:14px}
-    .phone-field input,.phone-field textarea{background:var(--paper);color:var(--ink)}
-    .phone-modal{background:rgba(20,16,12,.48)}
+    /* ===== Admin: same ink / paper / bamboo tokens as the public site ===== */
+    body.admin-page{background:var(--kinari);color:var(--sumi);min-height:100vh}
+    .a-wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px}
+    [hidden]{display:none!important}
+    .a-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 14px;border:1px solid var(--rule);border-radius:8px;background:var(--shiro);color:var(--sumi);font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none;transition:background-color .15s ease,border-color .15s ease}
+    .a-btn:hover{border-color:var(--sumi)}
+    .a-btn.primary{background:var(--sumi);border-color:var(--sumi);color:var(--shiro)}
+    .a-btn.primary:hover{background:#000}
+    .a-btn.danger{color:#a3392c;border-color:#e4c9c4;background:var(--shiro)}
+    .a-btn.danger:hover{border-color:#a3392c}
+    .a-btn.ghost{border-color:transparent;background:transparent}
+    .a-btn.ghost:hover{background:rgba(0,0,0,.05)}
+    .a-btn.small{min-height:32px;padding:0 10px;font-size:13px}
+    .a-btn:disabled{opacity:.5;cursor:not-allowed}
+    .a-input,.a-select,.a-textarea{width:100%;min-height:42px;padding:8px 11px;border:1px solid var(--rule);border-radius:8px;background:var(--shiro);color:var(--sumi);font:inherit;font-size:15px;box-sizing:border-box}
+    .a-textarea{min-height:80px;resize:vertical}
+    .a-input:focus,.a-select:focus,.a-textarea:focus{outline:2px solid rgba(79,127,58,.35);outline-offset:1px;border-color:var(--kincha)}
+    .a-label{display:block;margin:0 0 6px;font-size:13px;font-weight:700;color:var(--nezumi)}
+    .a-field{margin-bottom:14px}
+    .a-muted{color:var(--nezumi)}
+    .a-panel{background:var(--shiro);border:1px solid var(--rule);border-radius:12px;padding:22px;margin-bottom:18px}
+    .a-panel h2{font-size:20px;margin:0 0 4px}
+    .a-panel>.a-muted{margin:0 0 16px;font-size:13px}
+    body.night-mode .a-btn.primary{background:var(--kincha-light);border-color:var(--kincha-light);color:#10140d}
 
-    /* Match the site's automatic 麻の葉 / 青海波 day-night treatment on admin. */
-    body{transition:background-color .35s ease,color .35s ease}
-    body.night-mode{
-      --green:#4aa88c;--green-dark:#226b58;--accent:#d6b45d;--ink:#f3f5ef;--muted:#adbbb5;--soft:#17221e;--paper:#121916;--edge:#30433b;--shadow:0 18px 45px rgba(0,0,0,.30);
-      background:#0a0f0d;color:#f3f5ef
-    }
-    body.night-mode .panel{background:var(--paper);border-color:var(--edge);box-shadow:var(--shadow)}
-    body.night-mode .top h1,body.night-mode .panel h1,body.night-mode .panel h2,body.night-mode th{color:#f3f5ef}
-    body.night-mode .muted,body.night-mode .schedule-summary-label{color:#adbbb5}
-    body.night-mode button.secondary{background:#151e1b;color:#f3f5ef;border-color:#34483f}
-    body.night-mode button.secondary:hover{background:#1d2b26;border-color:#4aa88c}
-    body.night-mode button.danger{background:#1b211f;color:#d8e0dc;border-color:#34413c}
-    body.night-mode button.danger:hover{background:#252d2a;border-color:#4b5d54}
-    body.night-mode .lang-switch{background:#151e1b;border-color:#34483f}
-    body.night-mode .lang-switch button{color:#f3f5ef}
-    body.night-mode input,body.night-mode select,body.night-mode textarea{background:#151e1b;color:#f3f5ef;border-color:#30433b;color-scheme:dark}
-    body.night-mode .schedule-summary{background:linear-gradient(135deg,#18221e,#121916);border-color:#30433b}
-    body.night-mode .schedule-tag{background:#17372f;color:#9be0cb}
-    body.night-mode .schedule-tag.stop{background:#202622;color:#c3ccc8}
-    body.night-mode .schedule-row,body.night-mode .appt,body.night-mode td,body.night-mode th{border-bottom-color:#2b3933}
-    body.night-mode .pause-state{background:#241b18;color:#e0aaa0;border-color:#543b35}
+    /* ----- top bar ----- */
+    .a-top{position:sticky;top:0;z-index:20;background:rgba(244,244,241,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);margin-bottom:22px}
+    body.night-mode .a-top{background:rgba(20,20,20,.92)}
+    .a-top-inner{max-width:1180px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:18px}
+    .a-brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:800;font-size:17px;white-space:nowrap}
+    .a-brand img{width:34px;height:34px;border-radius:50%}
+    body.night-mode .a-brand img{background:#fff;box-shadow:0 0 0 2px #fff}
+    .a-brand small{font-family:var(--sans);font-weight:500;font-size:12px;color:var(--nezumi)}
+    .a-tabs{display:flex;gap:4px;padding:4px;border-radius:10px;background:rgba(0,0,0,.05)}
+    body.night-mode .a-tabs{background:rgba(255,255,255,.06)}
+    .a-tabs button{min-height:36px;padding:0 16px;border:0;border-radius:7px;background:transparent;color:var(--nezumi);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+    .a-tabs button[aria-selected="true"]{background:var(--shiro);color:var(--sumi);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+    .a-top-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+    .a-notify{position:relative}
+    .a-notify .dot{width:8px;height:8px;border-radius:50%;background:#b9bbb5}
+    .a-notify[aria-pressed="true"] .dot{background:var(--kincha)}
+    .a-notify.sync-offline .dot{background:#b64d3d}
+    .a-menu{position:relative}
+    .a-menu-panel{position:absolute;right:0;top:calc(100% + 8px);width:240px;padding:14px;background:var(--shiro);border:1px solid var(--rule);border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.14);display:grid;gap:12px}
+    .a-menu-panel .row{display:flex;align-items:center;gap:8px;justify-content:space-between}
+    .a-seg{display:inline-flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+    .a-seg button{border:0;background:transparent;padding:7px 12px;font:inherit;font-size:13px;font-weight:700;color:var(--sumi);cursor:pointer}
+    .a-seg button.active{background:var(--sumi);color:var(--shiro)}
+    body.night-mode .a-seg button.active{background:var(--kincha-light);color:#10140d}
+    .a-menu-panel input[type=range]{flex:1;accent-color:var(--kincha)}
+    .a-menu-panel output{font-size:12px;color:var(--nezumi);min-width:36px;text-align:right}
+    .a-sync{font-size:12px;color:var(--nezumi);line-height:1.5}
 
-    /* Compact business-hours editor on mobile.
-       Desktop keeps the existing table layout. */
-    @media (max-width:700px){
-      #hours table{
-        width:100%;
-        table-layout:fixed;
-        font-size:14px;
-      }
-      #hours th,
-      #hours td{
-        padding:7px 4px;
-        vertical-align:middle;
-      }
-      #hours th:nth-child(1),
-      #hours td:nth-child(1){
-        width:42px;
-      }
-      #hours th:nth-child(2),
-      #hours td:nth-child(2){
-        width:42px;
-        text-align:center;
-      }
-      #hours th:nth-child(3),
-      #hours td:nth-child(3),
-      #hours th:nth-child(4),
-      #hours td:nth-child(4){
-        width:auto;
-      }
-      #hours input[type="time"]{
-        width:100%;
-        min-width:0;
-        box-sizing:border-box;
-        padding:7px 4px;
-        font-size:14px;
-      }
-      #hours input[type="checkbox"]{
-        width:18px;
-        height:18px;
-        margin:0;
-      }
-      #hours + .primary{
-        width:100%;
-        margin-top:10px;
-      }
-    }
+    /* ----- day header ----- */
+    .a-dayhead{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px}
+    .a-dayhead h1{font-size:24px;margin:0 6px 0 0;min-width:0}
+    .a-datepick{position:relative}
+    .a-datepick input{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .a-dayhead .spacer{flex:1}
+    .a-stop{position:relative}
+    .a-stop-panel{position:absolute;right:0;top:calc(100% + 8px);z-index:15;width:270px;padding:14px;background:var(--shiro);border:1px solid var(--rule);border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.14)}
+    .a-stop-panel p{margin:0 0 10px;font-size:13px;color:var(--nezumi);line-height:1.6}
+    .a-stop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
 
-    /* Final admin refinements */
-    .extension-actions-inline .primary{background:var(--paper);color:var(--ink);border-color:var(--edge)}
-    .extension-actions-inline .primary:hover{background:var(--soft);color:var(--ink);border-color:var(--green)}
-    .pause-direct-controls{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
-    .pause-date-row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;align-items:center}
-    .pause-date-row label{font-weight:700;color:var(--ink);margin:0}
-    .pause-date-row input[type="date"]{width:100%;min-width:0}
-    .pause-direct-controls .pause-btn{grid-column:1/-1}
-    @media(max-width:700px){.pause-date-row{grid-template-columns:64px minmax(0,1fr)}}
-    body.night-mode .extension-actions-inline .primary{background:#151e1b;color:#f3f5ef;border-color:#34483f}
-    body.night-mode .extension-actions-inline .primary:hover{background:#1d2b26;border-color:#4aa88c}
-    body.night-mode .phone-modal{background:rgba(0,0,0,.62)}
-    body.night-mode .phone-modal-box{background:#121916;border-color:#30433b}
-    body.night-mode .phone-field input,body.night-mode .phone-field textarea{background:#151e1b;color:#f3f5ef;border-color:#30433b}
+    /* ----- 14-day strip ----- */
+    .a-week{display:grid;grid-template-columns:repeat(14,minmax(52px,1fr));gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;scrollbar-width:thin}
+    .a-day{display:grid;justify-items:center;gap:1px;padding:7px 0 6px;border:1px solid var(--rule);border-radius:9px;background:var(--shiro);cursor:pointer;font:inherit;color:var(--sumi)}
+    .a-day small{font-size:11px;color:var(--nezumi)}
+    .a-day strong{font-size:17px;line-height:1.2}
+    .a-day .n{min-width:20px;padding:0 6px;border-radius:999px;font-size:11px;font-weight:700;background:#eef4e8;color:#3f6b2e}
+    .a-day .n.zero{background:transparent;color:var(--nezumi)}
+    .a-day.closed{background:transparent;border-style:dashed}
+    .a-day.closed strong{color:var(--nezumi)}
+    .a-day[aria-current="date"]{border-color:var(--sumi);box-shadow:inset 0 0 0 1px var(--sumi)}
+    .a-day.today small{color:var(--kincha);font-weight:700}
+    body.night-mode .a-day .n{background:#22281d;color:var(--kincha-light)}
 
-    @media(max-width:700px){
-      .admin{padding-top:28px}
-      .panel{padding:18px}
-      .extension-actions-inline{width:100%}
-      .extension-actions-inline button{flex:1 1 calc(50% - 8px)}
-      .extension-actions-inline .phone-reserve-btn{flex-basis:100%}
-    }
-    /* Mobile: compact extension controls — 30/40/50 on row 1, 60/manual on row 2. */
-    @media(max-width:700px){
-      .calendar{flex-direction:column;align-items:stretch}
-      .calendar-controls{width:100%;justify-content:center;box-sizing:border-box}
-      .extension-actions-inline{width:100%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;align-items:stretch;margin-left:0}
-      .extension-actions-inline .primary{flex:none;min-width:0;width:100%;box-sizing:border-box}
-      .extension-actions-inline .primary:nth-child(-n+3){grid-column:span 2}
-      .extension-actions-inline .primary:nth-child(4),
-      .extension-actions-inline .phone-reserve-btn{grid-column:span 3}
-      .extension-actions-inline .phone-reserve-btn{width:100%;min-width:0;box-sizing:border-box}
-    }
+    /* ----- summary ----- */
+    .a-summary{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+    .a-stat{flex:1 1 160px;padding:12px 16px;border:1px solid var(--rule);border-radius:10px;background:var(--shiro)}
+    .a-stat small{display:block;font-size:12px;color:var(--nezumi);font-weight:700}
+    .a-stat strong{font-size:22px;font-family:var(--serif)}
+    .a-stat span{font-size:13px;color:var(--nezumi)}
+    .a-stat.next{flex:2 1 260px}
+    .a-stat.next strong{font-size:18px}
 
-    /* Compact notification controls beside the language switch. */
-    .sound-controls{display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap}
-    .sound-controls .sound-toggle{min-width:112px;white-space:nowrap}
-    .sound-volume-label{color:var(--ink);font-size:.86rem;font-weight:700;white-space:nowrap}
-    .sound-controls input[type="range"]{width:100px;min-height:0;height:22px;padding:0;border:0;accent-color:var(--green);cursor:pointer;background:transparent}
-    .sound-controls output{font-size:.83rem;color:var(--muted);font-variant-numeric:tabular-nums;min-width:37px;text-align:right}
-    .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    .sound-controls .sync-offline{border-color:#a24135!important}
-    @media(max-width:700px){.sound-controls{width:100%;justify-content:flex-start;gap:8px}.sound-controls input[type="range"]{width:min(25vw,120px)}}
+    /* ----- timeline ----- */
+    .a-timeline{position:relative;display:grid;border:1px solid var(--rule);border-radius:12px;background:var(--shiro);overflow:hidden}
+    .a-tl-head{display:contents}
+    .a-tl-corner,.a-lane-head{position:sticky;top:0;z-index:3;padding:10px 12px;border-bottom:1px solid var(--rule);background:var(--shiro)}
+    .a-lane-head strong{display:block;font-size:14px}
+    .a-lane-head small{font-size:12px;color:var(--nezumi)}
+    .a-axis{position:relative;border-right:1px solid var(--rule)}
+    .a-axis span{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:var(--nezumi);font-variant-numeric:tabular-nums}
+    .a-lane{position:relative;border-right:1px solid var(--rule);cursor:copy;background-image:linear-gradient(var(--rule) 1px,transparent 1px);background-size:100% var(--hour);background-position:0 var(--offset)}
+    .a-lane:last-child{border-right:0}
+    .a-closed{position:absolute;left:0;right:0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.035) 0 6px,transparent 6px 12px);pointer-events:none}
+    body.night-mode .a-closed{background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 6px,transparent 6px 12px)}
+    .a-appt{position:absolute;left:6px;right:6px;z-index:1;display:block;padding:5px 9px;border:1px solid var(--rule);border-left:4px solid var(--c,#1c1c1c);border-radius:7px;background:var(--bg,#fff);color:var(--sumi);font:inherit;text-align:left;overflow:hidden;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.06);transition:box-shadow .15s ease,transform .15s ease}
+    .a-appt:hover{box-shadow:0 6px 16px rgba(0,0,0,.12);z-index:2}
+    .a-appt .t{display:block;font-size:11px;color:var(--nezumi);font-variant-numeric:tabular-nums}
+    .a-appt .n{display:block;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .a-appt .m{display:block;font-size:12px;color:var(--nezumi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .a-appt.tiny{padding:2px 8px;display:flex;gap:6px;align-items:center}
+    .a-appt.tiny .t,.a-appt.tiny .n{display:inline}
+    .a-appt.tiny .m,.a-appt.short .m{display:none}
+    .a-appt.past{opacity:.5}
+    body.night-mode .a-appt{--bg:#22231f;border-color:#34352f}
+    .a-break{position:absolute;left:6px;right:6px;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:6px;padding:4px 6px 4px 9px;border-radius:7px;background:repeating-linear-gradient(135deg,#ecece8 0 6px,#f6f6f3 6px 12px);border:1px dashed #c9cac4;font-size:12px;color:var(--nezumi);overflow:hidden;cursor:default}
+    body.night-mode .a-break{background:repeating-linear-gradient(135deg,#262622 0 6px,#1f1f1c 6px 12px);border-color:#3a3b35}
+    .a-break button{border:0;background:transparent;color:inherit;font-size:16px;line-height:1;cursor:pointer;padding:0 2px}
+    .a-now{position:absolute;left:0;right:0;z-index:4;height:0;border-top:2px solid #c0392b;pointer-events:none}
+    .a-now::before{content:attr(data-time);position:absolute;left:4px;top:-10px;padding:1px 6px;border-radius:999px;background:#c0392b;color:#fff;font-size:11px;font-weight:700}
+    .a-empty{padding:36px;text-align:center;color:var(--nezumi)}
+    .a-cancelled{margin-top:14px}
+    .a-cancelled summary{cursor:pointer;font-size:14px;color:var(--nezumi);font-weight:700}
+    .a-cancelled ul{list-style:none;margin:10px 0 0;padding:0}
+    .a-cancelled li{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--rule);font-size:14px;color:var(--nezumi)}
+    .a-cancelled li s{color:var(--nezumi)}
+    .a-cancelled li .a-btn{margin-left:auto}
+    .a-hint{margin:10px 2px 0;font-size:12px;color:var(--nezumi)}
+
+    /* ----- search ----- */
+    .a-search{display:flex;gap:10px;margin-bottom:16px}
+    .a-search .a-input{font-size:16px;min-height:48px}
+    .a-result-date{margin:18px 0 6px;font-family:var(--serif);font-weight:700;font-size:16px}
+    .a-result{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;width:100%;padding:12px 14px;margin-bottom:6px;border:1px solid var(--rule);border-radius:10px;background:var(--shiro);color:var(--sumi);font:inherit;text-align:left;cursor:pointer}
+    .a-result:hover{border-color:var(--sumi)}
+    .a-result .time{font-weight:700;font-variant-numeric:tabular-nums}
+    .a-result .who strong{display:block}
+    .a-result .who small{color:var(--nezumi)}
+    .a-tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:700;background:var(--soft);color:var(--sumi)}
+    .a-tag.cancel{background:#f4e6e3;color:#a3392c}
+    body.night-mode .a-tag.cancel{background:#3a2420;color:#e0aaa0}
+
+    /* ----- settings ----- */
+    .a-settings{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:12px;align-items:start}
+    .a-settings .wide{grid-column:1/-1}
+    .a-col{display:grid;gap:12px;align-content:start;min-width:0}
+    .a-col>.a-panel{margin-bottom:0}
+    .a-table{width:100%;border-collapse:collapse;font-size:14px}
+    .a-table th,.a-table td{padding:7px 6px;border-bottom:1px solid var(--rule);text-align:left}
+    .a-table th{font-size:12px;color:var(--nezumi)}
+    .a-table input[type=time]{min-height:36px;padding:4px 6px;font-size:14px}
+    .a-check{display:inline-flex;align-items:center;gap:6px;font-size:14px;cursor:pointer}
+    .a-check input{width:18px;height:18px;accent-color:var(--kincha)}
+    .a-card{border:1px solid var(--rule);border-radius:10px;padding:16px;margin-bottom:12px;background:var(--kinari)}
+    .a-card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+    .a-card-head .a-input{font-weight:700}
+    .a-card-head{flex-wrap:wrap}
+    #lanesEditor .a-card-head .a-input{max-width:180px!important}
+    .a-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .a-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .a-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .a-chips label{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--rule);border-radius:999px;background:var(--shiro);font-size:13px;cursor:pointer}
+    .a-chips label:has(input:checked){border-color:var(--kincha);background:#eef4e8}
+    body.night-mode .a-chips label:has(input:checked){background:#22281d}
+    .a-chips input{accent-color:var(--kincha)}
+    .a-savebar{position:sticky;bottom:12px;z-index:10;display:flex;align-items:center;gap:12px;justify-content:flex-end;padding:10px 14px;margin-top:6px;border:1px solid var(--rule);border-radius:12px;background:var(--shiro);box-shadow:0 10px 30px rgba(0,0,0,.12)}
+    .a-settings>.a-savebar{grid-column:1/-1;margin-top:0}
+    .a-savebar.dirty{border-color:var(--kincha);box-shadow:0 10px 30px rgba(79,127,58,.22)}
+    .a-savebar.dirty span{color:var(--kincha);font-weight:700}
+    .a-savebar span{font-size:13px;color:var(--nezumi);margin-right:auto}
+    .a-list-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--rule);font-size:14px}
+    .a-list-row .a-btn{margin-left:auto}
+    details.a-more summary{cursor:pointer;font-size:13px;color:var(--nezumi);margin:4px 0 10px}
+
+    /* ----- modal / toast ----- */
+    .a-modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,15,12,.45)}
+    .a-modal-box{width:min(520px,100%);max-height:92vh;overflow:auto;padding:22px;border-radius:14px;background:var(--shiro);border:1px solid var(--rule);box-shadow:0 30px 70px rgba(0,0,0,.3);animation:rise .25s ease both}
+    .a-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+    .a-modal-head h2{margin:0;font-size:20px}
+    .a-modal-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-top:18px}
+    .a-modal-actions .left{margin-right:auto}
+    .a-detail{display:grid;grid-template-columns:5.5em 1fr;gap:8px 12px;margin:0;font-size:15px}
+    .a-detail dt{color:var(--nezumi);font-size:13px;padding-top:2px}
+    .a-detail dd{margin:0;word-break:break-word}
+    .a-detail a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+    .a-error{min-height:1.4em;margin:6px 0 0;color:#a3392c;font-size:14px}
+    .a-pills{display:flex;flex-wrap:wrap;gap:6px}
+    .a-pills label{display:inline-flex;align-items:center;padding:7px 12px;border:1px solid var(--rule);border-radius:999px;background:var(--shiro);font-size:14px;cursor:pointer}
+    .a-pills input{position:absolute;opacity:0;pointer-events:none}
+    .a-pills label:has(input:checked){background:var(--sumi);border-color:var(--sumi);color:var(--shiro)}
+    body.night-mode .a-pills label:has(input:checked){background:var(--kincha-light);border-color:var(--kincha-light);color:#10140d}
+    .a-toasts{position:fixed;left:50%;bottom:22px;z-index:60;display:grid;gap:8px;transform:translateX(-50%);pointer-events:none}
+    .a-toast{padding:11px 18px;border-radius:999px;background:var(--sumi);color:var(--shiro);font-size:14px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:rise .25s ease both}
+    .a-toast.err{background:#a3392c;color:#fff}
+
+    /* ----- login ----- */
+    .a-login{max-width:380px;margin:12vh auto 0;text-align:center}
+    .a-login img{width:72px;height:72px;margin:0 auto 12px}
+    .a-login h1{font-size:24px;margin:0 0 4px}
+    .a-login .a-input{margin:18px 0 10px;text-align:center}
+
+    @media (max-width:860px){
+      .a-settings{grid-template-columns:1fr}
+      .a-brand small{display:none}
+    }
+    @media (max-width:640px){
+      .a-wrap{padding:0 12px 80px}
+      .a-top-inner{flex-wrap:wrap;gap:8px 10px;padding:8px 12px}
+      .a-brand{font-size:15px}
+      .a-tabs{order:3;width:100%}
+      .a-tabs button{flex:1;padding:0 6px}
+      .a-dayhead h1{font-size:19px;width:100%}
+      .a-dayhead .spacer{display:none}
+      .a-dayhead .act{flex:1}
+      .a-stat{flex-basis:calc(50% - 5px);padding:10px 12px}
+      .a-stat.next{flex-basis:100%}
+      .a-grid3{grid-template-columns:1fr 1fr}
+      .a-result{grid-template-columns:52px 1fr}
+      .a-result .a-tag{grid-column:2;justify-self:start}
+      .a-stop-panel{right:auto;left:0}
+    }
+.a-appt .t,.a-appt .n,.a-appt .m{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .a-break span{min-width:0;overflow:hidden}
+    .a-break b{font-weight:700}
+    .a-break i{font-style:normal}
+    @media (max-width:640px){.a-appt{padding:4px 6px 4px 7px;left:3px;right:3px}.a-appt .e{display:none}.a-appt.tiny{gap:4px}.a-break{left:3px;right:3px;padding:3px 4px 3px 6px;font-size:11px}.a-break b{display:block}}
+    .a-stat.cap{display:flex;flex-direction:column;align-items:flex-start}
+    .a-stat.cap .row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+    .a-stat.cap .a-btn{margin-top:6px}
+    .a-stat.cap .a-tag{font-size:11px}
+    .a-closed.cap{pointer-events:auto;cursor:pointer;background:repeating-linear-gradient(135deg,rgba(0,0,0,.06) 0 5px,rgba(0,0,0,.015) 5px 10px);display:flex;align-items:center;justify-content:center}
+    .a-closed.cap span{margin-top:8px;font-size:11px;color:var(--nezumi);background:var(--kinari);padding:1px 8px;border-radius:999px}
+    .a-cap-editor{display:grid;gap:10px;margin-bottom:6px}
+    .a-cap-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .a-cap-line .lbl{min-width:7em;font-size:14px;font-weight:700}
+    .a-cap-line .a-input{width:auto;min-width:0;max-width:140px}
+    .a-cap-line .sep{color:var(--nezumi)}
+    .a-num{display:inline-flex;border:1px solid var(--rule);border-radius:9px;overflow:hidden}
+    .a-num button{min-width:44px;min-height:40px;border:0;border-right:1px solid var(--rule);background:var(--shiro);font:inherit;font-weight:700;font-size:16px;cursor:pointer;color:var(--sumi)}
+    .a-num button:last-child{border-right:0}
+    .a-num button[aria-pressed="true"]{background:var(--sumi);color:#fff}
+    .a-cap-ranges{display:grid;gap:8px;padding-left:12px;border-left:3px solid var(--rule)}
+    .a-cap-note{font-size:12px;color:var(--nezumi);margin:8px 0 0;line-height:1.6}
+    #breaks p,#pausePeriods p{font-size:13px}
+    .a-cap-save{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+    .a-cap-save .a-check{font-size:12px;flex:1 1 260px}
+    .a-cap-save .a-btn{margin-left:auto}
+    .a-lane-pick{display:flex;flex-wrap:wrap;gap:8px}
+    .a-off{font-size:12px;color:#a3392c;margin-left:4px}
+    /* ===== compact density ===== */
+    .a-top{margin-bottom:12px}
+    .a-top-inner{padding:6px 20px;gap:14px}
+    .a-brand{font-size:15px;gap:8px}
+    .a-brand img{width:28px;height:28px}
+    .a-tabs{padding:3px}
+    .a-tabs button{min-height:32px;padding:0 13px;font-size:13px}
+    .a-btn{min-height:36px;padding:0 12px;font-size:13px}
+    .a-btn.small{min-height:30px;padding:0 9px;font-size:12px}
+    .a-input,.a-select{min-height:36px;padding:6px 10px;font-size:14px}
+    .a-textarea{min-height:64px;font-size:14px}
+    .a-label{margin-bottom:4px;font-size:12px}
+    .a-field{margin-bottom:10px}
+    .a-panel{padding:16px 18px;margin-bottom:12px;border-radius:10px}
+    .a-panel h2{font-size:17px}
+    .a-panel>.a-muted{margin-bottom:12px;font-size:12px}
+    .a-dayhead{gap:6px;margin-bottom:10px}
+    .a-dayhead h1{font-size:20px}
+    .a-week{gap:4px;margin-bottom:10px;grid-template-columns:repeat(14,minmax(44px,1fr))}
+    .a-day{padding:4px 0 3px;border-radius:7px;grid-template-columns:auto;gap:0}
+    .a-day small{font-size:10px}
+    .a-day strong{font-size:14px}
+    .a-day .n{font-size:10px;min-width:16px;padding:0 5px;line-height:15px}
+    .a-summary{gap:0;margin-bottom:10px;border:1px solid var(--rule);border-radius:10px;background:var(--shiro);overflow:hidden}
+    .a-stat{display:flex;align-items:baseline;gap:6px;flex:0 1 auto;padding:9px 16px;border:0;border-right:1px solid var(--rule);border-radius:0;background:transparent;min-width:0}
+    .a-stat small{display:inline;font-size:11px;margin-right:2px;white-space:nowrap}
+    .a-stat strong{font-size:18px}
+    .a-stat span{font-size:12px}
+    .a-stat.next{flex:1 1 auto;border-right:0}
+    .a-stat.next strong{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .a-stat.cap{display:flex;flex-direction:row;align-items:baseline}
+    .a-link{border:0;background:none;padding:0 0 0 4px;font:inherit;font-size:12px;font-weight:700;color:var(--kincha);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    .a-link[hidden]{display:none}
+    .a-tl-corner,.a-lane-head{padding:7px 10px}
+    .a-lane-head strong{display:inline;font-size:13px}
+    .a-lane-head small{font-size:11px;margin-left:4px}
+    .a-appt{padding:3px 8px;left:4px;right:4px;border-radius:6px}
+    .a-appt .n{font-size:13px}
+    .a-appt .t{font-size:10.5px}
+    .a-appt .m{font-size:11px}
+    .a-break{left:4px;right:4px;font-size:11px;padding:3px 6px 3px 8px}
+    .a-hint{margin-top:6px}
+    .a-card{padding:12px 14px;margin-bottom:8px}
+    .a-menu-card{padding:0}
+    .a-menu-card>summary{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 14px;cursor:pointer;list-style:none}
+    .a-menu-card>summary::-webkit-details-marker{display:none}
+    .a-menu-card>summary .nm{font-weight:700;font-size:14px;margin-right:6px}
+    .a-menu-card>summary .a-tag{font-size:11px}
+    .a-menu-card>summary .chev{margin-left:auto;color:var(--nezumi);transition:transform .15s ease;font-size:18px;line-height:1}
+    .a-menu-card[open]>summary .chev{transform:rotate(90deg)}
+    .a-menu-card>.body{padding:4px 14px 12px;border-top:1px solid var(--rule)}
+    .a-menu-card>.body .a-card-head{margin-top:10px}
+    .a-table td,.a-table th{padding:4px 6px}
+    .a-pills label,.a-chips label{padding:5px 11px;font-size:13px}
+    .a-savebar{padding:8px 12px}
+    .a-appt .t,.a-appt .n,.a-appt .m{line-height:1.35}
+    .a-table .a-input{min-height:32px;padding:4px 8px}
+    .a-savebar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);width:min(1140px,calc(100% - 28px));margin:0;z-index:30}
+    .a-savebar:not(.dirty){display:none}
+    @media (max-width:640px){
+      .a-summary{flex-wrap:wrap}
+      .a-stat{flex:1 1 40%;border-bottom:1px solid var(--rule);padding:7px 12px}
+      .a-stat strong{font-size:16px;white-space:nowrap}
+      .a-stat:nth-child(2){border-right:0}
+      .a-stat.cap{flex-basis:100%;border-right:0;flex-wrap:wrap}
+      .a-stat.next{flex-basis:100%;border-bottom:0}
+      .a-lane-head small{display:none}
+      .a-break i{display:none}
+      .a-break b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px}
+      .a-tl-corner,.a-lane-head{padding:6px 6px}
+    }
+    .a-lang button{padding:6px 10px;font-size:12px}
+    .a-export span[aria-hidden]{font-size:15px;line-height:1}
+    .a-search .a-btn{min-height:48px;flex:0 0 auto}
+    .a-result{padding:8px 14px;margin-bottom:5px}
+    .a-result-date{margin:14px 0 6px}
+    @media (max-width:640px){
+      .a-brand .nm,.a-brand small{display:none}
+      .a-top-inner{gap:8px}
+      .a-top-right{gap:6px}
+      .a-lang button{padding:6px 8px}
+      .a-export span[data-i18n]{display:none}
+      .a-export{padding:0 10px}
+      .a-search{flex-wrap:wrap}
+      .a-search .a-btn{min-height:40px}
+    }
+    /* ===== faint traditional patterns behind everything (same inks as the public site) =====
+       予約表 → 麻の葉, 一覧・検索 → 七宝, 設定 → 籠目, ログイン → 七宝 */
+    body.admin-page{position:relative;isolation:isolate;min-height:100vh;--pattern-ink:rgba(28,28,28,.06);--corner-ink:rgba(79,127,58,.3);
+      --pat:url("images/pattern-asanoha.svg");--pat-size:46px 79.7px}
+    body.admin-page.pat-list,body.admin-page.pat-login{--pat:url("images/pattern-shippo.svg");--pat-size:42px 42px}
+    body.admin-page.pat-settings{--pat:url("images/pattern-kagome.svg");--pat-size:36px 62.35px}
+    body.admin-page.night-mode{--pattern-ink:rgba(255,255,255,.045);--corner-ink:rgba(156,196,127,.14)}
+    /* page background: faint pattern over the whole page (scrolls with it) */
+    body.admin-page::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:var(--pattern-ink);
+      -webkit-mask-image:var(--pat);mask-image:var(--pat);-webkit-mask-size:var(--pat-size);mask-size:var(--pat-size);-webkit-mask-position:0 0;mask-position:0 0}
+    /* 浸染: the same tiles, lined up with the background by dye.js, seep into each white card from its top-right corner */
+    .a-panel,.a-summary,.a-login{position:relative;isolation:isolate;overflow:hidden;--dye-w:300px;--dye-h:190px;--dye-at:100% 0}
+    .a-panel::before,.a-summary::before,.a-login::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background:var(--corner-ink);
+      -webkit-mask-image:var(--pat),radial-gradient(ellipse var(--dye-w) var(--dye-h) at var(--dye-at),#000 0,#000 25%,rgba(0,0,0,.45) 55%,transparent 100%);
+      mask-image:var(--pat),radial-gradient(ellipse var(--dye-w) var(--dye-h) at var(--dye-at),#000 0,#000 25%,rgba(0,0,0,.45) 55%,transparent 100%);
+      -webkit-mask-size:var(--pat-size),100% 100%;mask-size:var(--pat-size),100% 100%;
+      -webkit-mask-repeat:repeat,no-repeat;mask-repeat:repeat,no-repeat;
+      -webkit-mask-position:var(--dye-ox,0) var(--dye-oy,0),0 0;mask-position:var(--dye-ox,0) var(--dye-oy,0),0 0;
+      -webkit-mask-composite:source-in;mask-composite:intersect}
+    .a-summary{--dye-w:240px;--dye-h:120px}
+    .a-login{--dye-w:420px;--dye-h:160px;--dye-at:50% 0}
+    body.night-mode .a-num button[aria-pressed="true"]{background:var(--kincha-light);color:#10140d}
+    /* a soft bamboo-green fade at the top so the pattern does not fight the header */
+    body.admin-page::after{content:"";position:fixed;inset:0 0 auto 0;height:220px;z-index:-1;pointer-events:none;background:linear-gradient(rgba(79,127,58,.05),transparent)}
+    .a-top{background:rgba(244,244,241,.86)}
+    .a-week .a-day:not(.closed){background:var(--shiro)}
+    .a-day.closed{background:rgba(244,244,241,.7)}
+    .a-cancelled,.a-hint{position:relative}
+    .a-cancelled{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.75)}
+    body.night-mode .a-cancelled{background:rgba(20,20,20,.6)}
+    @media (prefers-reduced-motion:reduce){body.admin-page::before{transition:none}}
   </style>
 </head>
-<body>
-<main class="admin">
-  <div id="login" class="panel login">
-    <h1 data-i18n="adminTitle">预约管理</h1>
-    <p>上高田整骨院</p>
-    <input id="pw" type="password" data-i18n-placeholder="adminPassword" placeholder="管理员密码" autocomplete="current-password">
-    <button class="primary" style="width:100%" onclick="login()" data-i18n="login">登录</button>
-    <p id="err" class="muted"></p>
-  </div>
+<body class="admin-page">
 
-  <div id="app" style="display:none">
-    <div class="top">
-      <div><h1 data-i18n="adminTitle">预约管理</h1><p class="muted">上高田整骨院</p></div>
-      <div class="top-actions">
-        <div class="lang-switch" role="group" aria-label="Language">
-          <button id="langZh" type="button" onclick="setAdminLanguage('zh')">中文</button>
-          <button id="langJa" type="button" onclick="setAdminLanguage('ja')">日本語</button>
-        </div>
-        <div class="sound-controls" role="group" aria-label="予約通知の音声設定" id="soundControls">
-          <button type="button" class="secondary sound-toggle" id="notifyToggle" aria-pressed="false">通知：オフ</button>
-          <label class="sound-volume-label" for="notifyVolume" data-i18n="notificationVolume">音量</label>
-          <input id="notifyVolume" type="range" min="0" max="100" step="5" value="100" data-i18n-aria-label="notificationVolume" aria-label="音量">
-          <output id="notifyVolumeValue" for="notifyVolume">100%</output>
-          <span id="notifySync" class="visually-hidden" role="status">接続確認中…</span>
-        </div>
-        <button class="secondary" type="button" onclick="logout()" data-i18n="logout">退出登录</button>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="calendar" style="justify-content:space-between;">
-        <div class="calendar-controls" style="display:flex;gap:10px;align-items:center;">
-          <button class="secondary" type="button" onclick="change(-1)" data-i18n-aria-label="prevDay" aria-label="前の日">←</button>
-          <input id="date" type="date" data-i18n-aria-label="reservationDate" aria-label="予約日">
-          <button class="secondary" type="button" onclick="change(1)" data-i18n-aria-label="nextDay" aria-label="次の日">→</button>
-        </div>
-        <div class="extension-actions-inline">
-          <button class="primary" type="button" onclick="extendToday(30)">＋30分</button>
-          <button class="primary" type="button" onclick="extendToday(40)">＋40分</button>
-          <button class="primary" type="button" onclick="extendToday(50)">＋50分</button>
-          <button class="primary" type="button" onclick="extendToday(60)">＋60分</button>
-          <button class="phone-reserve-btn" type="button" onclick="openPhoneModal()" data-i18n="manualReservation">＋ 手動予約</button>
-        </div>
-      </div>
-    </div>
-
-    <section class="panel">
-      <div class="panel-heading-row">
-        <div><h2 data-i18n="todaySchedule">今日の予定</h2><p class="muted" data-i18n="todayScheduleDesc">予約と予約停止時間を開始時刻順にまとめて表示します。</p></div><button class="secondary export-btn" type="button" onclick="exportAppointments()" data-i18n="exportAppointments">予約データを書き出す</button>
-        <div class="schedule-summary">
-          <div class="schedule-summary-item">
-            <div class="schedule-summary-label" data-i18n="reservationCount">予約人数</div>
-            <div class="schedule-summary-value"><span id="reservationCount">0</span><span class="schedule-summary-unit" data-i18n="peopleUnit">名</span></div>
-          </div>
-          <div class="schedule-summary-item">
-            <div class="schedule-summary-label" data-i18n="reservationTotalTime">予約総時間</div>
-            <div class="schedule-summary-value"><span id="reservationTotalHours">0</span><span class="schedule-summary-unit" data-i18n="hoursUnit">時間</span><span id="reservationTotalMinutes"></span></div>
-          </div>
-        </div>
-      </div>
-      <div id="schedule" class="schedule-list"></div>
-    </section>
-
-    <div class="grid2 secondary-tools">
-      <section class="panel compact-panel">
-        <h2 data-i18n="temporaryBreak">临时休息</h2>
-        <div class="break-controls">
-          <div class="break-range">
-            <div class="break-time-row"><label data-i18n="startTime">开始</label><input id="bs" type="time" value="12:00" aria-label="開始時間"></div>
-            <div class="break-time-row"><label data-i18n="endTime">结束</label><input id="be" type="time" value="14:00" aria-label="終了時間"></div>
-          </div>
-          <button class="primary" type="button" onclick="addBreak()" data-i18n="addBreak">添加休息时间</button>
-        </div>
-        <div id="breaks" style="margin-top:12px"></div>
-      </section>
-<section class="panel compact-panel pause-panel">
-        <h2 data-i18n="pauseClinic">暂停营业</h2>
-        <div class="pause-direct-controls">
-          <div class="pause-date-row"><label for="pauseStartDate" data-i18n="pauseStartDate">开始日期</label><input id="pauseStartDate" type="date"></div>
-          <div class="pause-date-row"><label for="pauseReopeningDate" data-i18n="reopeningDate">再开日期</label><input id="pauseReopeningDate" type="date"></div>
-          <button id="pauseSaveButton" class="pause-btn" type="button" onclick="savePausePeriod()" data-i18n="pauseClinic">暂停营业</button>
-        </div>
-        <div id="pausePeriods" class="pause-periods"></div>
-      </section>
-    </div>
-
-    <section class="panel">
-      <h2 data-i18n="businessHours">营业时间</h2>
-      <p class="muted" data-i18n="businessHoursDesc">设置每周营业时间和预约间隔。</p>
-      <div id="hours"></div>
-      <button class="primary" type="button" onclick="saveHours()" data-i18n="saveBusinessHours">保存营业时间</button>
-    </section>
-  </div>
-
-  <div id="phoneReserveModal" class="phone-modal">
-    <div class="phone-modal-box">
-      <div style="display:flex;justify-content:space-between;align-items:center"><h2 id="phoneReserveModalTitle">手動予約を登録</h2><button class="danger" type="button" onclick="closePhoneModal()" data-i18n-aria-label="close">×</button></div>
-      <div style="margin-top:20px">
-        <div class="phone-field"><label data-i18n="reservationDateLabel">预约日</label><input id="phoneReserveDate" type="date"></div>
-        <div class="phone-field"><label data-i18n="reservationTimeLabel">预约时间</label><input id="phoneReserveTime" type="time"></div>
-        <div class="phone-field"><label data-i18n="extensionTreatment">延长施术</label><select id="phoneReserveExtension"><option value="0" data-i18n="extension0">なし（25分施術 / 30分確保）</option><option value="10" data-i18n="extension10">10分延長（35分施術 / 40分確保）＋800円</option><option value="20" data-i18n="extension20">20分延長（45分施術 / 50分確保）＋1,600円</option><option value="30" data-i18n="extension30">30分延長（55分施術 / 60分確保）＋2,400円</option></select></div>
-        <div class="phone-field"><label data-i18n="name">姓名</label><input id="phoneReserveName" type="text" maxlength="80" data-i18n-placeholder="patientName" placeholder="患者姓名"></div>
-        <div class="phone-field"><label data-i18n="phoneNumber">电话号码</label><input id="phoneReservePhone" type="tel" maxlength="40" data-i18n-placeholder="phoneNumberPlaceholder" placeholder="电话号码"></div>
-        <div class="phone-field"><label data-i18n="notes">备注</label><textarea id="phoneReserveNote" rows="3" maxlength="500" data-i18n-placeholder="notesPlaceholder" placeholder="备注（任意）"></textarea></div>
-        <p id="phoneReserveError" class="phone-error"></p>
-        <div class="phone-modal-actions"><button class="secondary" type="button" onclick="closePhoneModal()" data-i18n="cancel">取消</button><button class="primary" type="button" onclick="submitPhoneReservation()" id="phoneReserveSubmit" data-i18n="registerManual">手动预约を登録</button></div>
-      </div>
-    </div>
+<!-- ===================== login ===================== -->
+<main id="login" class="a-wrap" hidden>
+  <div class="a-login a-panel">
+    <img src="images/logo-192.webp" width="72" height="72" alt="">
+    <h1 data-i18n="adminTitle">予約管理</h1>
+    <p class="a-muted">上高田整骨院</p>
+    <input id="pw" class="a-input" type="password" data-i18n-placeholder="adminPassword" placeholder="管理者パスワード" autocomplete="current-password">
+    <button class="a-btn primary" style="width:100%" type="button" data-act="login" data-i18n="login">ログイン</button>
+    <p id="err" class="a-error"></p>
   </div>
 </main>
 
+<!-- ===================== app ===================== -->
+<div id="app" hidden>
+  <header class="a-top">
+    <div class="a-top-inner">
+      <div class="a-brand"><img src="images/logo-96.webp" width="34" height="34" alt="上高田整骨院"><span class="nm">上高田整骨院</span><small data-i18n="adminTitle">予約管理</small></div>
+      <nav class="a-tabs" role="tablist">
+        <button role="tab" data-tab="day" aria-selected="true" data-i18n="tabDay">予約表</button>
+        <button role="tab" data-tab="list" aria-selected="false" data-i18n="tabList">一覧・検索</button>
+        <button role="tab" data-tab="settings" aria-selected="false" data-i18n="tabSettings">設定</button>
+      </nav>
+      <div class="a-top-right">
+        <div id="soundControls" role="group" aria-label="予約通知の音声設定">
+          <button type="button" class="a-btn a-notify" id="notifyToggle" aria-pressed="false"><span class="dot" aria-hidden="true"></span><span id="notifyLabel">通知：オフ</span></button>
+        </div>
+        <div class="a-seg a-lang" role="group" aria-label="言語 / 语言"><button type="button" id="langJa" data-act="lang" data-lang="ja">日本語</button><button type="button" id="langZh" data-act="lang" data-lang="zh">中文</button></div>
+        <button class="a-btn a-export" type="button" data-act="export" title="予約データ（CSV）"><span aria-hidden="true">⤓</span><span data-i18n="exportShort">書き出し</span></button>
+        <div class="a-menu">
+          <button type="button" class="a-btn ghost" data-act="toggle-menu" aria-haspopup="true" aria-expanded="false" aria-label="メニュー">⋯</button>
+          <div id="topMenu" class="a-menu-panel" hidden>
+            <div class="row"><span data-i18n="notificationVolume">音量</span><input id="notifyVolume" type="range" min="0" max="100" step="5" value="100" aria-label="音量"><output id="notifyVolumeValue">100%</output></div>
+            <p id="notifySync" class="a-sync" role="status">接続確認中…</p>
+            <button class="a-btn" type="button" data-act="logout" data-i18n="logout">ログアウト</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="a-wrap">
+    <!-- ============ day ============ -->
+    <section id="tab-day">
+      <div class="a-dayhead">
+        <h1 id="dayTitle"></h1>
+        <button class="a-btn small" type="button" data-act="day" data-n="-1" data-i18n-aria-label="prevDay" aria-label="前の日">‹</button>
+        <label class="a-btn small a-datepick"><span data-i18n="pickDate">日付</span><input id="date" type="date" aria-label="日付"></label>
+        <button class="a-btn small" type="button" data-act="day" data-n="1" data-i18n-aria-label="nextDay" aria-label="次の日">›</button>
+        <button class="a-btn small" type="button" data-act="today" data-i18n="today">今日</button>
+        <span class="spacer"></span>
+        <div class="a-stop act">
+          <button class="a-btn act" style="width:100%" type="button" data-act="toggle-stop" aria-expanded="false" data-i18n="stopNow">今から受付を止める</button>
+          <div id="stopPanel" class="a-stop-panel" hidden>
+            <p data-i18n="stopHelp">今からの時間、Web予約を受け付けません（飛び込みのお客様の対応などに）。</p>
+            <label class="a-label" for="stopLane" data-i18n="lane">枠</label>
+            <select id="stopLane" class="a-select"></select>
+            <div class="a-stop-grid">
+              <button class="a-btn small" type="button" data-act="stop" data-min="30">30<span data-i18n="minutesUnit">分</span></button>
+              <button class="a-btn small" type="button" data-act="stop" data-min="40">40<span data-i18n="minutesUnit">分</span></button>
+              <button class="a-btn small" type="button" data-act="stop" data-min="50">50<span data-i18n="minutesUnit">分</span></button>
+              <button class="a-btn small" type="button" data-act="stop" data-min="60">60<span data-i18n="minutesUnit">分</span></button>
+            </div>
+          </div>
+        </div>
+        <button class="a-btn primary act" type="button" data-act="new" data-i18n="newBooking">＋ 予約を入れる</button>
+      </div>
+
+      <div id="week" class="a-week" aria-label="14日間"></div>
+
+      <div class="a-summary">
+        <div class="a-stat"><small data-i18n="reservationCount">予約人数</small><strong id="statCount">0</strong><span data-i18n="peopleUnit">名</span></div>
+        <div class="a-stat"><small data-i18n="reservationTotalTime">施術時間の合計</small><strong id="statTime">0</strong></div>
+        <div class="a-stat cap"><small data-i18n="capDay">枠数</small><strong id="statCap">1</strong><span id="statCapNote"></span><button class="a-link" type="button" id="capEditBtn" data-act="edit-day-cap" data-i18n="capChange">変更</button></div>
+        <div class="a-stat next"><small id="statNextLabel" data-i18n="nextBooking">次の予約</small><strong id="statNext">—</strong></div>
+      </div>
+
+      <div id="timeline" class="a-timeline"></div>
+      <p class="a-hint" data-i18n="timelineHint">予約表の空いているところを押すと、その時間で予約を入れられます。</p>
+      <details id="cancelled" class="a-cancelled" hidden><summary></summary><ul></ul></details>
+    </section>
+
+    <!-- ============ list / search ============ -->
+    <section id="tab-list" hidden>
+      <div class="a-search">
+        <input id="searchInput" class="a-input" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="お名前または電話番号で検索" autocomplete="off">
+        <button class="a-btn" type="button" data-act="export" data-i18n="exportAppointments">予約データを書き出す</button>
+      </div>
+      <p id="searchNote" class="a-muted" style="font-size:13px;margin:0 0 6px"></p>
+      <div id="searchResults"></div>
+    </section>
+
+    <!-- ============ settings ============ -->
+    <section id="tab-settings" hidden>
+      <div class="a-settings">
+        <div class="a-col">
+          <section class="a-panel">
+            <h2 data-i18n="capTitle">同時に受けられる人数（枠）</h2>
+            <p class="a-muted" data-i18n="capHelp">通常のご予約は指名なしで、空いている枠に入ります。枠は最大3つ。時間帯ごとに数を変えられます。</p>
+            <div id="capEditor" class="a-cap-editor"></div>
+            <p class="a-cap-note" data-i18n="capStandardNote">ここは「標準」です。新しく予約受付が始まる日（15日目）は、この枠数で始まります。受付中の日は、予約表でその日だけ変えられます。</p>
+            <div class="a-cap-save"><label class="a-check"><input type="checkbox" id="capApplyOpen"><span data-i18n="capApplyOpen">受付中の日（今日〜14日後）にも反映する</span></label><button class="a-btn primary" type="button" data-act="save-standard-cap" data-i18n="capSaveStandard">標準の枠数を保存</button></div>
+          </section>
+          <section class="a-panel">
+            <h2 data-i18n="staffTitle">鍼灸（担当の先生）</h2>
+            <p class="a-muted" data-i18n="staffHelp">鍼灸は担当の先生だけが受けるので、上の枠とは別です。「提供する」をオンにして保存すると、予約ページに鍼灸が出ます。</p>
+            <div id="lanesEditor"></div>
+          </section>
+          <section class="a-panel">
+            <h2 data-i18n="menusTitle">メニュー</h2>
+            <p class="a-muted" data-i18n="menusHelp">Web予約ページに出す施術メニューです。所要時間と、どの枠で受けるかを決めます。</p>
+            <div id="menusEditor"></div>
+            <button class="a-btn small" type="button" data-act="add-menu" data-i18n="addMenu">＋ メニューを追加</button>
+          </section>
+        </div>
+        <div class="a-col">
+          <section class="a-panel">
+            <h2 data-i18n="breaksTitle">受付停止（休憩など）</h2>
+            <p class="a-muted" data-i18n="breaksHelp">指定した時間は新しい予約を受け付けません。枠を選ぶと、その枠だけ止まります。</p>
+            <div class="a-grid2">
+              <div class="a-field"><label class="a-label" for="bDate" data-i18n="date">日付</label><input id="bDate" class="a-input" type="date"></div>
+              <div class="a-field"><label class="a-label" for="bLane" data-i18n="lane">枠</label><select id="bLane" class="a-select"></select></div>
+              <div class="a-field"><label class="a-label" for="bs" data-i18n="startTime">開始</label><input id="bs" class="a-input" type="time" value="12:00"></div>
+              <div class="a-field"><label class="a-label" for="be" data-i18n="endTime">終了</label><input id="be" class="a-input" type="time" value="13:00"></div>
+            </div>
+            <button class="a-btn primary" type="button" data-act="add-break" data-i18n="addBreak">受付停止を追加</button>
+            <div id="breaks" style="margin-top:14px"></div>
+          </section>
+          <section class="a-panel">
+            <h2 data-i18n="pauseClinic">臨時休業</h2>
+            <p class="a-muted" data-i18n="pauseHint">休業期間中は新しい予約を止め、ホームページにお知らせを出します。</p>
+            <div class="a-grid2">
+              <div class="a-field"><label class="a-label" for="pauseStartDate" data-i18n="pauseStartDate">開始日</label><input id="pauseStartDate" class="a-input" type="date"></div>
+              <div class="a-field"><label class="a-label" for="pauseReopeningDate" data-i18n="reopeningDate">再開日</label><input id="pauseReopeningDate" class="a-input" type="date"></div>
+            </div>
+            <button id="pauseSaveButton" class="a-btn primary" type="button" data-act="save-pause" data-i18n="pauseSave">臨時休業を設定</button>
+            <div id="pausePeriods" style="margin-top:14px"></div>
+          </section>
+          <section class="a-panel">
+            <h2 data-i18n="businessHours">営業時間</h2>
+            <p class="a-muted" data-i18n="businessHoursDesc">毎週の営業時間です。枠の時間はこの範囲内で使われます。</p>
+            <div id="hours"></div>
+            <button class="a-btn primary" style="margin-top:12px" type="button" data-act="save-hours" data-i18n="saveBusinessHours">営業時間を保存</button>
+          </section>
+        </div>
+
+
+        <div id="saveBar" class="a-savebar"><span id="configState" data-i18n="configHint">枠とメニューの変更は「保存」を押すと反映されます。</span><button class="a-btn" type="button" data-act="reset-config" data-i18n="discard">元に戻す</button><button class="a-btn primary" type="button" data-act="save-config" data-i18n="save">保存</button></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ===================== modals ===================== -->
+<div id="bookingModal" class="a-modal" hidden>
+  <div class="a-modal-box" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+    <div class="a-modal-head"><h2 id="bookingTitle"></h2><button class="a-btn ghost small" type="button" data-act="close-modal" aria-label="閉じる">✕</button></div>
+    <div class="a-field"><span class="a-label" data-i18n="menu">メニュー</span><div id="fMenus" class="a-pills" role="radiogroup"></div></div>
+    <div class="a-grid2">
+      <div class="a-field"><label class="a-label" for="fDate" data-i18n="date">日付</label><input id="fDate" class="a-input" type="date"></div>
+      <div class="a-field"><label class="a-label" for="fTime" data-i18n="time">時間</label><input id="fTime" class="a-input" type="time" step="60"></div>
+      <div class="a-field"><label class="a-label" for="fLane" data-i18n="lane">枠</label><select id="fLane" class="a-select"></select></div>
+      <div class="a-field" id="fExtField"><label class="a-label" for="fExt" data-i18n="extensionTreatment">延長</label><select id="fExt" class="a-select"></select></div>
+    </div>
+    <div class="a-field"><label class="a-label" for="fName" data-i18n="name">お名前</label><input id="fName" class="a-input" maxlength="80" autocomplete="off"></div>
+    <div class="a-field"><label class="a-label" for="fPhone" data-i18n="phoneNumber">電話番号</label><input id="fPhone" class="a-input" type="tel" maxlength="40" autocomplete="off"></div>
+    <div class="a-field"><label class="a-label" for="fNote" data-i18n="notes">備考</label><textarea id="fNote" class="a-textarea" maxlength="500"></textarea></div>
+    <p id="fError" class="a-error" role="alert"></p>
+    <div class="a-modal-actions"><button class="a-btn" type="button" data-act="close-modal" data-i18n="cancel">キャンセル</button><button id="fSubmit" class="a-btn primary" type="button" data-act="submit-booking"></button></div>
+  </div>
+</div>
+
+<div id="capModal" class="a-modal" hidden>
+  <div class="a-modal-box" role="dialog" aria-modal="true" aria-labelledby="capModalTitle" style="width:min(680px,100%)">
+    <div class="a-modal-head"><h2 id="capModalTitle"></h2><button class="a-btn ghost small" type="button" data-act="close-modal" aria-label="閉じる">✕</button></div>
+    <p class="a-muted" style="margin:0 0 14px;font-size:13px" data-i18n="capDayHelp">この日だけの枠数です。すでに入っている予約はそのまま残ります。</p>
+    <div id="dayCapEditor" class="a-cap-editor"></div>
+    <p id="capError" class="a-error" role="alert"></p>
+    <div class="a-modal-actions"><button class="a-btn left" type="button" id="capResetBtn" data-act="reset-day-cap" data-i18n="capReset">標準に戻す</button><button class="a-btn" type="button" data-act="close-modal" data-i18n="cancel">キャンセル</button><button class="a-btn primary" type="button" data-act="save-day-cap" data-i18n="save">保存</button></div>
+  </div>
+</div>
+
+<div id="detailModal" class="a-modal" hidden>
+  <div class="a-modal-box" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="a-modal-head"><h2 id="detailTitle"></h2><button class="a-btn ghost small" type="button" data-act="close-modal" aria-label="閉じる">✕</button></div>
+    <dl id="detailBody" class="a-detail"></dl>
+    <div id="detailActions" class="a-modal-actions"></div>
+  </div>
+</div>
+
+<div id="confirmModal" class="a-modal" hidden>
+  <div class="a-modal-box" role="alertdialog" aria-modal="true" style="width:min(400px,100%)">
+    <p id="confirmText" style="margin:0 0 6px;font-size:16px;line-height:1.7"></p>
+    <div class="a-modal-actions"><button class="a-btn" type="button" data-act="confirm-no" data-i18n="back">戻る</button><button id="confirmYes" class="a-btn primary" type="button" data-act="confirm-yes"></button></div>
+  </div>
+</div>
+
+<div id="toasts" class="a-toasts" aria-live="polite"></div>
+
 <script>
-  let D = null;
-  let phoneModalMode = 'create';
-  let editingAppointmentId = null;
+  // ------------------------------------------------------------ state
+  let D = null;                 // /api/admin/data for the selected date
+  let draft = null;             // editable copy of lanes + menus (settings tab)
+  let draftDirty = false;
   let adminLanguage = localStorage.getItem('kamitakada-admin-language') || 'ja';
+  let modalMode = 'create', editingId = null, pendingDetailId = null;
+  const $ = id => document.getElementById(id);
 
   const I18N = {
-    zh: {
-      adminTitle:'预约管理', adminPassword:'管理员密码', login:'登录', logout:'退出登录', pauseClinic:'暂停营业', pauseHint:'设置临时歇业的开始日期和再开日期。歇业期间将停止新的预约。', pauseStartDate:'开始日期', reopeningDate:'再开日期', pauseInvalid:'请选择有效的开始日期和再开日期。', pauseFailed:'暂停营业设置失败。', pauseSaved:'临时歇业已保存。', pauseDeleted:'临时歇业已取消。', pauseEdit:'修改', pauseDelete:'取消', pauseNoItems:'没有设置临时歇业。', prevDay:'前一天', nextDay:'后一天', reservationDate:'预约日期', manualReservation:'＋ 手动预约',
-      todaySchedule:'今日安排', exportAppointments:'导出预约', exportConfirm:'将下载包含顾客姓名、联系方式等信息的预约 CSV 文件。确定导出吗？', notificationVolume:'音量', reservationCount:'预约人数', peopleUnit:'人', reservationTotalTime:'预约总时间', hoursUnit:'小时', minutesUnit:'分', startTime:'开始', endTime:'结束', todayScheduleDesc:'按开始时间顺序显示预约和预约停止时间。', temporaryBreak:'临时休息', date:'日期', addBreak:'添加休息时间', businessHours:'营业时间', businessHoursDesc:'设置每周营业时间和预约间隔。', saveBusinessHours:'保存营业时间',
-      reservationDateLabel:'预约日期', reservationTimeLabel:'预约时间', extensionTreatment:'延长施术', extension0:'无（25分钟施术 / 30分钟占用）', extension10:'延长10分钟（35分钟施术 / 40分钟占用）＋800日元', extension20:'延长20分钟（45分钟施术 / 50分钟占用）＋1,600日元', extension30:'延长30分钟（55分钟施术 / 60分钟占用）＋2,400日元', name:'姓名', phoneNumber:'电话号码', notes:'备注', patientName:'患者姓名', phoneNumberPlaceholder:'电话号码', notesPlaceholder:'备注（可选）', cancel:'取消', registerManual:'登记手动预约', saveChanges:'保存修改',
-      noSchedule:'当天没有预约或预约停止时间。', appointment:'预约', stop:'停止', delete:'删除', edit:'修改', cancelled:'已取消', basicTreatment:'基本施术 25分钟 / 占用 30分钟', treatmentHold:(t,o)=>`施术 ${t}分钟 / 占用 ${o}分钟`, stopDetail:'该时间段不接受新的预约。', noItems:'无', extendSuccess:m=>`已将预约停止时间延长 ${m} 分钟。`, extendFailed:'无法延长预约停止时间。', saveSuccess:'已保存。',
-      loginPasswordNotConfigured:'管理员登录尚未配置。', sessionCreationFailed:'无法创建登录会话。', invalidPassword:'密码不正确。', loginFailed:'登录失败。', sessionInvalid:'登录会话已失效，请重新登录。', dataLoadFailed:'无法加载管理员数据。', dataGetFailed:'无法获取管理员数据。',
-      notFound:'找不到该预约，请刷新页面。', notEditable:'已取消的预约无法修改。', invalidExtension:'延长时间不正确。', alreadyBooked:'该时间已经被预约。', pastTime:'不能预约过去的时间。', breakTime:'该时间属于休息时间，无法预约。', unavailable:'该时间无法预约。', invalidDate:'预约日期不正确。', invalidTime:'预约时间不正确。', invalidName:'请输入姓名。', invalidPhone:'请输入电话号码。', sessionExpired:'登录会话已过期。', editFailed:'预约修改失败。', manualFailed:'手动预约登记失败。',
-      manualRegistered:'手动预约已登记。', reservationUpdated:'预约已修改。', reservationCancelled:'预约已取消。', reservationDeleted:'预约已删除。', cancelReservationConfirm:'确定要取消这条预约吗？', deleteReservationConfirm:'确定要删除这条预约记录吗？', deleteBreakConfirm:'确定要删除这段休息时间吗？', breakAdded:'休息时间已添加。', breakDeleted:'休息时间已删除。', businessHoursSaved:'营业时间已保存。',
-      weekdays:['周日','周一','周二','周三','周四','周五','周六']
-    },
     ja: {
-      adminTitle:'予約管理', adminPassword:'管理者パスワード', login:'ログイン', logout:'ログアウト', pauseClinic:'臨時休業', pauseHint:'臨時休業の開始日と再開日を設定します。休業期間中は新しい予約を停止します。', pauseStartDate:'開始日', reopeningDate:'再開日', pauseInvalid:'開始日と再開日を正しく選択してください。', pauseFailed:'臨時休業の設定に失敗しました。', pauseSaved:'臨時休業を保存しました。', pauseDeleted:'臨時休業を解除しました。', pauseEdit:'変更', pauseDelete:'解除', pauseNoItems:'臨時休業は設定されていません。', prevDay:'前の日', nextDay:'次の日', reservationDate:'予約日', manualReservation:'＋ 手動予約',
-      todaySchedule:'本日の予定', exportAppointments:'予約データを書き出す', exportConfirm:'お客様の氏名・連絡先などを含む予約CSVファイルをダウンロードします。よろしいですか？', notificationVolume:'音量', reservationCount:'予約人数', peopleUnit:'名', reservationTotalTime:'予約総時間', hoursUnit:'時間', minutesUnit:'分', startTime:'開始', endTime:'終了', todayScheduleDesc:'予約と予約停止時間を開始時刻順にまとめて表示します。', temporaryBreak:'臨時休憩', date:'日付', addBreak:'休憩時間を追加', businessHours:'営業時間', businessHoursDesc:'毎週の営業時間と予約間隔を設定します。', saveBusinessHours:'営業時間を保存',
-      reservationDateLabel:'予約日', reservationTimeLabel:'予約時間', extensionTreatment:'延長施術', extension0:'なし（25分施術 / 30分確保）', extension10:'10分延長（35分施術 / 40分確保）＋800円', extension20:'20分延長（45分施術 / 50分確保）＋1,600円', extension30:'30分延長（55分施術 / 60分確保）＋2,400円', name:'お名前', phoneNumber:'電話番号', notes:'備考', patientName:'患者様のお名前', phoneNumberPlaceholder:'電話番号', notesPlaceholder:'備考（任意）', cancel:'キャンセル', registerManual:'手動予約を登録', saveChanges:'変更を保存',
-      noSchedule:'この日の予約・予約停止はありません。', appointment:'予約', stop:'停止', delete:'削除', edit:'変更', cancelled:'キャンセル済み', basicTreatment:'基本施術 25分 / 確保 30分', treatmentHold:(t,o)=>`施術 ${t}分 / 確保 ${o}分`, stopDetail:'この時間帯は新しい予約を受け付けません。', noItems:'なし', extendSuccess:m=>`予約停止時間を${m}分延長しました。`, extendFailed:'予約停止時間を延長できませんでした。', saveSuccess:'保存しました。',
-      loginPasswordNotConfigured:'管理者ログインは現在設定されていません。', sessionCreationFailed:'ログインセッションを作成できませんでした。', invalidPassword:'パスワードが正しくありません。', loginFailed:'ログイン処理に失敗しました。', sessionInvalid:'セッションが無効です。もう一度ログインしてください。', dataLoadFailed:'管理者データを読み込めませんでした。', dataGetFailed:'管理者データを取得できませんでした。',
-      notFound:'予約が見つかりません。画面を更新してください。', notEditable:'キャンセル済みの予約は変更できません。', invalidExtension:'延長時間が正しくありません。', alreadyBooked:'この時間はすでに予約されています。', pastTime:'過去の時間は予約できません。', breakTime:'休憩時間のため予約できません。', unavailable:'この時間は予約できません。', invalidDate:'予約日が正しくありません。', invalidTime:'予約時間が正しくありません。', invalidName:'お名前を入力してください。', invalidPhone:'電話番号を入力してください。', sessionExpired:'ログインセッションが切れています。', editFailed:'予約の変更に失敗しました。', manualFailed:'手動予約の登録に失敗しました。',
-      manualRegistered:'手動予約を登録しました。', reservationUpdated:'予約を変更しました。', reservationCancelled:'予約をキャンセルしました。', reservationDeleted:'予約を削除しました。', cancelReservationConfirm:'この予約をキャンセルしますか？', deleteReservationConfirm:'この予約記録を削除しますか？', deleteBreakConfirm:'この休憩時間を削除しますか？', breakAdded:'休憩時間を追加しました。', breakDeleted:'休憩時間を削除しました。', businessHoursSaved:'営業時間を保存しました。',
-      weekdays:['日','月','火','水','木','金','土']
+      adminTitle:'予約管理', adminPassword:'管理者パスワード', login:'ログイン', logout:'ログアウト', language:'言語', notificationVolume:'音量',
+      tabDay:'予約表', tabList:'一覧・検索', tabSettings:'設定', pickDate:'日付', today:'今日', prevDay:'前の日', nextDay:'次の日',
+      stopNow:'今から受付を止める', stopHelp:'今からの時間、Web予約を受け付けません（飛び込みのお客様の対応などに）。', allLanes:'すべての枠',
+      newBooking:'＋ 予約を入れる', reservationCount:'予約人数', peopleUnit:'名', reservationTotalTime:'施術時間の合計', nextBooking:'次の予約', firstBooking:'最初の予約', noMore:'本日の予約はすべて終了しました', none:'なし',
+      timelineHint:'予約表の空いているところを押すと、その時間・その枠で予約を入れられます。',
+      closedDay:'この日は休診日です。', holidayDay:'この日は休業日に設定されています。', laneClosed:'休み', cancelledList:n=>`キャンセル済み（${n}件）`, deleteRecord:'記録を削除',
+      stop:'受付停止', stopAll:'全枠', searchPlaceholder:'お名前または電話番号で検索', upcomingTitle:'今後14日間の予約', searchCount:n=>`${n}件見つかりました`, searchNone:'該当する予約はありません。', searchHint:'電話番号は数字の一部だけでも検索できます。',
+      capTitle:'同時に受けられる人数（枠）', capHelp:'通常のご予約は指名なしで、空いている枠に入ります。枠は最大3つ。時間帯ごとに数を変えられます。', capStandardNote:'ここは「標準」です。新しく予約受付が始まる日（15日目）は、この枠数で始まります。受付中の日は、予約表でその日だけ変えられます。', capApplyOpen:'受付中の日（今日〜14日後）にも反映する', capSaveStandard:'標準の枠数を保存', capBase:'基本の枠数', capRangeLabel:'この時間は', capAddRange:'＋ 時間帯で枠数を変える', capRemove:'削除', capDay:'枠数', capChange:'変更', capDayHelp:'この日だけの枠数です。すでに入っている予約はそのまま残ります。', capReset:'標準に戻す', capOnlyThisDay:'この日だけ', capRangeText:(a,b,n)=>`${a}–${b} は ${n}`, capModalTitle:d=>`${d} の枠数`, capSaved:'枠数を保存しました。', capStandardSaved:'標準の枠数を保存しました。', capBadRange:'時間帯の開始と終了を正しく入れてください。', capConflicts:(n,list)=>`閉じた枠に予約が${n}件残っています（${list}）。必要ならお客様に連絡してください。`, capClosedHere:'枠なし',
+      staffTitle:'鍼灸（担当の先生）', staffHelp:'鍼灸は担当の先生だけが受けるので、上の枠とは別です。「提供する」をオンにして保存すると、予約ページに鍼灸が出ます。', menuOff:'停止中', notOfferedShort:'提供していません', offer:'提供する', notOffered:'（いま提供していません）', poolLanes:'枠1〜3（指名なし）',
+      laneName:'名前', laneActive:'提供する', laneHoursSame:'営業時間と同じ', laneHoursCustom:'曜日ごとに設定（先生の出勤日）', addLane:'＋ 担当の先生を追加', removeLane:'削除',
+      menusTitle:'メニュー', menusHelp:'Web予約ページに出す施術メニューです。所要時間と、どの枠で受けるかを決めます。', addMenu:'＋ メニューを追加', removeMenu:'削除',
+      menuNameJa:'名前（日本語）', menuNameZh:'名前（中文）', menuNameEn:'名前（English）', menuDescJa:'説明（日本語）', menuDescZh:'説明（中文）', menuDescEn:'説明（English）', translations:'中国語・英語の表示',
+      treatMinutes:'施術（分）', bufferMinutes:'準備・片付け（分）', occupiedTotal:m=>`1回あたり ${m}分 の枠を使います`, extensions:'延長の選択肢', extensionPrice:'延長10分あたりの料金（円）', menuLanes:'受ける枠', menuActive:'使う', menuWeb:'Web予約に出す', reservationOnly:'完全予約制として表示', noticeHours:'何時間前まで予約可（Web）',
+      configHint:'鍼灸とメニューの変更は「保存」を押すと反映されます。', configDirty:'保存されていない変更があります。', discard:'元に戻す', save:'保存', configSaved:'保存しました。',
+      businessHours:'営業時間', businessHoursDesc:'毎週の営業時間です。枠の時間はこの範囲内で使われます。', saveBusinessHours:'営業時間を保存', businessHoursSaved:'営業時間を保存しました。', open:'営業', weekday:'曜日',
+      breaksTitle:'受付停止（休憩など）', breaksHelp:'指定した時間は新しい予約を受け付けません。枠を選ぶと、その枠だけ止まります。', addBreak:'受付停止を追加', breakAdded:'受付停止を追加しました。', breakDeleted:'受付停止を削除しました。', deleteBreakConfirm:'この受付停止を削除しますか？', breaksOn:d=>`${d} の受付停止`,
+      pauseClinic:'臨時休業', pauseHint:'休業期間中は新しい予約を止め、ホームページにお知らせを出します。', pauseStartDate:'開始日', reopeningDate:'再開日', pauseSave:'臨時休業を設定', pauseUpdate:'変更を保存', pauseInvalid:'開始日と再開日を正しく選択してください。', pauseFailed:'臨時休業の設定に失敗しました。', pauseSaved:'臨時休業を保存しました。', pauseDeleted:'臨時休業を解除しました。', pauseEdit:'変更', pauseDelete:'解除', pauseNoItems:'臨時休業は設定されていません。', pauseDeleteConfirm:'この臨時休業を解除しますか？',
+      date:'日付', time:'時間', lane:'枠', laneAuto:'空いている枠に自動で入れる', menu:'メニュー', extensionTreatment:'延長', extNone:'なし', extOption:n=>`${n}分延長`, name:'お名前', phoneNumber:'電話番号', email:'メール', notes:'備考', createdAt:'登録日時', startTime:'開始', endTime:'終了', minutesUnit:'分',
+      createTitle:'予約を入れる', editTitle:'予約を変更', createSubmit:'予約を登録', editSubmit:'変更を保存', edit:'変更', cancelBooking:'予約をキャンセル', cancel:'キャンセル', back:'戻る', call:'電話する', delete:'削除',
+      cancelReservationConfirm:'この予約をキャンセルしますか？', deleteReservationConfirm:'この予約記録を完全に削除しますか？', doCancel:'キャンセルする', doDelete:'削除する',
+      manualRegistered:'予約を登録しました。', reservationUpdated:'予約を変更しました。', reservationCancelled:'予約をキャンセルしました。', reservationDeleted:'予約記録を削除しました。', extendSuccess:m=>`今から${m}分、受付を止めました。`, extendFailed:'受付を止められませんでした。',
+      exportAppointments:'予約データを書き出す', exportShort:'書き出し', exportConfirm:'お客様の氏名・連絡先などを含む予約CSVファイルをダウンロードします。よろしいですか？', exportFailed:'書き出しに失敗しました。', download:'ダウンロード',
+      loginPasswordNotConfigured:'管理者ログインは現在設定されていません。', sessionCreationFailed:'ログインセッションを作成できませんでした。', invalidPassword:'パスワードが正しくありません。', rateLimited:'試行回数が多すぎます。しばらくしてから再度お試しください。', loginFailed:'ログインに失敗しました。', sessionInvalid:'セッションが切れました。もう一度ログインしてください。', dataLoadFailed:'データを読み込めませんでした。',
+      notFound:'予約が見つかりません。画面を更新してください。', notEditable:'キャンセル済みの予約は変更できません。', invalidExtension:'延長時間が正しくありません。', alreadyBooked:'この時間はすでに予約で埋まっています。', pastTime:'過去の時間は予約できません。', breakTime:'受付停止中の時間です。', unavailable:'この時間・この枠では予約できません。', invalidDate:'日付を選んでください。', invalidTime:'時間を入力してください。', invalidName:'お名前を入力してください。', invalidPhone:'電話番号を正しく入力してください。', invalidLane:'このメニューはその枠では受けられません。', invalidMenu:'メニューを選んでください。', saveFailed:'保存できませんでした。',
+      weekdays:['日','月','火','水','木','金','土'], dateTitle:(y,m,d,w)=>`${m}月${d}日（${w}）`, listDate:(m,d,w)=>`${m}月${d}日（${w}）`,
+      spokenMenu:n=>`${n}の`
+    },
+    zh: {
+      adminTitle:'预约管理', adminPassword:'管理员密码', login:'登录', logout:'退出登录', language:'语言', notificationVolume:'音量',
+      tabDay:'预约表', tabList:'列表・搜索', tabSettings:'设置', pickDate:'日期', today:'今天', prevDay:'前一天', nextDay:'后一天',
+      stopNow:'从现在起停止接受预约', stopHelp:'从现在开始的一段时间内不接受网上预约（例如接待临时上门的顾客时）。', allLanes:'所有枠',
+      newBooking:'＋ 添加预约', reservationCount:'预约人数', peopleUnit:'人', reservationTotalTime:'施术时间合计', nextBooking:'下一位预约', firstBooking:'第一位预约', noMore:'今天的预约已全部结束', none:'无',
+      timelineHint:'点击预约表的空白处，即可在该时间、该枠添加预约。',
+      closedDay:'这一天是休息日。', holidayDay:'这一天被设为休业日。', laneClosed:'休息', cancelledList:n=>`已取消（${n}条）`, deleteRecord:'删除记录',
+      stop:'停止接受预约', stopAll:'全部', searchPlaceholder:'按姓名或电话号码搜索', upcomingTitle:'今后14天的预约', searchCount:n=>`找到 ${n} 条`, searchNone:'没有符合条件的预约。', searchHint:'电话号码只输入一部分数字也可以搜索。',
+      capTitle:'同一时间可接待的人数（枠）', capHelp:'常规预约不指名，自动放进空着的枠。最多3个枠，可以按时间段设定不同的数量。', capStandardNote:'这里是「标准」设定。新开放预约的日子（第15天）会以这个枠数开始。已经开放预约的日子，请在预约表里单独修改。', capApplyOpen:'同时应用到已开放预约的日子（今天〜14天后）', capSaveStandard:'保存标准枠数', capBase:'基本枠数', capRangeLabel:'这个时间段', capAddRange:'＋ 按时间段改变枠数', capRemove:'删除', capDay:'枠数', capChange:'修改', capDayHelp:'只修改这一天的枠数。已有的预约会保留。', capReset:'恢复标准', capOnlyThisDay:'仅这一天', capRangeText:(a,b,n)=>`${a}–${b} 为 ${n}`, capModalTitle:d=>`${d} 的枠数`, capSaved:'枠数已保存。', capStandardSaved:'标准枠数已保存。', capBadRange:'请正确填写时间段的开始和结束。', capConflicts:(n,list)=>`关闭的枠里还有 ${n} 条预约（${list}）。如有需要请联系顾客。`, capClosedHere:'无枠',
+      staffTitle:'针灸（负责老师）', staffHelp:'针灸只由负责的老师接待，和上面的枠分开。打开「提供」并保存后，预约页面会显示针灸。', menuOff:'已停用', notOfferedShort:'未提供', offer:'提供', notOffered:'（目前未提供）', poolLanes:'枠1〜3（不指名）',
+      laneName:'名称', laneActive:'提供', laneHoursSame:'与营业时间相同', laneHoursCustom:'按星期设定（老师出勤日）', addLane:'＋ 添加负责老师', removeLane:'删除',
+      menusTitle:'菜单', menusHelp:'显示在网上预约页面的施术菜单。设定所需时间和由哪个枠接待。', addMenu:'＋ 添加菜单', removeMenu:'删除',
+      menuNameJa:'名称（日语）', menuNameZh:'名称（中文）', menuNameEn:'名称（English）', menuDescJa:'说明（日语）', menuDescZh:'说明（中文）', menuDescEn:'说明（English）', translations:'中文・英文显示',
+      treatMinutes:'施术（分钟）', bufferMinutes:'准备・整理（分钟）', occupiedTotal:m=>`每次占用 ${m} 分钟`, extensions:'可选延长', extensionPrice:'每延长10分钟的价格（日元）', menuLanes:'接待的枠', menuActive:'启用', menuWeb:'在网上预约中显示', reservationOnly:'显示为完全预约制', noticeHours:'需提前几小时预约（网上）',
+      configHint:'针灸和菜单的修改需点击「保存」后生效。', configDirty:'有尚未保存的修改。', discard:'撤销修改', save:'保存', configSaved:'已保存。',
+      businessHours:'营业时间', businessHoursDesc:'每周的营业时间。各枠只在此范围内使用。', saveBusinessHours:'保存营业时间', businessHoursSaved:'营业时间已保存。', open:'营业', weekday:'星期',
+      breaksTitle:'停止接受预约（休息等）', breaksHelp:'设定的时间段不接受新的预约。选择枠时只停止该枠。', addBreak:'添加停止时段', breakAdded:'已添加停止时段。', breakDeleted:'已删除停止时段。', deleteBreakConfirm:'确定删除这个停止时段吗？', breaksOn:d=>`${d} 的停止时段`,
+      pauseClinic:'临时歇业', pauseHint:'歇业期间停止新预约，并在主页显示通知。', pauseStartDate:'开始日期', reopeningDate:'再开日期', pauseSave:'设定临时歇业', pauseUpdate:'保存修改', pauseInvalid:'请选择有效的开始日期和再开日期。', pauseFailed:'临时歇业设置失败。', pauseSaved:'临时歇业已保存。', pauseDeleted:'临时歇业已取消。', pauseEdit:'修改', pauseDelete:'取消', pauseNoItems:'没有设置临时歇业。', pauseDeleteConfirm:'确定取消这段临时歇业吗？',
+      date:'日期', time:'时间', lane:'枠', laneAuto:'自动放入空着的枠', menu:'菜单', extensionTreatment:'延长', extNone:'无', extOption:n=>`延长 ${n} 分钟`, name:'姓名', phoneNumber:'电话号码', email:'邮箱', notes:'备注', createdAt:'登记时间', startTime:'开始', endTime:'结束', minutesUnit:'分',
+      createTitle:'添加预约', editTitle:'修改预约', createSubmit:'登记预约', editSubmit:'保存修改', edit:'修改', cancelBooking:'取消预约', cancel:'取消', back:'返回', call:'拨打电话', delete:'删除',
+      cancelReservationConfirm:'确定要取消这条预约吗？', deleteReservationConfirm:'确定要彻底删除这条预约记录吗？', doCancel:'确定取消', doDelete:'确定删除',
+      manualRegistered:'预约已登记。', reservationUpdated:'预约已修改。', reservationCancelled:'预约已取消。', reservationDeleted:'预约记录已删除。', extendSuccess:m=>`已从现在起停止接受预约 ${m} 分钟。`, extendFailed:'无法停止接受预约。',
+      exportAppointments:'导出预约数据', exportShort:'导出', exportConfirm:'将下载包含顾客姓名、联系方式等信息的预约 CSV 文件。确定导出吗？', exportFailed:'导出失败。', download:'下载',
+      loginPasswordNotConfigured:'管理员登录尚未配置。', sessionCreationFailed:'无法创建登录会话。', invalidPassword:'密码不正确。', rateLimited:'尝试次数过多，请稍后再试。', loginFailed:'登录失败。', sessionInvalid:'登录已过期，请重新登录。', dataLoadFailed:'无法加载数据。',
+      notFound:'找不到该预约，请刷新页面。', notEditable:'已取消的预约无法修改。', invalidExtension:'延长时间不正确。', alreadyBooked:'该时间已经约满。', pastTime:'不能预约过去的时间。', breakTime:'该时间已停止接受预约。', unavailable:'该时间、该枠无法预约。', invalidDate:'请选择日期。', invalidTime:'请输入时间。', invalidName:'请输入姓名。', invalidPhone:'请正确输入电话号码。', invalidLane:'该菜单不能在这个枠接待。', invalidMenu:'请选择菜单。', saveFailed:'保存失败。',
+      weekdays:['周日','周一','周二','周三','周四','周五','周六'], dateTitle:(y,m,d,w)=>`${m}月${d}日 ${w}`, listDate:(m,d,w)=>`${m}月${d}日 ${w}`,
+      spokenMenu:n=>`${n}的`
     }
   };
+  function t(key, ...args){ const v = I18N[adminLanguage][key] ?? I18N.ja[key]; return typeof v === 'function' ? v(...args) : (v ?? key); }
+  function esc(s){ return String(s ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+  function toMin(v){ const [h,m] = String(v).split(':').map(Number); return h*60+m; }
+  function hhmm(n){ return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
+  function tokyoParts(){ const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()); return Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value])); }
+  function today(){ const v=tokyoParts(); return `${v.year}-${v.month}-${v.day}`; }
+  function nowMin(){ const v=tokyoParts(); return Number(v.hour)*60+Number(v.minute); }
+  function addDays(date,n){ const d=new Date(`${date}T12:00:00Z`); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+  function weekdayOf(date){ return new Date(`${date}T12:00:00Z`).getUTCDay(); }
+  function dateLabel(date){ const [y,m,d]=date.split('-').map(Number); return t('dateTitle',y,m,d,I18N[adminLanguage].weekdays[weekdayOf(date)]); }
+  function listDate(date){ const [,m,d]=date.split('-').map(Number); return t('listDate',m,d,I18N[adminLanguage].weekdays[weekdayOf(date)]); }
+  function fmtCreated(v){ const d=new Date(v); if(isNaN(d)) return String(v); return new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(d); }
+  function menuById(id){ return (D?.menus||[]).find(m=>m.id===id) || null; }
+  function laneById(id){ return (D?.lanes||[]).find(l=>l.id===id) || null; }
+  function menuLabel(id){ const m=menuById(id); if(!m) return id||''; return (adminLanguage==='zh' && m.name.zh) ? m.name.zh : m.name.ja; }
+  function showMenu(id){ return (D?.menus||[]).filter(m=>m.offered).length>1 || id!=='seikotsu'; }
+  function laneLabel(id){ return laneById(id)?.name || id || ''; }
+  const MENU_COLORS=['#1c1c1c','#4f7f3a','#8a6a3f','#3f5f7f','#7a3f5f','#5f5f2f'];
+  const MENU_BG=['#ffffff','#eef4e8','#f6efe4','#e9eff5','#f4e9ef','#f2f2e4'];
+  function menuColor(id){ const i=Math.max(0,(D?.menus||[]).findIndex(m=>m.id===id)); return {c:MENU_COLORS[i%MENU_COLORS.length], bg:MENU_BG[i%MENU_BG.length]}; }
 
-  function t(key, ...args){ const value = I18N[adminLanguage][key]; return typeof value === 'function' ? value(...args) : (value ?? key); }
+  // ------------------------------------------------------------ api / ui helpers
+  async function api(path,opt={}){
+    const r=await fetch(path,{...opt,credentials:'same-origin'});
+    const j=await r.json().catch(()=>({error:'error'}));
+    if(!r.ok){ const e=new Error(j.error||'error'); e.code=j.code; e.status=r.status; throw e; }
+    return j;
+  }
+  const post=(path,body)=>api(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  function toast(msg,err=false){ const el=document.createElement('div'); el.className='a-toast'+(err?' err':''); el.textContent=msg; $('toasts').append(el); setTimeout(()=>el.remove(),err?5000:2600); }
+  let confirmResolve=null;
+  function ask(text,yesLabel){ $('confirmText').textContent=text; $('confirmYes').textContent=yesLabel||t('save'); $('confirmModal').hidden=false; $('confirmYes').focus(); return new Promise(r=>{confirmResolve=r;}); }
+  function closeModals(){ document.querySelectorAll('.a-modal').forEach(m=>m.hidden=true); if(confirmResolve){confirmResolve(false);confirmResolve=null;} }
+  function errorText(e,fallback){
+    const map={not_found:'notFound',not_editable:'notEditable',invalid_extension:'invalidExtension',already_booked:'alreadyBooked',past_time:'pastTime',break_time:'breakTime',unavailable:'unavailable',invalid_date:'invalidDate',invalid_time:'invalidTime',invalid_name:'invalidName',invalid_phone:'invalidPhone',invalid_lane:'invalidLane',invalid_menu:'invalidMenu'};
+    if(e && map[e.code]) return t(map[e.code]);
+    if(e && (e.status===401||e.status===403)) return t('sessionInvalid');
+    return (e && e.message && e.message!=='error') ? e.message : t(fallback);
+  }
 
+  // ------------------------------------------------------------ language
   function applyAdminLanguage(){
-    document.documentElement.lang = adminLanguage === 'zh' ? 'zh-CN' : 'ja';
-    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
-    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel)); });
-    document.getElementById('langZh').classList.toggle('active', adminLanguage === 'zh');
-    document.getElementById('langJa').classList.toggle('active', adminLanguage === 'ja');
-    renderPausePeriods();
-    document.title = `${t('adminTitle')} | 上高田整骨院`;
-    if(typeof updateNotifyToggle==='function')updateNotifyToggle();
-    if (D) { renderSchedule(); renderBreaks(); renderHours(); renderPausePeriods(); }
-    if (phoneModalMode === 'edit') { document.getElementById('phoneReserveModalTitle').textContent = t('edit'); document.getElementById('phoneReserveSubmit').textContent = t('saveChanges'); }
-    else { document.getElementById('phoneReserveModalTitle').textContent = t('registerManual'); document.getElementById('phoneReserveSubmit').textContent = t('registerManual'); }
+    document.documentElement.lang = adminLanguage==='zh' ? 'zh-CN' : 'ja';
+    document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent=t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{ el.placeholder=t(el.dataset.i18nPlaceholder); });
+    document.querySelectorAll('[data-i18n-aria-label]').forEach(el=>{ el.setAttribute('aria-label',t(el.dataset.i18nAriaLabel)); });
+    $('langJa').classList.toggle('active',adminLanguage==='ja'); $('langZh').classList.toggle('active',adminLanguage==='zh');
+    document.title=`${t('adminTitle')} | 上高田整骨院`;
+    if(typeof updateNotifyToggle==='function') updateNotifyToggle();
+    if(D){ renderDay(); renderSettings(); }
+    if(!$('tab-list').hidden) runSearch();
+  }
+  function setAdminLanguage(lang){ adminLanguage=lang==='zh'?'zh':'ja'; localStorage.setItem('kamitakada-admin-language',adminLanguage); applyAdminLanguage(); }
+
+  // ------------------------------------------------------------ login / load
+  function loginErrorMessage(e){ return ({admin_password_not_configured:t('loginPasswordNotConfigured'),session_creation_failed:t('sessionCreationFailed'),invalid_password:t('invalidPassword'),rate_limited:t('rateLimited')})[e.code] || t('loginFailed'); }
+  async function login(){ $('err').textContent=''; try{ await post('/api/login',{password:$('pw').value}); }catch(e){ $('err').textContent=loginErrorMessage(e); return; } $('pw').value=''; showApp(); }
+  function showApp(){ $('login').hidden=true; $('app').hidden=false; setPattern(document.querySelector('.a-tabs [aria-selected="true"]')?.dataset.tab||'day'); if(!$('date').value) $('date').value=today(); applyAdminLanguage(); render().catch(handleAdminLoadError); pollReservationEvents(); }
+  function showLogin(){ $('login').hidden=false; $('app').hidden=true; setPattern('login'); }
+  function handleAdminLoadError(e){ $('err').textContent=(e.status===401||e.status===403)?t('sessionInvalid'):t('dataLoadFailed'); showLogin(); }
+  async function render(){ D=await api('/api/admin/data?date='+encodeURIComponent($('date').value||today())); if(!draft||!draftDirty) resetDraft(); renderDay(); renderSettings(); if(pendingDetailId){ const id=pendingDetailId; pendingDetailId=null; openDetail(id); } }
+  async function logout(){ await fetch('/api/logout',{method:'POST',credentials:'same-origin'}); showLogin(); }
+
+  // ------------------------------------------------------------ tabs
+  function setPattern(name){ document.body.classList.remove('pat-day','pat-list','pat-settings','pat-login'); document.body.classList.add('pat-'+name); }
+  function showTab(name){
+    setPattern(name);
+    document.querySelectorAll('.a-tabs [data-tab]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===name)));
+    ['day','list','settings'].forEach(n=>{ $('tab-'+n).hidden = n!==name; });
+    if(name==='list'){ runSearch(); setTimeout(()=>$('searchInput').focus(),50); }
+    window.scrollTo({top:0});
   }
 
-  function setAdminLanguage(lang){ adminLanguage = lang === 'zh' ? 'zh' : 'ja'; localStorage.setItem('kamitakada-admin-language', adminLanguage); applyAdminLanguage(); }
-
-  const days = I18N.ja.weekdays;
-
-  function today(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-  function change(n){
-    const dateInput=document.getElementById('date');
-    if(!dateInput.value) dateInput.value=today();
-    const parts=dateInput.value.split('-').map(Number);
-    const d=new Date(parts[0],parts[1]-1,parts[2]);
-    d.setDate(d.getDate()+n);
-    const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
-    dateInput.value=`${y}-${m}-${day}`;
-    render().catch(handleAdminLoadError);
+  // ------------------------------------------------------------ day view
+  function shownLanes(){
+    const used=new Set((D.appointments||[]).filter(a=>a.status==='confirmed').map(a=>a.lane_id||'L1'));
+    const max=D.capacity?.max||1;
+    return D.lanes.filter(l=>l.kind==='pool' ? (Number(l.id.slice(1))<=max || used.has(l.id)) : ((l.active && D.laneHours[l.id]) || used.has(l.id)));
   }
-  async function api(path,opt={}){ const r=await fetch(path,{...opt,credentials:'same-origin'}); const j=await r.json().catch(()=>({error:'error'})); if(!r.ok){const error=new Error(j.error||'error');error.code=j.code;error.status=r.status;throw error;}return j; }
-  function loginErrorMessage(e){ if(e.code==='admin_password_not_configured')return t('loginPasswordNotConfigured'); if(e.code==='session_creation_failed')return t('sessionCreationFailed'); if(e.code==='invalid_password')return t('invalidPassword'); return t('loginFailed'); }
-  async function login(){ const errorBox=document.getElementById('err'); const passwordInput=document.getElementById('pw'); errorBox.textContent=''; try{await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:passwordInput.value})});}catch(e){errorBox.textContent=loginErrorMessage(e);return;} passwordInput.value=''; showApp(); }
-  function showApp(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';document.getElementById('date').value=today();applyAdminLanguage();render().catch(handleAdminLoadError);pollReservationEvents();}
-  function showLogin(){document.getElementById('login').style.display='block';document.getElementById('app').style.display='none';}
-  function handleAdminLoadError(e){const errorBox=document.getElementById('err'); if(e.status===401||e.status===403)errorBox.textContent=t('sessionInvalid');else if(e.status>=500)errorBox.textContent=t('dataLoadFailed');else errorBox.textContent=t('dataGetFailed');showLogin();}
-  async function render(){D=await api('/api/admin/data?date='+encodeURIComponent(document.getElementById('date').value||today()));renderSchedule();renderBreaks();renderHours();renderPausePeriods();}
-
-  function renderSchedule(){
-    const box=document.getElementById('schedule');const selectedDate=document.getElementById('date').value;const items=[];
-    const appointments=D.appointments.filter(x=>x.date===selectedDate&&x.status!=='cancelled');
-    const reservationCount=appointments.length;
-    const totalTreatmentMinutes=appointments.reduce((sum,x)=>{
-      const occupied=Number(x.duration_minutes)||30;
-      return sum + Math.max(25,occupied-5);
-    },0);
-    document.getElementById('reservationCount').textContent=reservationCount;
-    document.getElementById('reservationTotalHours').textContent=Math.floor(totalTreatmentMinutes/60);
-    document.getElementById('reservationTotalMinutes').textContent=totalTreatmentMinutes%60 ? ` ${totalTreatmentMinutes%60}${t('minutesUnit')}` : '';
-    D.appointments.filter(x=>x.date===selectedDate).sort((a,b)=>a.time.localeCompare(b.time)).forEach(x=>{const occupied=Number(x.duration_minutes)||30;const treatment=Math.max(25,occupied-5);items.push({start:toMinutes(x.time),end:toMinutes(x.time)+occupied,type:'appointment',time:x.time,name:esc(x.name),detail:occupied===30?t('basicTreatment'):t('treatmentHold',treatment,occupied),contact:`${esc(x.phone)}${x.note?' · '+esc(x.note):''}`,action:x.status==='cancelled'?`<button class="danger" type="button" onclick="cancelA('${x.id}')">${t('delete')}</button>`:`<div class="schedule-actions"><button class="secondary" type="button" onclick="openEditModal('${x.id}')">${t('edit')}</button><button class="danger" type="button" onclick="cancelA('${x.id}')">${t('cancel')}</button></div>`});});
-    D.breaks.filter(x=>x.date===selectedDate).forEach(x=>items.push({start:toMinutes(x.startTime),end:toMinutes(x.endTime),type:'stop',time:`${x.startTime} ～ ${x.endTime}`,name:t('stop'),detail:t('stopDetail'),contact:'',action:`<button class="danger" type="button" onclick="delBreak('${x.id}')">${t('delete')}</button>`}));
-    items.sort((a,b)=>a.start-b.start||a.end-b.end);box.innerHTML=items.length?items.map(x=>`<div class="schedule-row"><div class="schedule-time">${x.time}</div><div><div><span class="schedule-tag ${x.type==='stop'?'stop':''}">${x.type==='stop'?t('stop'):t('appointment')}</span><strong>${x.name}</strong></div><div class="muted">${x.detail}</div>${x.contact?`<div class="muted">${x.contact}</div>`:''}</div><div>${x.action}</div></div>`).join(''):`<p class="muted">${t('noSchedule')}</p>`;
+  function renderDay(){
+    const date=$('date').value; const isToday=date===D.today;
+    $('dayTitle').textContent=dateLabel(date);
+    renderWeek(); renderSummary(); renderTimeline(); renderCancelled(); renderStopLanes();
+    document.querySelector('[data-act="stop"]') && document.querySelectorAll('[data-act="stop"]').forEach(b=>b.disabled=!isToday);
   }
-  function renderBreaks(){const list=D.breaks.filter(x=>x.date===today()).slice().sort((a,b)=>a.startTime.localeCompare(b.startTime));document.getElementById('breaks').innerHTML=list.length?list.map(x=>`<div style="padding:7px 0">${x.date} ${x.startTime}–${x.endTime} <button class="danger" type="button" onclick="delBreak('${x.id}')">${t('delete')}</button></div>`).join(''):`<p class="muted">${t('noItems')}</p>`;}
-  function toMinutes(value){const parts=String(value).split(':').map(Number);return parts[0]*60+parts[1];}
-  async function extendToday(minutes){const todayValue=today();if(document.getElementById('date').value!==todayValue){document.getElementById('date').value=todayValue;await render();}try{await api('/api/admin/extend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:todayValue,minutes})});await render();alert(t('extendSuccess',minutes));}catch(e){alert(e.message||t('extendFailed'));}}
-  function renderHours(){const weekdayNames=I18N[adminLanguage].weekdays;document.getElementById('hours').innerHTML='<table><tr><th>'+ (adminLanguage==='zh'?'星期':'曜日') +'</th><th>'+ (adminLanguage==='zh'?'营业':'営業') +'</th><th>'+ (adminLanguage==='zh'?'开始':'開始') +'</th><th>'+ (adminLanguage==='zh'?'结束':'終了') +'</th></tr>'+weekdayNames.map((n,i)=>{const v=D.businessHours[i];return `<tr><td>${n}</td><td><input type="checkbox" id="e${i}" ${v?'checked':''}></td><td><input id="s${i}" type="time" value="${v?v[0]:'10:00'}"></td><td><input id="t${i}" type="time" value="${v?v[1]:'19:00'}"></td></tr>`;}).join('')+'</table>';}
-
-  async function cancelA(id){const a=D.appointments.find(x=>x.id===id);if(!a)return;const message=a.status==='cancelled'?t('deleteReservationConfirm'):t('cancelReservationConfirm');if(!confirm(message))return;await api('/api/admin/'+(a.status==='cancelled'?'delete':'cancel'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});await render();alert(a.status==='cancelled'?t('reservationDeleted'):t('reservationCancelled'));}
-  async function addBreak(){await api('/api/admin/breaks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({start:document.getElementById('bs').value,end:document.getElementById('be').value})});await render();alert(t('breakAdded'));}
-  async function delBreak(id){if(!confirm(t('deleteBreakConfirm')))return;await api('/api/admin/breaks-delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});await render();alert(t('breakDeleted'));}
-  function pauseTodayKey(){
-    const now=new Date();
-    const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
-    const v=Object.fromEntries(parts.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
-    return `${v.year}-${v.month}-${v.day}`;
+  function renderWeek(){
+    const box=$('week'); const sel=$('date').value; const out=[];
+    for(let i=0;i<14;i++){
+      const d=addDays(D.today,i); const [,,day]=d.split('-').map(Number); const n=D.upcoming[d]||0;
+      const closed=!D.businessHours[String(weekdayOf(d))];
+      out.push(`<button type="button" class="a-day${closed?' closed':''}${i===0?' today':''}" data-act="goto" data-date="${d}" ${d===sel?'aria-current="date"':''}><small>${i===0?esc(t('today')):esc(I18N[adminLanguage].weekdays[weekdayOf(d)])}</small><strong>${day}</strong><span class="n${n?'':' zero'}">${n||'·'}</span></button>`);
+    }
+    box.innerHTML=out.join('');
+    box.querySelector('[aria-current="date"]')?.scrollIntoView({block:'nearest',inline:'nearest'});
   }
-  function getPausePeriods(){ return Array.isArray(D?.temporaryPausePeriods) ? D.temporaryPausePeriods.slice() : []; }
+  function planText(plan){ return plan.ranges.map(r=>t('capRangeText',r.start,r.end,r.count)).join('、'); }
+  function renderCapStat(){
+    const c=D.capacity; if(!c) return;
+    $('statCap').textContent=c.plan.base;
+    $('statCapNote').innerHTML=esc(planText(c.plan))+(c.custom?` <span class="a-tag">${esc(t('capOnlyThisDay'))}</span>`:'');
+    $('capEditBtn').hidden=$('date').value<D.today || D.holiday;
+  }
+  function renderSummary(){
+    const date=$('date').value; const list=(D.appointments||[]).filter(a=>a.status==='confirmed');
+    $('statCount').textContent=list.length;
+    const total=list.reduce((s,a)=>{ const m=menuById(a.menu_id); return s+Math.max(0,(Number(a.duration_minutes)||30)-(m?m.bufferMinutes:5)); },0);
+    $('statTime').textContent=total>=60?`${Math.floor(total/60)}${adminLanguage==='zh'?'小时':'時間'}${total%60?` ${total%60}${t('minutesUnit')}`:''}`:`${total}${t('minutesUnit')}`;
+    const sorted=list.slice().sort((a,b)=>a.time.localeCompare(b.time));
+    let label=t('nextBooking'), next=null;
+    if(date===D.today){ const now=nowMin(); next=sorted.find(a=>toMin(a.time)+(Number(a.duration_minutes)||30)>now); if(!next && sorted.length){ $('statNextLabel').textContent=label; $('statNext').textContent=t('noMore'); renderCapStat(); return; } }
+    else if(date>D.today){ label=t('firstBooking'); next=sorted[0]; }
+    $('statNextLabel').textContent=label;
+    renderCapStat();
+    $('statNext').innerHTML=next?`${esc(next.time)}　${esc(next.name)}${showMenu(next.menu_id)?` <span class="a-tag">${esc(menuLabel(next.menu_id))}</span>`:''}`:esc(t('none'));
+  }
+  function laneOpenSpans(l){
+    const h=D.laneHours[l.id]; if(!h) return [];
+    let spans=[[toMin(h[0]),toMin(h[1])]];
+    if(l.kind==='pool') for(const [a,b] of (D.capacity?.closed?.[l.id]||[])){
+      const A=toMin(a),B=toMin(b); const next=[];
+      for(const [x,y] of spans){ if(B<=x||A>=y){ next.push([x,y]); continue; } if(A>x) next.push([x,A]); if(B<y) next.push([B,y]); }
+      spans=next;
+    }
+    return spans;
+  }
+  function pxPerMin(){ return window.innerWidth<640?1.4:1.6; }
+  function renderTimeline(){
+    const box=$('timeline'); const date=$('date').value;
+    const lanes=shownLanes();
+    if(D.holiday || !lanes.length){ box.style.gridTemplateColumns='1fr'; box.innerHTML=`<div class="a-empty">${esc(D.holiday?t('holidayDay'):t('closedDay'))}</div>`; return; }
+    const appts=(D.appointments||[]).filter(a=>a.status==='confirmed');
+    const breaks=(D.breaks||[]).filter(b=>b.date===date);
+    let start=Infinity,end=-Infinity;
+    for(const l of lanes){ const h=D.laneHours[l.id]; if(h){ start=Math.min(start,toMin(h[0])); end=Math.max(end,toMin(h[1])); } }
+    for(const a of appts){ start=Math.min(start,toMin(a.time)); end=Math.max(end,toMin(a.time)+(Number(a.duration_minutes)||30)); }
+    if(!Number.isFinite(start)){ start=600; end=1140; }
+    start=Math.floor(start/60)*60; end=Math.ceil(end/60)*60;
+    const ppm=pxPerMin();
+    const H=(end-start)*ppm;
+    box.style.gridTemplateColumns=`52px repeat(${lanes.length},minmax(0,1fr))`;
+    let html=`<div class="a-tl-corner"></div>`;
+    for(const l of lanes){ const open=laneOpenSpans(l); html+=`<div class="a-lane-head"><strong>${esc(l.name)}</strong> <small>${open.length?open.map(x=>`${hhmm(x[0])}–${hhmm(x[1])}`).join(', '):esc(t('laneClosed'))}</small></div>`; }
+    let axis=`<div class="a-axis" style="height:${H}px">`;
+    for(let m=start+60;m<end;m+=60){ axis+=`<span style="top:${(m-start)*ppm}px">${hhmm(m)}</span>`; }
+    html+=axis+'</div>';
+    const past=date<D.today; const now=date===D.today?nowMin():null;
+    for(const l of lanes){
+      const h=D.laneHours[l.id];
+      let col=`<div class="a-lane" data-lane="${esc(l.id)}" data-start="${start}" style="height:${H}px;--hour:${60*ppm}px;--offset:0px">`;
+      if(!h) col+=`<div class="a-closed" style="top:0;height:${H}px"></div>`;
+      else{
+        if(toMin(h[0])>start) col+=`<div class="a-closed" style="top:0;height:${(toMin(h[0])-start)*ppm}px"></div>`;
+        if(toMin(h[1])<end) col+=`<div class="a-closed" style="top:${(toMin(h[1])-start)*ppm}px;height:${(end-toMin(h[1]))*ppm}px"></div>`;
+      }
+      // 枠 the day's capacity plan keeps closed (click to change the count).
+      if(h && l.kind==='pool') for(const [a,b] of (D.capacity?.closed?.[l.id]||[])){
+        col+=`<div class="a-closed cap" data-act="edit-day-cap" style="top:${(toMin(a)-start)*ppm}px;height:${(toMin(b)-toMin(a))*ppm}px" title="${esc(t('capChange'))}"><span>${esc(t('capClosedHere'))}</span></div>`;
+      }
+      for(const b of breaks.filter(b=>!b.laneId||b.laneId===l.id)){
+        const top=(toMin(b.startTime)-start)*ppm, hgt=Math.max(18,(toMin(b.endTime)-toMin(b.startTime))*ppm-2);
+        col+=`<div class="a-break" style="top:${top}px;height:${hgt}px" title="${esc(t('stop'))}"><span><b>${esc(t('stop'))}</b> <i>${esc(b.startTime)}–${esc(b.endTime)}</i></span><button type="button" data-act="del-break" data-id="${esc(b.id)}" aria-label="${esc(t('delete'))}">×</button></div>`;
+      }
+      for(const a of appts.filter(a=>(a.lane_id||'L1')===l.id)){
+        const s=toMin(a.time), dur=Number(a.duration_minutes)||30, e=s+dur;
+        const top=(s-start)*ppm, hgt=Math.max(20,dur*ppm-2);
+        const {c,bg}=menuColor(a.menu_id);
+        const isPast=past||(now!==null&&e<=now);
+        const tiny=hgt<34, short=!tiny&&hgt<70;
+        const note=(a.note||'').replace(/^電話受付(?:\s*·\s*)?/,'');
+        col+=`<button type="button" class="a-appt${tiny?' tiny':''}${short?' short':''}${isPast?' past':''}" style="top:${top}px;height:${hgt}px;--c:${c};--bg:${bg}" data-act="detail" data-id="${esc(a.id)}"><span class="t">${esc(a.time)}<span class="e">–${hhmm(e)}</span></span><span class="n">${esc(a.name)}</span><span class="m">${[showMenu(a.menu_id)?menuLabel(a.menu_id):'',note].filter(Boolean).map(esc).join(' · ')}</span></button>`;
+      }
+      col+='</div>';
+      html+=col;
+    }
+    box.innerHTML=html;
+    if(now!==null && now>=start && now<=end){
+      const line=document.createElement('div'); line.className='a-now'; line.dataset.time=hhmm(now);
+      const headH=box.querySelector('.a-lane-head').offsetHeight;
+      line.style.top=`${headH+(now-start)*ppm}px`; line.style.left='52px';
+      box.append(line);
+    }
+  }
+  function renderCancelled(){
+    const box=$('cancelled'); const list=(D.appointments||[]).filter(a=>a.status==='cancelled');
+    box.hidden=!list.length; if(!list.length) return;
+    box.querySelector('summary').textContent=t('cancelledList',list.length);
+    box.querySelector('ul').innerHTML=list.map(a=>`<li><span>${esc(a.time)}</span><s>${esc(a.name)}</s><span class="a-tag">${esc(menuLabel(a.menu_id))}</span><button class="a-btn small" type="button" data-act="delete-record" data-id="${esc(a.id)}">${esc(t('deleteRecord'))}</button></li>`).join('');
+  }
+  function laneOptions(selected,withAll){ return (withAll?`<option value="">${esc(t('allLanes'))}</option>`:'')+D.lanes.filter(l=>l.active).map(l=>`<option value="${esc(l.id)}"${l.id===selected?' selected':''}>${esc(l.name)}</option>`).join(''); }
+  function renderStopLanes(){ const v=$('stopLane').value; $('stopLane').innerHTML=laneOptions(v,true); $('stopLane').value=v; }
+  function gotoDate(d){ $('date').value=d; render().catch(handleAdminLoadError); }
+
+  // ------------------------------------------------------------ detail
+  function openDetail(id){
+    const a=(D.appointments||[]).find(x=>String(x.id)===String(id));
+    if(!a){ toast(t('notFound'),true); return; }
+    $('detailTitle').textContent=a.name;
+    const e=toMin(a.time)+(Number(a.duration_minutes)||30);
+    const tel=String(a.phone||'').replace(/[^\d+]/g,'');
+    const rows=[[t('date'),`${esc(listDate(a.date))} ${esc(a.time)}–${hhmm(e)}`],[t('menu'),esc(menuLabel(a.menu_id))+` <span class="a-muted">（${Number(a.duration_minutes)||30}${esc(t('minutesUnit'))}）</span>`],[t('lane'),esc(laneLabel(a.lane_id))],[t('phoneNumber'),`<a href="tel:${esc(tel)}">${esc(a.phone)}</a>`]];
+    if(a.email) rows.push([t('email'),esc(a.email)]);
+    if(a.note) rows.push([t('notes'),esc(a.note)]);
+    if(a.created_at && a.created_at!=='x') rows.push([t('createdAt'),esc(fmtCreated(a.created_at))]);
+    $('detailBody').innerHTML=rows.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${v}</dd>`).join('');
+    $('detailActions').innerHTML=a.status==='cancelled'
+      ? `<button class="a-btn danger left" type="button" data-act="delete-record" data-id="${esc(a.id)}">${esc(t('deleteRecord'))}</button><button class="a-btn" type="button" data-act="close-modal">${esc(t('back'))}</button>`
+      : `<button class="a-btn danger left" type="button" data-act="cancel-booking" data-id="${esc(a.id)}">${esc(t('cancelBooking'))}</button><a class="a-btn" href="tel:${esc(tel)}">${esc(t('call'))}</a><button class="a-btn primary" type="button" data-act="edit" data-id="${esc(a.id)}">${esc(t('edit'))}</button>`;
+    $('detailModal').hidden=false;
+  }
+
+  // ------------------------------------------------------------ booking form
+  function selectedMenu(){ return menuById(document.querySelector('input[name="fMenu"]:checked')?.value)||null; }
+  function renderFormMenus(menuId){
+    const menus=D.menus.filter(m=>m.offered||m.id===menuId);
+    $('fMenus').innerHTML=menus.map(m=>`<label><input type="radio" name="fMenu" value="${esc(m.id)}"${m.id===menuId?' checked':''}>${esc((adminLanguage==='zh'&&m.name.zh)||m.name.ja)}</label>`).join('');
+  }
+  function renderFormForMenu(laneId,ext){
+    const m=selectedMenu(); if(!m) return;
+    const lanes=m.lanes.map(id=>laneById(id)).filter(l=>l&&(l.kind!=='pool'||Number(l.id.slice(1))<=Math.max(D.capacity?.max||1,1)||$('fLane').value===l.id));
+    $('fLane').innerHTML=`<option value="auto">${esc(t('laneAuto'))}</option>`+lanes.map(l=>`<option value="${esc(l.id)}">${esc(l.name)}${l.active?'':' ×'}</option>`).join('');
+    $('fLane').value=laneId&&m.lanes.includes(laneId)?laneId:'auto';
+    $('fExt').innerHTML=m.extensions.map(n=>`<option value="${n}">${esc(n?t('extOption',n):t('extNone'))}</option>`).join('');
+    $('fExt').value=String(m.extensions.includes(Number(ext))?Number(ext):0);
+    $('fExtField').hidden=m.extensions.length<2;
+  }
+  function openBooking(opts={}){
+    modalMode=opts.id?'edit':'create'; editingId=opts.id||null;
+    const a=opts.id?(D.appointments||[]).find(x=>x.id===opts.id):null;
+    const menuId=a?.menu_id||opts.menuId||(D.menus.find(m=>m.offered&&(!opts.laneId||m.lanes.includes(opts.laneId)))||D.menus.find(m=>m.offered))?.id;
+    renderFormMenus(menuId);
+    const m=menuById(menuId);
+    const ext=a?Math.max(0,(Number(a.duration_minutes)||30)-(m?m.treatMinutes+m.bufferMinutes:30)):0;
+    renderFormForMenu(a?a.lane_id:opts.laneId,ext);
+    $('fDate').value=a?a.date:(opts.date||$('date').value||today());
+    $('fTime').value=a?a.time:(opts.time||'');
+    $('fName').value=a?a.name:''; $('fPhone').value=a?a.phone:'';
+    $('fNote').value=a?String(a.note||'').replace(/^電話受付(?:\s*·\s*)?/,''):'';
+    $('fError').textContent='';
+    $('bookingTitle').textContent=t(a?'editTitle':'createTitle');
+    $('fSubmit').textContent=t(a?'editSubmit':'createSubmit');
+    $('detailModal').hidden=true; $('bookingModal').hidden=false;
+    setTimeout(()=>(a||opts.time?$('fName'):$('fTime')).focus(),30);
+  }
+  async function submitBooking(){
+    const m=selectedMenu(); const err=$('fError'); err.textContent='';
+    const payload={date:$('fDate').value,time:$('fTime').value,name:$('fName').value.trim(),phone:$('fPhone').value.trim(),note:$('fNote').value.trim(),menuId:m?.id,laneId:$('fLane').value,extensionMinutes:Number($('fExt').value||0)};
+    if(!m) return err.textContent=t('invalidMenu');
+    if(!payload.date) return err.textContent=t('invalidDate');
+    if(!payload.time) return err.textContent=t('invalidTime');
+    if(!payload.name) return err.textContent=t('invalidName');
+    if(!payload.phone) return err.textContent=t('invalidPhone');
+    if(modalMode==='edit') payload.id=editingId;
+    $('fSubmit').disabled=true;
+    try{
+      await post(modalMode==='edit'?'/api/admin/update':'/api/admin/reserve',payload);
+      $('bookingModal').hidden=true;
+      toast(t(modalMode==='edit'?'reservationUpdated':'manualRegistered'));
+      $('date').value=payload.date; await render();
+    }catch(e){ err.textContent=errorText(e,'saveFailed'); }
+    finally{ $('fSubmit').disabled=false; }
+  }
+  async function cancelBooking(id){
+    if(!await ask(t('cancelReservationConfirm'),t('doCancel'))) return;
+    try{ await post('/api/admin/cancel',{id}); closeModals(); toast(t('reservationCancelled')); await render(); }catch(e){ toast(errorText(e,'saveFailed'),true); }
+  }
+  async function deleteRecord(id){
+    if(!await ask(t('deleteReservationConfirm'),t('doDelete'))) return;
+    try{ await post('/api/admin/delete',{id}); closeModals(); toast(t('reservationDeleted')); await render(); }catch(e){ toast(errorText(e,'saveFailed'),true); }
+  }
+  async function stopNow(minutes){
+    try{ await post('/api/admin/extend',{date:today(),minutes,laneId:$('stopLane').value||undefined}); $('stopPanel').hidden=true; toast(t('extendSuccess',minutes)); if($('date').value!==today()) $('date').value=today(); await render(); }
+    catch(e){ toast(errorText(e,'extendFailed'),true); }
+  }
+
+  // ------------------------------------------------------------ search
+  let searchTimer=null, searchSeq=0;
+  async function runSearch(){
+    const q=$('searchInput').value.trim(); const seq=++searchSeq;
+    try{
+      const r=await api('/api/admin/search?q='+encodeURIComponent(q));
+      if(seq!==searchSeq) return;
+      const box=$('searchResults');
+      $('searchNote').textContent=q?(r.results.length?t('searchCount',r.results.length):''):`${t('upcomingTitle')}　${t('searchHint')}`;
+      if(!r.results.length){ box.innerHTML=`<p class="a-empty">${esc(q?t('searchNone'):t('none'))}</p>`; return; }
+      let html='', last='';
+      for(const a of r.results){
+        if(a.date!==last){ html+=`<h3 class="a-result-date">${esc(listDate(a.date))}${a.date===r.today?` · ${esc(t('today'))}`:''}</h3>`; last=a.date; }
+        html+=`<button type="button" class="a-result" data-act="open-result" data-id="${esc(a.id)}" data-date="${esc(a.date)}"><span class="time">${esc(a.time)}</span><span class="who"><strong>${esc(a.name)}</strong><small>${[a.phone,menuLabel(a.menu_id),laneLabel(a.lane_id)].filter((x,i,arr)=>x&&arr.indexOf(x)===i).map(esc).join(' · ')}</small></span>${a.status==='cancelled'?`<span class="a-tag cancel">${esc(t('cancel'))}</span>`:''}</button>`;
+      }
+      box.innerHTML=html;
+    }catch(e){ if(e.status===401||e.status===403) showLogin(); }
+  }
+
+  // ------------------------------------------------------------ settings: hours / breaks / pause
+  function renderSettings(){ if(!capStd && D.capacity) capStd=JSON.parse(JSON.stringify(D.capacity.standard)); if(capStd) renderCapEditor('std'); renderHours(); renderLanesEditor(); renderMenusEditor(); renderBreaks(); renderPausePeriods(); }
+  function renderHours(){
+    const names=I18N[adminLanguage].weekdays;
+    $('hours').innerHTML=`<table class="a-table"><tr><th>${esc(t('weekday'))}</th><th>${esc(t('open'))}</th><th>${esc(t('startTime'))}</th><th>${esc(t('endTime'))}</th></tr>`+names.map((n,i)=>{ const v=D.businessHours[i]; return `<tr><td>${esc(n)}</td><td><input class="a-check" type="checkbox" id="e${i}"${v?' checked':''}></td><td><input class="a-input" id="s${i}" type="time" value="${v?v[0]:'10:00'}"></td><td><input class="a-input" id="t${i}" type="time" value="${v?v[1]:'19:00'}"></td></tr>`; }).join('')+'</table>';
+  }
+  async function saveHours(){
+    const h={}; for(let i=0;i<7;i++) h[i]=$('e'+i).checked?[$('s'+i).value,$('t'+i).value]:null;
+    try{ await post('/api/admin/hours',{businessHours:h,slotMinutes:30}); toast(t('businessHoursSaved')); await render(); }catch(e){ toast(errorText(e,'saveFailed'),true); }
+  }
+  function renderBreaks(){
+    if(!$('bDate').value) $('bDate').value=$('date').value||today();
+    const v=$('bLane').value; $('bLane').innerHTML=laneOptions(v,true); $('bLane').value=v;
+    const date=$('date').value;
+    const list=(D.breaks||[]).filter(b=>b.date===date).sort((a,b)=>a.startTime.localeCompare(b.startTime));
+    $('breaks').innerHTML=`<p class="a-muted" style="font-size:13px;margin:0 0 4px">${esc(t('breaksOn',listDate(date)))}</p>`+(list.length?list.map(b=>`<div class="a-list-row"><span>${esc(b.startTime)}–${esc(b.endTime)}</span><span class="a-tag">${esc(b.laneId?laneLabel(b.laneId):t('allLanes'))}</span><button class="a-btn small" type="button" data-act="del-break" data-id="${esc(b.id)}">${esc(t('delete'))}</button></div>`).join(''):`<p class="a-muted" style="margin:0">${esc(t('none'))}</p>`);
+  }
+  async function addBreak(){
+    try{ await post('/api/admin/breaks',{date:$('bDate').value,start:$('bs').value,end:$('be').value,laneId:$('bLane').value||undefined}); toast(t('breakAdded')); $('date').value=$('bDate').value; await render(); }
+    catch(e){ toast(errorText(e,'saveFailed'),true); }
+  }
+  async function delBreak(id){
+    if(!await ask(t('deleteBreakConfirm'),t('doDelete'))) return;
+    try{ await post('/api/admin/breaks-delete',{id}); toast(t('breakDeleted')); await render(); }catch(e){ toast(errorText(e,'saveFailed'),true); }
+  }
+  function getPausePeriods(){ return Array.isArray(D?.temporaryPausePeriods)?D.temporaryPausePeriods.slice():[]; }
   function renderPausePeriods(){
-    const box=document.getElementById('pausePeriods'); if(!box)return;
-    const list=getPausePeriods().sort((a,b)=>String(a.startDate).localeCompare(String(b.startDate))||String(a.reopeningDate).localeCompare(String(b.reopeningDate)));
-    box.innerHTML=list.length?list.map(x=>`<div class="pause-period"><div class="pause-period-dates">${formatAdminDate(x.startDate)} ～ ${formatAdminDate(x.reopeningDate)}</div><div class="pause-period-actions"><button class="secondary" type="button" onclick="editPausePeriod('${esc(x.id)}')">${t('pauseEdit')}</button><button class="danger" type="button" onclick="deletePausePeriod('${esc(x.id)}')">${t('pauseDelete')}</button></div></div>`).join(''):`<p class="muted">${t('pauseNoItems')}</p>`;
+    const list=getPausePeriods().sort((a,b)=>String(a.startDate).localeCompare(String(b.startDate)));
+    $('pausePeriods').innerHTML=list.length?list.map(x=>`<div class="a-list-row"><span>${esc(String(x.startDate).replaceAll('-','/'))} ～ ${esc(String(x.reopeningDate).replaceAll('-','/'))}</span><button class="a-btn small" type="button" data-act="edit-pause" data-id="${esc(x.id)}">${esc(t('pauseEdit'))}</button><button class="a-btn small danger" style="margin-left:0" type="button" data-act="del-pause" data-id="${esc(x.id)}">${esc(t('pauseDelete'))}</button></div>`).join(''):`<p class="a-muted" style="margin:0">${esc(t('pauseNoItems'))}</p>`;
   }
-  function formatAdminDate(value){return value?String(value).replaceAll('-','/') : '';}
-  function editPausePeriod(id){
-    const p=getPausePeriods().find(x=>String(x.id)===String(id)); if(!p)return;
-    document.getElementById('pauseStartDate').value=p.startDate||'';
-    document.getElementById('pauseReopeningDate').value=p.reopeningDate||'';
-    const btn=document.getElementById('pauseSaveButton'); btn.dataset.editId=String(p.id); btn.textContent=t('pauseEdit');
-    document.getElementById('pauseStartDate').focus();
-  }
+  function editPausePeriod(id){ const p=getPausePeriods().find(x=>String(x.id)===String(id)); if(!p) return; $('pauseStartDate').value=p.startDate||''; $('pauseReopeningDate').value=p.reopeningDate||''; $('pauseSaveButton').dataset.editId=String(p.id); $('pauseSaveButton').textContent=t('pauseUpdate'); $('pauseStartDate').focus(); }
   async function savePausePeriod(){
-    const startDate=document.getElementById('pauseStartDate').value, reopeningDate=document.getElementById('pauseReopeningDate').value;
-    if(!startDate||!reopeningDate||startDate>=reopeningDate){alert(t('pauseInvalid'));return;}
-    const btn=document.getElementById('pauseSaveButton'), editId=btn.dataset.editId||'';
-    try{ await api('/api/admin/pause',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save',id:editId,startDate,reopeningDate})}); delete btn.dataset.editId; btn.textContent=t('pauseClinic'); document.getElementById('pauseStartDate').value=''; document.getElementById('pauseReopeningDate').value=''; await render(); alert(t('pauseSaved')); }
-    catch(e){alert(t('pauseFailed'));}
+    const startDate=$('pauseStartDate').value, reopeningDate=$('pauseReopeningDate').value;
+    if(!startDate||!reopeningDate||startDate>=reopeningDate){ toast(t('pauseInvalid'),true); return; }
+    const btn=$('pauseSaveButton'), editId=btn.dataset.editId||'';
+    try{ await post('/api/admin/pause',{action:'save',id:editId,startDate,reopeningDate}); delete btn.dataset.editId; btn.textContent=t('pauseSave'); $('pauseStartDate').value=''; $('pauseReopeningDate').value=''; await render(); toast(t('pauseSaved')); }
+    catch(e){ toast(t('pauseFailed'),true); }
   }
   async function deletePausePeriod(id){
-    if(!confirm(adminLanguage==='ja'?'この臨時休業を解除しますか？':'确定取消这段临时歇业吗？'))return;
-    try{await api('/api/admin/pause',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',id})});await render();alert(t('pauseDeleted'));}catch(e){alert(t('pauseFailed'));}
+    if(!await ask(t('pauseDeleteConfirm'),t('pauseDelete'))) return;
+    try{ await post('/api/admin/pause',{action:'delete',id}); await render(); toast(t('pauseDeleted')); }catch(e){ toast(t('pauseFailed'),true); }
   }
 
-  async function saveHours(){const h={};for(let i=0;i<7;i++)h[i]=document.getElementById('e'+i).checked?[document.getElementById('s'+i).value,document.getElementById('t'+i).value]:null;await api('/api/admin/hours',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({businessHours:h,slotMinutes:30})});alert(t('businessHoursSaved'));await render();}
-  async function exportAppointments(){
-    if(!window.confirm(t('exportConfirm')))return;
+  // ------------------------------------------------------------ capacity editors
+  let capStd=null, capDay=null;
+  function capRef(which){ return which==='day'?capDay:capStd; }
+  function numPicker(which,i,val){ return `<div class="a-num" role="group">${[1,2,3].map(n=>`<button type="button" data-act="cap-count" data-cap="${which}" data-i="${i}" data-n="${n}" aria-pressed="${n===val}">${n}</button>`).join('')}</div>`; }
+  function capEditorHTML(which){
+    const p=capRef(which);
+    return `<div class="a-cap-line"><span class="lbl">${esc(t('capBase'))}</span>${numPicker(which,-1,p.base)}</div>`+
+      (p.ranges.length?`<div class="a-cap-ranges">${p.ranges.map((r,i)=>`<div class="a-cap-line"><input class="a-input" type="time" data-cap-range="${which}" data-i="${i}" data-k="start" value="${esc(r.start)}" aria-label="${esc(t('startTime'))}"><span class="sep">〜</span><input class="a-input" type="time" data-cap-range="${which}" data-i="${i}" data-k="end" value="${esc(r.end)}" aria-label="${esc(t('endTime'))}"><span class="sep">${esc(t('capRangeLabel'))}</span>${numPicker(which,i,r.count)}<button class="a-btn small ghost" type="button" data-act="cap-remove" data-cap="${which}" data-i="${i}" aria-label="${esc(t('capRemove'))}" title="${esc(t('capRemove'))}">✕</button></div>`).join('')}</div>`:'')+
+      `<div><button class="a-btn small" type="button" data-act="cap-add" data-cap="${which}">${esc(t('capAddRange'))}</button></div>`;
+  }
+  function renderCapEditor(which){ $(which==='day'?'dayCapEditor':'capEditor').innerHTML=capEditorHTML(which); }
+  function capValid(p){ return p.ranges.every(r=>r.start&&r.end&&r.start<r.end); }
+  function conflictToast(list){
+    if(!list||!list.length) return;
+    const text=list.slice(0,4).map(c=>`${c.date.slice(5).replace('-','/')} ${c.time} ${laneLabel(c.laneId)}`).join('、')+(list.length>4?' …':'');
+    toast(t('capConflicts',list.length,text),true);
+  }
+  function openDayCap(){
+    if(!D?.capacity || $('date').value<D.today) return;
+    capDay=JSON.parse(JSON.stringify(D.capacity.plan));
+    $('capModalTitle').textContent=t('capModalTitle',listDate($('date').value));
+    $('capResetBtn').hidden=!D.capacity.custom; $('capError').textContent='';
+    renderCapEditor('day'); $('capModal').hidden=false;
+  }
+  async function saveDayCap(reset){
+    if(!reset && !capValid(capDay)){ $('capError').textContent=t('capBadRange'); return; }
     try{
-      const response=await fetch('/api/admin/export',{method:'GET',credentials:'same-origin'});
-      if(!response.ok){
-        if(response.status===401||response.status===403){showLogin();return;}
-        throw new Error('export_failed');
+      const r=await post('/api/admin/capacity',reset?{date:$('date').value,reset:true}:{date:$('date').value,plan:capDay});
+      $('capModal').hidden=true; toast(t('capSaved')); conflictToast(r.conflicts); await render();
+    }catch(e){ $('capError').textContent=errorText(e,'saveFailed'); }
+  }
+  async function saveStdCap(){
+    if(!capValid(capStd)){ toast(t('capBadRange'),true); return; }
+    try{
+      const r=await post('/api/admin/capacity',{default:capStd,applyToOpenDays:$('capApplyOpen').checked});
+      $('capApplyOpen').checked=false; toast(t('capStandardSaved')); conflictToast(r.conflicts); capStd=null; await render();
+    }catch(e){ toast(errorText(e,'saveFailed'),true); }
+  }
+  function capInput(e){
+    const el=e.target; if(el.dataset.capRange===undefined) return;
+    const p=capRef(el.dataset.capRange); p.ranges[Number(el.dataset.i)][el.dataset.k]=el.value;
+  }
+
+  // ------------------------------------------------------------ settings: lanes + menus
+  function resetDraft(){ draft=JSON.parse(JSON.stringify({lanes:D.lanes,menus:D.menus})); setDirty(false); }
+  function setDirty(v){ draftDirty=v; $('configState').textContent=t(v?'configDirty':'configHint'); $('saveBar').classList.toggle('dirty',v); }
+  function renderLanesEditor(){
+    if(!draft) return;
+    const names=I18N[adminLanguage].weekdays;
+    $('lanesEditor').innerHTML=draft.lanes.map((l,i)=>{
+      if(l.kind==='pool') return '';
+      const custom=!!l.hours;
+      const rows=custom?`<table class="a-table" style="margin-top:10px"><tr><th>${esc(t('weekday'))}</th><th>${esc(t('open'))}</th><th>${esc(t('startTime'))}</th><th>${esc(t('endTime'))}</th></tr>`+names.map((n,d)=>{ const v=l.hours[String(d)]; return `<tr><td>${esc(n)}</td><td><input type="checkbox" data-lane-day="${i}" data-day="${d}" data-k="on"${v?' checked':''}></td><td><input class="a-input" type="time" data-lane-day="${i}" data-day="${d}" data-k="s" value="${v?v[0]:'10:00'}"></td><td><input class="a-input" type="time" data-lane-day="${i}" data-day="${d}" data-k="e" value="${v?v[1]:'19:00'}"></td></tr>`; }).join('')+'</table>':'';
+      return `<div class="a-card"><div class="a-card-head"><input class="a-input" style="max-width:260px" data-lane="${i}" data-k="name" value="${esc(l.name)}" aria-label="${esc(t('laneName'))}"><label class="a-check"><input type="checkbox" data-lane="${i}" data-k="active"${l.active?' checked':''}>${esc(t('laneActive'))}</label>${draft.lanes.filter(x=>x.kind!=='pool').length>1?`<button class="a-btn small danger" style="margin-left:auto" type="button" data-act="remove-lane" data-i="${i}">${esc(t('removeLane'))}</button>`:''}
+        <div class="a-pills"><label><input type="radio" name="laneHours${i}" data-lane="${i}" data-k="hoursMode" value="same"${custom?'':' checked'}>${esc(t('laneHoursSame'))}</label><label><input type="radio" name="laneHours${i}" data-lane="${i}" data-k="hoursMode" value="custom"${custom?' checked':''}>${esc(t('laneHoursCustom'))}</label></div></div>${rows}</div>`;
+    }).join('');
+  }
+  const openMenus=new Set();
+  function renderMenusEditor(){
+    if(!draft) return;
+    $('menusEditor').innerHTML=draft.menus.map((m,i)=>{
+      const f=(k,label,type='number',val=m[k],attrs='')=>`<div class="a-field"><label class="a-label">${esc(label)}</label><input class="a-input" type="${type}" data-menu="${i}" data-k="${k}" value="${esc(val)}" ${attrs}></div>`;
+      const exts=[10,20,30].map(n=>`<label><input type="checkbox" data-menu="${i}" data-k="ext" value="${n}"${m.extensions.includes(n)?' checked':''}>+${n}${esc(t('minutesUnit'))}</label>`).join('');
+      const staff=draft.lanes.filter(l=>l.kind!=='pool');
+      const isPool=m.lanes.some(id=>draft.lanes.find(l=>l.id===id)?.kind==='pool');
+      const lanes=`<label><input type="radio" name="menuLane${i}" data-menu="${i}" data-k="laneChoice" value="pool"${isPool?' checked':''}>${esc(t('poolLanes'))}</label>`+staff.map(l=>`<label><input type="radio" name="menuLane${i}" data-menu="${i}" data-k="laneChoice" value="${esc(l.id)}"${!isPool&&m.lanes.includes(l.id)?' checked':''}>${esc(l.name)}${l.active?'':`<span class="a-off">${esc(t('notOffered'))}</span>`}</label>`).join('');
+      const laneName=isPool?t('poolLanes'):(staff.find(l=>m.lanes.includes(l.id))?.name||'');
+      const laneOff=!isPool&&!staff.some(l=>l.active&&m.lanes.includes(l.id));
+      const chips=[laneOff?t('notOfferedShort'):'',`${m.treatMinutes+m.bufferMinutes}${t('minutesUnit')}`,laneName,m.web?t('menuWeb'):'',m.reservationOnly?t('reservationOnly'):''].filter(Boolean).map(x=>`<span class="a-tag">${esc(x)}</span>`).join('');
+      return `<details class="a-card a-menu-card" data-menu-id="${esc(m.id)}"${openMenus.has(m.id)?' open':''}><summary><span class="nm">${esc(m.name.ja)}</span>${m.active?'':`<span class="a-tag cancel">${esc(t('menuOff'))}</span>`}${chips}<span class="chev" aria-hidden="true">›</span></summary><div class="body">
+        <div class="a-card-head"><input class="a-input" style="max-width:300px" data-menu="${i}" data-k="name.ja" value="${esc(m.name.ja)}" aria-label="${esc(t('menuNameJa'))}"><label class="a-check"><input type="checkbox" data-menu="${i}" data-k="active"${m.active?' checked':''}>${esc(t('menuActive'))}</label><button class="a-btn small danger" style="margin-left:auto" type="button" data-act="remove-menu" data-i="${i}">${esc(t('removeMenu'))}</button></div>
+        <div class="a-grid3">${f('treatMinutes',t('treatMinutes'),'number',m.treatMinutes,'min="5" max="240" step="5"')}${f('bufferMinutes',t('bufferMinutes'),'number',m.bufferMinutes,'min="0" max="60" step="5"')}${f('noticeHours',t('noticeHours'),'number',Math.round(m.noticeMinutes/6)/10,'min="0" max="168" step="0.5"')}</div>
+        <p class="a-muted" style="margin:-4px 0 12px;font-size:13px">${esc(t('occupiedTotal',m.treatMinutes+m.bufferMinutes))}</p>
+        <div class="a-field"><span class="a-label">${esc(t('menuLanes'))}</span><div class="a-chips">${lanes}</div></div>
+        <div class="a-grid2"><div class="a-field"><span class="a-label">${esc(t('extensions'))}</span><div class="a-chips">${exts}</div></div>${f('extensionPrice',t('extensionPrice'),'number',m.extensionPrice,'min="0" step="100"')}</div>
+        <div class="a-chips" style="margin-bottom:10px"><label><input type="checkbox" data-menu="${i}" data-k="web"${m.web?' checked':''}>${esc(t('menuWeb'))}</label><label><input type="checkbox" data-menu="${i}" data-k="reservationOnly"${m.reservationOnly?' checked':''}>${esc(t('reservationOnly'))}</label></div>
+        ${f('desc.ja',t('menuDescJa'),'text',m.desc.ja,'maxlength="60"')}
+        <details class="a-more"><summary>${esc(t('translations'))}</summary><div class="a-grid2">${f('name.zh',t('menuNameZh'),'text',m.name.zh,'maxlength="40"')}${f('desc.zh',t('menuDescZh'),'text',m.desc.zh,'maxlength="60"')}${f('name.en',t('menuNameEn'),'text',m.name.en,'maxlength="40"')}${f('desc.en',t('menuDescEn'),'text',m.desc.en,'maxlength="60"')}</div></details></div></details>`;
+    }).join('');
+  }
+  function onDraftInput(e){
+    const el=e.target; if(!draft) return;
+    if(el.dataset.lane!==undefined){
+      const l=draft.lanes[Number(el.dataset.lane)]; const k=el.dataset.k;
+      if(k==='name') l.name=el.value;
+      else if(k==='active') l.active=el.checked;
+      else if(k==='hoursMode'){ l.hours=el.value==='custom'?Object.fromEntries([0,1,2,3,4,5,6].map(d=>[String(d),D.businessHours[d]?D.businessHours[d].slice():null])):null; renderLanesEditor(); }
+      setDirty(true); if(k==='name'||k==='active') renderMenusEditor(); return;
+    }
+    if(el.dataset.laneDay!==undefined){
+      const l=draft.lanes[Number(el.dataset.laneDay)]; const d=el.dataset.day; const cur=l.hours[d]||['10:00','19:00'];
+      if(el.dataset.k==='on') l.hours[d]=el.checked?cur:null;
+      else if(l.hours[d]){ if(el.dataset.k==='s') l.hours[d]=[el.value,cur[1]]; else l.hours[d]=[cur[0],el.value]; }
+      setDirty(true); return;
+    }
+    if(el.dataset.menu!==undefined){
+      const m=draft.menus[Number(el.dataset.menu)]; const k=el.dataset.k;
+      if(k.includes('.')){ const [a,b]=k.split('.'); m[a][b]=el.value; }
+      else if(k==='active'||k==='web'||k==='reservationOnly') m[k]=el.checked;
+      else if(k==='ext'){ const n=Number(el.value); m.extensions=[0,...[10,20,30].filter(x=>x===n?el.checked:m.extensions.includes(x))]; }
+      else if(k==='laneChoice'){ m.lanes=el.value==='pool'?draft.lanes.filter(l=>l.kind==='pool').map(l=>l.id):[el.value]; }
+      else if(k==='noticeHours') m.noticeMinutes=Math.round(Number(el.value||0)*60);
+      else m[k]=Number(el.value||0);
+      setDirty(true);
+      if(k==='treatMinutes'||k==='bufferMinutes'){ const p=el.closest('.a-card').querySelector('p.a-muted'); if(p) p.textContent=t('occupiedTotal',m.treatMinutes+m.bufferMinutes); }
+    }
+  }
+  function addLane(){ let n=1; while(draft.lanes.some(l=>l.id==='S'+n)) n++; draft.lanes.push({id:'S'+n,kind:'staff',name:(adminLanguage==='zh'?'老师':'担当')+n,active:false,hours:null}); setDirty(true); renderLanesEditor(); renderMenusEditor(); }
+  function addMenu(){ const id='m'+Date.now().toString(36).slice(-5); openMenus.add(id); draft.menus.push({id,active:false,web:true,name:{ja:'新しいメニュー',zh:'',en:''},desc:{ja:'',zh:'',en:''},treatMinutes:30,bufferMinutes:5,extensions:[0],extensionPrice:0,lanes:draft.lanes.filter(l=>l.kind==='pool').map(l=>l.id),noticeMinutes:0,reservationOnly:false}); setDirty(true); renderMenusEditor(); }
+  async function saveConfig(){
+    try{ const r=await post('/api/admin/config',{lanes:draft.lanes,menus:draft.menus}); setDirty(false); toast(t('configSaved')); await render(); resetDraft(); renderSettings(); }
+    catch(e){ toast(errorText(e,'saveFailed'),true); }
+  }
+
+  // ------------------------------------------------------------ export
+  async function exportAppointments(){
+    if(!await ask(t('exportConfirm'),t('download'))) return;
+    try{
+      const response=await fetch('/api/admin/export',{credentials:'same-origin'});
+      if(response.status===401||response.status===403){ showLogin(); return; }
+      if(!response.ok) throw new Error('export_failed');
+      const url=URL.createObjectURL(await response.blob()); const a=document.createElement('a');
+      a.href=url; a.download='appointments.csv'; document.body.append(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }catch(e){ toast(t('exportFailed'),true); }
+  }
+
+  // ------------------------------------------------------------ events
+  document.addEventListener('click',async e=>{
+    const el=e.target.closest('[data-act]');
+    if(!el){
+      // Click on an empty part of a lane: start a booking there.
+      const lane=e.target.closest('.a-lane');
+      if(lane && e.target===lane){
+        const ppm=pxPerMin();
+        const m=Number(lane.dataset.start)+Math.round((e.offsetY/ppm)/5)*5;
+        openBooking({laneId:lane.dataset.lane,time:hhmm(m),date:$('date').value});
       }
-      const blob=await response.blob();
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');
-      a.href=url;
-      a.download='appointments.csv';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }catch(e){alert(adminLanguage==='ja'?'予約データのエクスポートに失敗しました。':'预约数据导出失败。');}
-  }
+      if(!e.target.closest('.a-menu')) $('topMenu').hidden=true;
+      if(!e.target.closest('.a-stop')) $('stopPanel').hidden=true;
+      if(e.target.classList.contains('a-modal')) closeModals();
+      return;
+    }
+    const act=el.dataset.act;
+    switch(act){
+      case 'login': return login();
+      case 'logout': return logout();
+      case 'toggle-menu': { const p=$('topMenu'); p.hidden=!p.hidden; el.setAttribute('aria-expanded',String(!p.hidden)); return; }
+      case 'lang': return setAdminLanguage(el.dataset.lang);
+      case 'export': $('topMenu').hidden=true; return exportAppointments();
+      case 'day': return gotoDate(addDays($('date').value||today(),Number(el.dataset.n)));
+      case 'today': return gotoDate(today());
+      case 'goto': return gotoDate(el.dataset.date);
+      case 'toggle-stop': { const p=$('stopPanel'); p.hidden=!p.hidden; return; }
+      case 'stop': return stopNow(Number(el.dataset.min));
+      case 'new': return openBooking({});
+      case 'detail': return openDetail(el.dataset.id);
+      case 'edit': return openBooking({id:el.dataset.id});
+      case 'cancel-booking': return cancelBooking(el.dataset.id);
+      case 'delete-record': return deleteRecord(el.dataset.id);
+      case 'submit-booking': return submitBooking();
+      case 'close-modal': return closeModals();
+      case 'confirm-yes': $('confirmModal').hidden=true; confirmResolve&&confirmResolve(true); confirmResolve=null; return;
+      case 'confirm-no': $('confirmModal').hidden=true; confirmResolve&&confirmResolve(false); confirmResolve=null; return;
+      case 'del-break': return delBreak(el.dataset.id);
+      case 'add-break': return addBreak();
+      case 'save-hours': return saveHours();
+      case 'save-pause': return savePausePeriod();
+      case 'edit-pause': return editPausePeriod(el.dataset.id);
+      case 'del-pause': return deletePausePeriod(el.dataset.id);
+      case 'add-lane': return addLane();
+      case 'remove-lane': draft.lanes.splice(Number(el.dataset.i),1); draft.menus.forEach(m=>{m.lanes=m.lanes.filter(id=>draft.lanes.some(l=>l.id===id));}); setDirty(true); renderLanesEditor(); renderMenusEditor(); return;
+      case 'add-menu': return addMenu();
+      case 'remove-menu': draft.menus.splice(Number(el.dataset.i),1); setDirty(true); renderMenusEditor(); return;
+      case 'save-config': return saveConfig();
+      case 'edit-day-cap': return openDayCap();
+      case 'save-day-cap': return saveDayCap(false);
+      case 'reset-day-cap': return saveDayCap(true);
+      case 'save-standard-cap': return saveStdCap();
+      case 'cap-count': { const p=capRef(el.dataset.cap); const i=Number(el.dataset.i); if(i<0) p.base=Number(el.dataset.n); else p.ranges[i].count=Number(el.dataset.n); return renderCapEditor(el.dataset.cap); }
+      case 'cap-add': { const p=capRef(el.dataset.cap); const last=p.ranges[p.ranges.length-1]; p.ranges.push({start:last?last.end:'10:00',end:last?'19:00':'13:00',count:Math.min(3,p.base+1)}); return renderCapEditor(el.dataset.cap); }
+      case 'cap-remove': capRef(el.dataset.cap).ranges.splice(Number(el.dataset.i),1); return renderCapEditor(el.dataset.cap);
+      case 'reset-config': resetDraft(); renderLanesEditor(); renderMenusEditor(); return;
+      case 'open-result': pendingDetailId=el.dataset.id; showTab('day'); return gotoDate(el.dataset.date);
+    }
+  });
+  document.querySelectorAll('.a-tabs [data-tab]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+  $('fMenus').addEventListener('change',()=>renderFormForMenu($('fLane').value,$('fExt').value));
+  $('date').addEventListener('change',()=>render().catch(handleAdminLoadError));
+  $('pw').addEventListener('keydown',e=>{ if(e.key==='Enter') login(); });
+  $('searchInput').addEventListener('input',()=>{ clearTimeout(searchTimer); searchTimer=setTimeout(runSearch,250); });
+  $('tab-settings').addEventListener('input',e=>{ if(e.target.dataset.capRange!==undefined) return capInput(e); onDraftInput(e); });
+  $('dayCapEditor').addEventListener('input',capInput);
+  $('menusEditor').addEventListener('toggle',e=>{ const d=e.target.closest?.('.a-menu-card'); if(!d||e.target!==d) return; d.open?openMenus.add(d.dataset.menuId):openMenus.delete(d.dataset.menuId); },true);
+  $('tab-settings').addEventListener('change',e=>{ if(e.target.id==='capApplyOpen') return; if(e.target.type==='checkbox'||e.target.type==='radio') onDraftInput(e); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModals(); });
+  window.addEventListener('beforeunload',e=>{ if(draftDirty){ e.preventDefault(); e.returnValue=''; } });
+  let lastWidthBucket=window.innerWidth<640;
+  window.addEventListener('resize',()=>{ const b=window.innerWidth<640; if(b!==lastWidthBucket&&D){ lastWidthBucket=b; renderTimeline(); } });
+  // Keep the "now" line and the "next booking" card current.
+  setInterval(()=>{ if(D && !$('app').hidden && $('date').value===today()){ renderTimeline(); renderSummary(); } },60000);
 
-  async function logout(){await fetch('/api/logout',{method:'POST',credentials:'same-origin'});showLogin();}
-  function esc(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
-
-  function openPhoneModal(){phoneModalMode='create';editingAppointmentId=null;document.getElementById('phoneReserveModalTitle').textContent=t('registerManual');document.getElementById('phoneReserveSubmit').textContent=t('registerManual');document.getElementById('phoneReserveDate').value=document.getElementById('date').value||today();document.getElementById('phoneReserveTime').value='';document.getElementById('phoneReserveName').value='';document.getElementById('phoneReserveExtension').value='0';document.getElementById('phoneReservePhone').value='';document.getElementById('phoneReserveNote').value='';document.getElementById('phoneReserveError').textContent='';document.getElementById('phoneReserveModal').classList.add('open');document.getElementById('phoneReserveName').focus();}
-  function openEditModal(id){const a=D&&D.appointments?D.appointments.find(x=>String(x.id)===String(id)):null;if(!a||a.status==='cancelled')return;phoneModalMode='edit';editingAppointmentId=a.id;document.getElementById('phoneReserveModalTitle').textContent=t('edit');document.getElementById('phoneReserveSubmit').textContent=t('saveChanges');document.getElementById('phoneReserveDate').value=a.date||'';document.getElementById('phoneReserveTime').value=a.time||'';document.getElementById('phoneReserveName').value=a.name||'';document.getElementById('phoneReservePhone').value=a.phone||'';const occupied=Number(a.duration_minutes)||30;const extension=Math.max(0,occupied-30);document.getElementById('phoneReserveExtension').value=[0,10,20,30].includes(extension)?String(extension):'0';let note=a.note||'';if(note.startsWith('電話受付'))note=note.replace(/^電話受付(?:\s*·\s*)?/,'');document.getElementById('phoneReserveNote').value=note;document.getElementById('phoneReserveError').textContent='';document.getElementById('phoneReserveModal').classList.add('open');document.getElementById('phoneReserveName').focus();}
-  function closePhoneModal(){document.getElementById('phoneReserveModal').classList.remove('open');}
-
-  async function submitPhoneReservation(){
-    const dateValue=document.getElementById('phoneReserveDate').value,timeValue=document.getElementById('phoneReserveTime').value,nameValue=document.getElementById('phoneReserveName').value.trim(),extensionValue=Number(document.getElementById('phoneReserveExtension').value||0),phoneValue=document.getElementById('phoneReservePhone').value.trim(),noteValue=document.getElementById('phoneReserveNote').value.trim(),errorBox=document.getElementById('phoneReserveError');errorBox.textContent='';
-    if(!dateValue){errorBox.textContent=t('invalidDate');return;} if(!timeValue){errorBox.textContent=t('invalidTime');return;} if(!nameValue){errorBox.textContent=t('invalidName');return;} if(!phoneValue){errorBox.textContent=t('invalidPhone');return;}
-    try{const endpoint=phoneModalMode==='edit'?'/api/admin/update':'/api/admin/reserve';const payload={date:dateValue,time:timeValue,name:nameValue,phone:phoneValue,note:noteValue,extensionMinutes:extensionValue};if(phoneModalMode==='edit')payload.id=editingAppointmentId;await api(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});closePhoneModal();document.getElementById('date').value=dateValue;await render();alert(phoneModalMode==='edit'?t('reservationUpdated'):t('manualRegistered'));}
-    catch(e){if(e.code==='not_found')errorBox.textContent=t('notFound');else if(e.code==='not_editable')errorBox.textContent=t('notEditable');else if(e.code==='invalid_extension')errorBox.textContent=t('invalidExtension');else if(e.code==='already_booked')errorBox.textContent=t('alreadyBooked');else if(e.code==='past_time')errorBox.textContent=t('pastTime');else if(e.code==='break_time')errorBox.textContent=t('breakTime');else if(e.code==='unavailable')errorBox.textContent=t('unavailable');else if(e.code==='invalid_date')errorBox.textContent=t('invalidDate');else if(e.code==='invalid_time')errorBox.textContent=t('invalidTime');else if(e.code==='invalid_name')errorBox.textContent=t('invalidName');else if(e.code==='invalid_phone')errorBox.textContent=t('invalidPhone');else if(e.status===401||e.status===403)errorBox.textContent=t('sessionExpired');else errorBox.textContent=phoneModalMode==='edit'?t('editFailed'):t('manualFailed');}
-  }
-
-  document.getElementById('phoneReserveModal').addEventListener('click',function(e){if(e.target===this)closePhoneModal();});
-  document.getElementById('date').addEventListener('change',function(){render().catch(handleAdminLoadError);});
-  document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')login();});
-  function updateAdminTheme(){
-    const now=new Date();
-    const minutes=now.getHours()*60+now.getMinutes();
-    const isDay=minutes>=9*60 && minutes<19*60;
-    document.body.classList.toggle('night-mode',!isDay);
-  }
-  updateAdminTheme();
-  setInterval(updateAdminTheme,60000);
+  function updateAdminTheme(){ const m=nowMin(); document.body.classList.toggle('night-mode',!(m>=540&&m<1140)); }
+  updateAdminTheme(); setInterval(updateAdminTheme,60000);
 
   // Background event feed contains only date/time/type (never patient data).
   const EVENT_CURSOR_STORAGE = 'kamitakada-admin-event-cursor-v1';
@@ -506,10 +1231,15 @@
     const newIsToday = event.nextDate === todayJst;
     const ja = adminLanguage === 'ja';
     const time = spokenTime(event.time);
+    // Say the menu name only when more than one menu is in use, so the
+    // clinic hears e.g. 「14時、鍼灸の新しい予約が入りました。」
+    const activeMenus = (D?.menus || []).filter(m => m.offered);
+    const menuWord = (event.menuId && activeMenus.length > 1) ? menuLabel(event.menuId) : '';
+    const m = menuWord ? (ja ? `${menuWord}の` : `${menuWord}的`) : '';
     if(event.type === 'created' && oldIsToday && time)
-      return ja ? `${time}、新しい予約が入りました。` : `${time}，有新预约。`;
+      return ja ? `${time}、${m}新しい予約が入りました。` : `${time}，有新的${m}预约。`;
     if(event.type === 'cancelled' && oldIsToday && time)
-      return ja ? `${time}の予約がキャンセルされました。` : `${time}的预约已取消。`;
+      return ja ? `${time}の${m}予約がキャンセルされました。` : `${time}的${m}预约已取消。`;
     if(event.type === 'moved' && (oldIsToday || newIsToday)) {
       const nextTime = spokenTime(event.nextTime);
       if(oldIsToday && newIsToday && time && nextTime && event.time !== event.nextTime)
@@ -605,7 +1335,7 @@
     },wait);
   }
   function updateNotifyToggle(){
-    notifyToggle.textContent=notificationsEnabled
+    document.getElementById('notifyLabel').textContent=notificationsEnabled
       ?(adminLanguage==='ja'?'通知：オン':'提醒：开')
       :(adminLanguage==='ja'?'通知：オフ':'提醒：关');
     notifyToggle.setAttribute('aria-pressed',String(notificationsEnabled));
@@ -651,7 +1381,7 @@
     notifyToggle.title=notifySync.textContent;
   }
   async function pollReservationEvents(){
-    if(eventPollRunning || document.getElementById('app').style.display==='none')return;
+    if(eventPollRunning || document.getElementById('app').hidden)return;
     eventPollRunning=true;
     try{
       const cursor=cursorRead();
@@ -681,38 +1411,28 @@
   }
   updateNotifyToggle();
   setInterval(pollReservationEvents,30000);
-  // Backend data should never be assumed fresh when event polling fails.
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollReservationEvents();});
 
-  // 后台预约自动刷新：只更新预约/休息列表和统计，不重绘营业时间编辑区，
-  // 避免管理员正在修改营业时间时被轮询覆盖输入内容。
+
+  // Re-load only the day view when a booking changes (settings drafts are left alone).
   let adminRefreshRunning=false;
   async function refreshAdminScheduleSilently(){
-    if(adminRefreshRunning)return;
-    const app=document.getElementById('app');
-    if(!app || app.style.display==='none')return;
+    if(adminRefreshRunning || $('app').hidden) return;
     adminRefreshRunning=true;
     try{
-      const activeDate=document.getElementById('date').value||today();
+      const activeDate=$('date').value||today();
       const fresh=await api('/api/admin/data?date='+encodeURIComponent(activeDate));
-      if(activeDate!==document.getElementById('date').value)return;
-      D=fresh;
-      notifyConnection(true,'schedule');
-      renderSchedule();
-      renderBreaks();
-      renderPausePeriods();
-    }catch(e){
-      notifyConnection(false,'schedule');
-      if(e.status===401||e.status===403)showLogin();
-    }finally{
-      adminRefreshRunning=false;
-    }
+      if(activeDate!==$('date').value) return;
+      D=fresh; notifyConnection(true,'schedule');
+      renderDay(); renderBreaks(); renderPausePeriods();
+      if(!$('tab-list').hidden) runSearch();
+    }catch(e){ notifyConnection(false,'schedule'); if(e.status===401||e.status===403) showLogin(); }
+    finally{ adminRefreshRunning=false; }
   }
-  // 每30秒检查一次新预约；无需手动刷新浏览器。
   setInterval(refreshAdminScheduleSilently,60000);
 
   applyAdminLanguage();
-  (async function(){try{await api('/api/admin/data');showApp();}catch(e){showLogin();}})();
+  (async function(){ try{ D=await api('/api/admin/data'); $('date').value=D.today; showApp(); }catch(e){ showLogin(); } })();
 </script>
+<script src="dye.js"></script>
 </body>
 </html>

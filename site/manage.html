@@ -133,9 +133,10 @@
     .manage-done-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:24px}
     .manage-done-actions .manage-secondary{min-height:48px;padding:0 20px;border-radius:6px;cursor:pointer;font:inherit;font-weight:700}
     @media (prefers-reduced-motion:reduce){.manage-done-panda{animation:none}}
+      .manage-result{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
   </style>
 </head>
-<body class="manage-page">
+<body class="manage-page dye-page dye-page-shippo">
   <header class="manage-header">
     <div class="manage-header-inner">
       <a class="manage-brand" href="index.html"><img src="images/logo-96.webp" width="36" height="36" alt="">上高田整骨院</a>
@@ -156,8 +157,8 @@
         <p data-i18n="subtitle">予約した日時を選択し、お名前と電話番号を入力してください。</p>
       </div>
 
-      <div class="manage-card">
-        <section class="manage-done" id="doneSection" hidden>
+      <div class="manage-card dye">
+        <section class="manage-done seq" id="doneSection" hidden>
           <img id="donePanda" class="manage-done-panda" src="images/panda-happy.svg" width="120" height="112" alt="">
           <h2 id="doneTitle" class="manage-done-title"></h2>
           <p id="doneMain" class="manage-done-main"></p>
@@ -209,7 +210,7 @@
             <label class="manage-field"><span class="manage-label"><span data-i18n="newTime">変更後の予約時間</span></span><input id="newTime" class="manage-input" type="text" inputmode="numeric" placeholder="HH:MM" maxlength="5"></label>
             <label class="manage-field"><span class="manage-label"><span data-i18n="newName">お名前</span></span><input id="newName" class="manage-input" maxlength="80"></label>
             <label class="manage-field"><span class="manage-label"><span data-i18n="newPhone">電話番号</span></span><input id="newPhone" class="manage-input" type="tel" inputmode="tel" maxlength="40"></label>
-            <div class="manage-field"><span class="manage-label"><span data-i18n="extension">延長施術</span></span>
+            <div id="newExtensionField" class="manage-field"><span class="manage-label"><span data-i18n="extension">延長施術</span></span>
               <select id="newExtension" class="manage-select"><option value="0">なし</option><option value="10">10分延長</option><option value="20">20分延長</option><option value="30">30分延長</option></select>
             </div>
             <label class="manage-field"><span class="manage-label"><span data-i18n="note">備考</span></span><textarea id="newNote" class="manage-textarea" rows="4" maxlength="500"></textarea></label>
@@ -225,9 +226,9 @@
 
   <script>
     const I18N={
-      ja:{back:'← トップへ戻る',doneUpdateTitle:'予約を変更しました',doneUpdateMain:'ご来院をお待ちしております。',doneCancelTitle:'予約をキャンセルしました',doneCancelMain:'ご連絡ありがとうございました。またのご来院をお待ちしております。',doneUpdateNote:'内容をもう一度変更する場合は、新しい日時で確認してください。',doneHome:'トップへ戻る',doneRebook:'新しく予約する',doneLabelUpdate:'変更後のご予約',doneLabelCancel:'キャンセルしたご予約',doneAgain:'ほかの予約を確認する',doneMinutes:(m)=>`${m}分`,title:'予約変更・キャンセル',subtitle:'予約した日時を選択し、お名前と電話番号を入力してください。',chooseDate:'予約日を選択',dateHelp:'本日から14日先まで表示します。',chooseTime:'予約時間を選択',verifyTitle:'予約情報を確認',name:'お名前',phone:'電話番号',namePlaceholder:'お名前を入力してください',phonePlaceholder:'090-1234-5678',verify:'確認する',resultTitle:'予約内容',edit:'予約を変更する',backToSearch:'戻る',newDate:'変更後の予約日',newTime:'変更後の予約時間',newName:'お名前',newPhone:'電話番号',extension:'延長施術',note:'備考',save:'変更を保存する',cancelEdit:'変更をやめる',cancelReservation:'この予約をキャンセルする',footer:'ご不明な点がありましたら、お電話でお問い合わせください。',noBookings:'この日はWeb予約がありません。',loadError:'予約情報を取得できませんでした。',selectTime:'予約時間を選択してください。',verifyError:'予約情報を確認できませんでした。日付・時間・お名前・電話番号をご確認ください。',verified:'予約情報を確認しました。',updateOk:'予約を変更しました。',cancelOk:'予約をキャンセルしました。',updateError:'予約を変更できませんでした。',cancelConfirm:'この予約をキャンセルしますか？',cancelError:'予約をキャンセルできませんでした。',past:'過去または開始済みの予約は変更・キャンセルできません。',unavailable:'この時間は予約できません。',closed:'この日は臨時休業中です。',days:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日月火水木金土'[d.getDay()]}）`},
-      zh:{back:'← 返回首页',doneUpdateTitle:'预约已修改',doneUpdateMain:'期待您的光临。',doneCancelTitle:'预约已取消',doneCancelMain:'感谢您的告知，期待您下次光临。',doneUpdateNote:'如需再次修改，请用新的日期和时间重新确认。',doneHome:'返回首页',doneRebook:'重新预约',doneLabelUpdate:'修改后的预约',doneLabelCancel:'已取消的预约',doneAgain:'查看其他预约',doneMinutes:(m)=>`${m}分钟`,title:'修改・取消预约',subtitle:'请选择预约日期和时间，然后输入姓名与电话号码。',chooseDate:'选择预约日期',dateHelp:'显示从今天起14天内的预约。',chooseTime:'选择预约时间',verifyTitle:'确认预约信息',name:'姓名',phone:'电话号码',namePlaceholder:'请输入姓名',phonePlaceholder:'090-1234-5678',verify:'确认',resultTitle:'预约内容',edit:'修改预约',backToSearch:'返回',newDate:'修改后的预约日期',newTime:'修改后的预约时间',newName:'姓名',newPhone:'电话号码',extension:'延长治疗',note:'备注',save:'保存修改',cancelEdit:'取消修改',cancelReservation:'取消此预约',footer:'如有疑问，请通过电话联系我们。',noBookings:'当天没有网上预约。',loadError:'无法获取预约信息，请稍后再试。',selectTime:'请选择预约时间。',verifyError:'无法确认预约信息，请检查日期、时间、姓名和电话号码。',verified:'预约信息已确认。',updateOk:'预约已修改。',cancelOk:'预约已取消。',updateError:'无法修改预约。',cancelConfirm:'确定要取消此预约吗？',cancelError:'无法取消预约。',past:'已经开始或已经过去的预约不能修改或取消。',unavailable:'该时间无法预约。',closed:'当天正在临时休业。',days:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`},
-      en:{back:'← Back to home',doneUpdateTitle:'Your reservation has been changed',doneUpdateMain:'We look forward to seeing you.',doneCancelTitle:'Your reservation has been cancelled',doneCancelMain:'Thank you for letting us know. We hope to see you again.',doneUpdateNote:'To change it again, look it up with the new date and time.',doneHome:'Back to home',doneRebook:'Make a new reservation',doneLabelUpdate:'Your new reservation',doneLabelCancel:'Cancelled reservation',doneAgain:'Look up another reservation',doneMinutes:(m)=>`${m} min`,title:'Change or Cancel Reservation',subtitle:'Select your reservation date and time, then enter your name and phone number.',chooseDate:'Select reservation date',dateHelp:'Reservations from today through 14 days ahead are shown.',chooseTime:'Select reservation time',verifyTitle:'Verify reservation',name:'Name',phone:'Phone number',namePlaceholder:'Enter your name',phonePlaceholder:'090-1234-5678',verify:'Verify',resultTitle:'Reservation details',edit:'Change reservation',backToSearch:'Back',newDate:'New reservation date',newTime:'New reservation time',newName:'Name',newPhone:'Phone number',extension:'Treatment extension',note:'Notes',save:'Save changes',cancelEdit:'Cancel changes',cancelReservation:'Cancel this reservation',footer:'If you have any questions, please call us.',noBookings:'There are no Web reservations on this date.',loadError:'Unable to load reservation information.',selectTime:'Please select a reservation time.',verifyError:'The reservation could not be verified. Please check the date, time, name, and phone number.',verified:'Reservation verified.',updateOk:'Reservation changed.',cancelOk:'Reservation cancelled.',updateError:'The reservation could not be changed.',cancelConfirm:'Cancel this reservation?',cancelError:'The reservation could not be cancelled.',past:'Reservations that have started or already passed cannot be changed or cancelled.',unavailable:'This time is not available.',closed:'The clinic is temporarily closed on this date.',days:(d)=>`${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`}
+      ja:{back:'← トップへ戻る',extNone:'なし',extOption:(n)=>`${n}分延長`,doneUpdateTitle:'予約を変更しました',doneUpdateMain:'ご来院をお待ちしております。',doneCancelTitle:'予約をキャンセルしました',doneCancelMain:'ご連絡ありがとうございました。またのご来院をお待ちしております。',doneUpdateNote:'内容をもう一度変更する場合は、新しい日時で確認してください。',doneHome:'トップへ戻る',doneRebook:'新しく予約する',doneLabelUpdate:'変更後のご予約',doneLabelCancel:'キャンセルしたご予約',doneAgain:'ほかの予約を確認する',doneMinutes:(m)=>`${m}分`,title:'予約変更・キャンセル',subtitle:'予約した日時を選択し、お名前と電話番号を入力してください。',chooseDate:'予約日を選択',dateHelp:'本日から14日先まで表示します。',chooseTime:'予約時間を選択',verifyTitle:'予約情報を確認',name:'お名前',phone:'電話番号',namePlaceholder:'お名前を入力してください',phonePlaceholder:'090-1234-5678',verify:'確認する',resultTitle:'予約内容',edit:'予約を変更する',backToSearch:'戻る',newDate:'変更後の予約日',newTime:'変更後の予約時間',newName:'お名前',newPhone:'電話番号',extension:'延長施術',note:'備考',save:'変更を保存する',cancelEdit:'変更をやめる',cancelReservation:'この予約をキャンセルする',footer:'ご不明な点がありましたら、お電話でお問い合わせください。',noBookings:'この日はWeb予約がありません。',loadError:'予約情報を取得できませんでした。',selectTime:'予約時間を選択してください。',verifyError:'予約情報を確認できませんでした。日付・時間・お名前・電話番号をご確認ください。',verified:'予約情報を確認しました。',updateOk:'予約を変更しました。',cancelOk:'予約をキャンセルしました。',updateError:'予約を変更できませんでした。',cancelConfirm:'この予約をキャンセルしますか？',cancelError:'予約をキャンセルできませんでした。',past:'過去または開始済みの予約は変更・キャンセルできません。',unavailable:'この時間は予約できません。',closed:'この日は臨時休業中です。',days:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日月火水木金土'[d.getDay()]}）`},
+      zh:{back:'← 返回首页',extNone:'无',extOption:(n)=>`延长 ${n} 分钟`,doneUpdateTitle:'预约已修改',doneUpdateMain:'期待您的光临。',doneCancelTitle:'预约已取消',doneCancelMain:'感谢您的告知，期待您下次光临。',doneUpdateNote:'如需再次修改，请用新的日期和时间重新确认。',doneHome:'返回首页',doneRebook:'重新预约',doneLabelUpdate:'修改后的预约',doneLabelCancel:'已取消的预约',doneAgain:'查看其他预约',doneMinutes:(m)=>`${m}分钟`,title:'修改・取消预约',subtitle:'请选择预约日期和时间，然后输入姓名与电话号码。',chooseDate:'选择预约日期',dateHelp:'显示从今天起14天内的预约。',chooseTime:'选择预约时间',verifyTitle:'确认预约信息',name:'姓名',phone:'电话号码',namePlaceholder:'请输入姓名',phonePlaceholder:'090-1234-5678',verify:'确认',resultTitle:'预约内容',edit:'修改预约',backToSearch:'返回',newDate:'修改后的预约日期',newTime:'修改后的预约时间',newName:'姓名',newPhone:'电话号码',extension:'延长治疗',note:'备注',save:'保存修改',cancelEdit:'取消修改',cancelReservation:'取消此预约',footer:'如有疑问，请通过电话联系我们。',noBookings:'当天没有网上预约。',loadError:'无法获取预约信息，请稍后再试。',selectTime:'请选择预约时间。',verifyError:'无法确认预约信息，请检查日期、时间、姓名和电话号码。',verified:'预约信息已确认。',updateOk:'预约已修改。',cancelOk:'预约已取消。',updateError:'无法修改预约。',cancelConfirm:'确定要取消此预约吗？',cancelError:'无法取消预约。',past:'已经开始或已经过去的预约不能修改或取消。',unavailable:'该时间无法预约。',closed:'当天正在临时休业。',days:(d)=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`},
+      en:{back:'← Back to home',extNone:'None',extOption:(n)=>`${n} min extension`,doneUpdateTitle:'Your reservation has been changed',doneUpdateMain:'We look forward to seeing you.',doneCancelTitle:'Your reservation has been cancelled',doneCancelMain:'Thank you for letting us know. We hope to see you again.',doneUpdateNote:'To change it again, look it up with the new date and time.',doneHome:'Back to home',doneRebook:'Make a new reservation',doneLabelUpdate:'Your new reservation',doneLabelCancel:'Cancelled reservation',doneAgain:'Look up another reservation',doneMinutes:(m)=>`${m} min`,title:'Change or Cancel Reservation',subtitle:'Select your reservation date and time, then enter your name and phone number.',chooseDate:'Select reservation date',dateHelp:'Reservations from today through 14 days ahead are shown.',chooseTime:'Select reservation time',verifyTitle:'Verify reservation',name:'Name',phone:'Phone number',namePlaceholder:'Enter your name',phonePlaceholder:'090-1234-5678',verify:'Verify',resultTitle:'Reservation details',edit:'Change reservation',backToSearch:'Back',newDate:'New reservation date',newTime:'New reservation time',newName:'Name',newPhone:'Phone number',extension:'Treatment extension',note:'Notes',save:'Save changes',cancelEdit:'Cancel changes',cancelReservation:'Cancel this reservation',footer:'If you have any questions, please call us.',noBookings:'There are no Web reservations on this date.',loadError:'Unable to load reservation information.',selectTime:'Please select a reservation time.',verifyError:'The reservation could not be verified. Please check the date, time, name, and phone number.',verified:'Reservation verified.',updateOk:'Reservation changed.',cancelOk:'Reservation cancelled.',updateError:'The reservation could not be changed.',cancelConfirm:'Cancel this reservation?',cancelError:'The reservation could not be cancelled.',past:'Reservations that have started or already passed cannot be changed or cancelled.',unavailable:'This time is not available.',closed:'The clinic is temporarily closed on this date.',days:(d)=>`${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`}
     };
     let lang=localStorage.getItem('language'); if(!['ja','zh','en'].includes(lang)) lang=navigator.language?.toLowerCase().startsWith('zh')?'zh':navigator.language?.toLowerCase().startsWith('ja')?'ja':'en';
     const $=id=>document.getElementById(id); const t=k=>I18N[lang][k]??I18N.ja[k]??k;
@@ -247,7 +248,8 @@
       $('doneTitle').textContent=t(kind==='update'?'doneUpdateTitle':'doneCancelTitle');
       $('doneMain').textContent=t(kind==='update'?'doneUpdateMain':'doneCancelMain');
       const timeEl=$('doneTime');timeEl.replaceChildren(when);
-      if(kind==='update'){const small=document.createElement('small');small.textContent=t('doneMinutes')(Number(a.duration_minutes||30));timeEl.append(small);}
+      if(kind==='update'){const small=document.createElement('small');const m=menuName(a);small.textContent=(m?m+'・':'')+t('doneMinutes')(Number(a.duration_minutes||30));timeEl.append(small);}
+      else if(menuName(a)){const small=document.createElement('small');small.textContent=menuName(a);timeEl.append(small);}
       $('doneSection').classList.toggle('is-update',kind==='update');
       $('doneSection').classList.toggle('is-cancel',kind==='cancel');
       $('donePanda').src=kind==='update'?'images/panda-happy.svg':'images/panda-wave.svg';
@@ -309,9 +311,18 @@
       }catch(e){setStatus(e.message||t('verifyError'))}finally{$('verifyBtn').disabled=false}
     }
     function fillResult(){
-      const a=current;$('summary').innerHTML=`<strong>${escapeHtml(a.date)} ${escapeHtml(a.time)}</strong><span>${escapeHtml(a.name)}</span><span>${escapeHtml(a.phone)}</span><span>${escapeHtml(a.duration_minutes||30)}分</span>`;
-      $('newDate').min=tokyoDate();$('newDate').max=maxDate();$('newDate').value=a.date;$('newTime').value=a.time;$('newName').value=a.name;$('newPhone').value=a.phone;$('newExtension').value=String(Math.max(0,Number(a.duration_minutes||30)-30));$('newNote').value=a.note||'';$('resultSection').style.display='block';$('resultSection').scrollIntoView({behavior:'smooth',block:'start'});
+      const a=current;
+      const menuLabel=menuName(a);
+      $('summary').innerHTML=`<strong>${escapeHtml(a.date)} ${escapeHtml(a.time)}</strong>${menuLabel?`<span>${escapeHtml(menuLabel)}</span>`:''}<span>${escapeHtml(a.name)}</span><span>${escapeHtml(a.phone)}</span><span>${escapeHtml(a.duration_minutes||30)}分</span>`;
+      // Extension choices depend on the booked menu (鍼灸 has none).
+      const exts=Array.isArray(a.menu_extensions)&&a.menu_extensions.length?a.menu_extensions:[0];
+      const base=Number(a.menu_base_minutes||30);
+      $('newExtension').replaceChildren(...exts.map(n=>{const o=document.createElement('option');o.value=String(n);o.textContent=n?t('extOption')(n):t('extNone');return o;}));
+      $('newExtensionField').style.display=exts.length>1?'':'none';
+      const currentExt=Math.max(0,Number(a.duration_minutes||base)-base);
+      $('newDate').min=tokyoDate();$('newDate').max=maxDate();$('newDate').value=a.date;$('newTime').value=a.time;$('newName').value=a.name;$('newPhone').value=a.phone;$('newExtension').value=String(exts.includes(currentExt)?currentExt:0);$('newNote').value=a.note||'';$('resultSection').style.display='block';$('resultSection').scrollIntoView({behavior:'smooth',block:'start'});
     }
+    function menuName(a){const n=a&&a.menu_name;return n?(n[lang]||n.ja||''):'';}
     function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
     $('verifyBtn').addEventListener('click',verify);
     $('editBtn').addEventListener('click',()=>{$('editForm').style.display='block';$('editBtn').style.display='none'});
@@ -335,7 +346,7 @@
       try{
         const r=await fetch('/api/manage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'cancel',date:current.date,time:current.time,name:current.name,phone:current.phone})});
         const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||t('cancelError'));
-        const cancelled={date:current.date,time:current.time};$('resultSection').style.display='none';date=cancelled.date;await loadSlots();current=null;showDone('cancel',cancelled);
+        const cancelled={date:current.date,time:current.time,menu_name:current.menu_name};$('resultSection').style.display='none';date=cancelled.date;await loadSlots();current=null;showDone('cancel',cancelled);
       }catch(e){setStatus(e.message||t('cancelError'))}finally{$('cancelBtn').disabled=false}
     });
     $('doneAgain').addEventListener('click',()=>{hideDone();setStatus('',false);loadSlots();});
@@ -343,5 +354,6 @@
     function applyTheme(){const p=tokyoParts();const m=Number(p.hour)*60+Number(p.minute);document.body.classList.toggle('night-mode',!(m>=540&&m<1140));}
     applyTheme();setInterval(applyTheme,60000);
   </script>
+  <script src="dye.js"></script>
 </body>
 </html>

@@ -1,13 +1,9 @@
 // Login brute-force guard: real Worker + SQLite-backed D1 shim.
-import { DatabaseSync } from 'node:sqlite';
+import fs from 'node:fs';
 import assert from 'node:assert/strict';
-const db = new DatabaseSync(':memory:');
-class Stmt { constructor(sql){this.sql=sql;this.p=[];} bind(...a){this.p=a;return this;}
-  async all(){return {results:db.prepare(this.sql).all(...this.p)};}
-  async first(){return db.prepare(this.sql).get(...this.p)??null;}
-  async run(){const r=db.prepare(this.sql).run(...this.p);return {meta:{changes:Number(r.changes)}};} }
-db.exec('CREATE TABLE sessions (token TEXT PRIMARY KEY, expires_at INTEGER NOT NULL)');
-const DB = { prepare: sql => new Stmt(sql) };
+import { createD1 } from './_d1.mjs';
+const DB = createD1(fs.readFileSync(new URL('../schema.sql', import.meta.url), 'utf8'));
+const db = DB.raw;
 const worker = (await import('../dist/worker/index.js')).default;
 const env = { DB, ADMIN_PASSWORD: 'correct-horse', ASSETS: { fetch: () => new Response('x') } };
 const ctx = { waitUntil(){}, passThroughOnException(){} };

@@ -9,11 +9,14 @@ import {
   randomId,
   minutesOf,
   isWithinWebBookingWindow,
-  isValidJapanesePhone
+  isValidJapanesePhone,
+  settings,
+  findMenu
 } from '../lib/utils.js';
+import { occupiedMinutes as menuOccupied } from '../lib/config.js';
 import { rateLimit } from '../lib/rate-limit.js';
 import { readJsonObject, isReasonableEmail } from '../lib/request-validation.js';
-import { NON_OVERLAP_INSERT_SQL, atomicAppointmentWrite, eventInsertStatement } from '../lib/reservation-events.js';
+import { insertIntoFreeLane } from '../lib/reservation-events.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') return optionResponse(context.request);
@@ -36,11 +39,21 @@ export async function onRequest(context) {
   const name = String(body.name||'').trim();
   const phone = String(body.phone||'').trim();
   const extension = Number(body.extensionMinutes || 0);
-  const allowedExtensions = [0, 10, 20, 30];
-  if (!allowedExtensions.includes(extension)) {
+  let menu;
+  try {
+    const s = await settings(context.env);
+    menu = body.menuId === undefined ? (s.menus.find(m => m.offered && m.web) || s.menus[0]) : findMenu(s, String(body.menuId));
+  } catch (error) {
+    console.error('Unable to load menus', error);
+    return withCors(json({ok:false, code:'service_unavailable', error:'現在予約を確認できません。しばらくしてから再度お試しください。'},503),context.request);
+  }
+  if (!menu || !menu.offered || !menu.web) {
+    return withCors(json({ok:false,code:'menu_unavailable',error:'このメニューはWeb予約できません。'},400),context.request);
+  }
+  if (!menu.extensions.includes(extension)) {
     return withCors(json({error:'延長時間が正しくありません。'},400),context.request);
   }
-  const occupiedMinutes = 30 + extension;
+  const occupiedMinutes = menuOccupied(menu, extension);
 
   if (!name || !phone) {
     return withCors(json({error:'お名前と電話番号を入力してください。'},400),context.request);
@@ -76,7 +89,7 @@ export async function onRequest(context) {
 
   let availability;
   try {
-    availability = await buildSlots(context.env, body.date, new Date(), occupiedMinutes);
+    availability = await buildSlots(context.env, body.date, new Date(), { menuId: menu.id, extension });
   } catch (error) {
     console.error('Unable to check reservation availability', error);
     return withCors(json({ok:false, code:'service_unavailable', error:'現在予約を確認できません。しばらくしてから再度お試しください。'},503),context.request);
@@ -86,55 +99,31 @@ export async function onRequest(context) {
   }
   const slot = availability.slots.find(s=>s.time===body.time);
 
+  if (slot && slot.status === 'notice') {
+    return withCors(json({ok:false,code:'too_soon',error:`このメニューは${Math.round(menu.noticeMinutes/60*10)/10}時間前までのご予約が必要です。`},409),context.request);
+  }
   if (!slot || slot.status !== 'available') {
     return withCors(json({error:'この時間はすでに予約済み、または予約できません。'},409),context.request);
   }
 
-  // 1 分単位の開始時刻でも、予約全体 30 分が他の予約と重ならないことを
-  // サーバー側でも再確認する。
+  // Lanes that are free for the whole occupied time; the insert re-checks
+  // each lane atomically, so a simultaneous booking cannot double-book.
   const requestedStart = minutesOf(body.time);
-  const requestedEnd = requestedStart + occupiedMinutes;
-
-  let existing;
-  try {
-    existing = await context.env.DB.prepare(
-      "SELECT time,duration_minutes FROM appointments WHERE date = ? AND status = 'confirmed'"
-    ).bind(body.date).all();
-  } catch (error) {
-    console.error('Unable to check reservation conflicts', error);
-    return withCors(json({ok:false, code:'service_unavailable', error:'現在予約を確認できません。しばらくしてから再度お試しください。'},503),context.request);
-  }
-
-  const overlap = (existing.results || []).some(x => {
-    const start = minutesOf(x.time);
-    const occupied = Number(x.duration_minutes) || 30;
-    return requestedStart < start + occupied && requestedEnd > start;
-  });
-
-  if (overlap) {
-    return withCors(json({error:'この時間はすでに予約済みです。別の時間を選択してください。'},409),context.request);
-  }
-
   const appointmentId = randomId();
+  let laneId;
   try {
-    const inserted = await atomicAppointmentWrite(context.env,
-      context.env.DB.prepare(NON_OVERLAP_INSERT_SQL).bind(
-        appointmentId,body.date,body.time,name,phone,email,note,
-        'confirmed',new Date().toISOString(),occupiedMinutes,
-        body.date,requestedEnd,requestedStart
-      ),
-      eventInsertStatement(context.env,'created',body.date,body.time,null,null,appointmentId)
-    );
-    if (!inserted) {
-      return withCors(json({ok:false,code:'already_booked',error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。'},409),context.request);
-    }
+    laneId = await insertIntoFreeLane(context.env, slot.lanes, {
+      id: appointmentId, date: body.date, time: body.time, name, phone, email, note,
+      createdAt: new Date().toISOString(), duration: occupiedMinutes, menuId: menu.id,
+      startMinutes: requestedStart,
+    });
   } catch (error) {
     console.error('Unable to save reservation',error);
-    const msg=String(error?.message||'');
-    if (/UNIQUE|constraint/i.test(msg))
-      return withCors(json({ok:false,code:'already_booked',error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。'},409),context.request);
     return withCors(json({ok:false,code:'reservation_failed',error:'現在予約を保存できません。しばらくしてから再度お試しください。'},503),context.request);
   }
+  if (!laneId) {
+    return withCors(json({ok:false,code:'already_booked',error:'この時間は先ほど予約された可能性があります。別の時間を選択してください。'},409),context.request);
+  }
 
-  return withCors(json({ok:true,date:body.date,time:body.time,extensionMinutes:extension,occupiedMinutes}),context.request);
+  return withCors(json({ok:true,date:body.date,time:body.time,extensionMinutes:extension,occupiedMinutes,menuId:menu.id,menuName:menu.name,treatMinutes:menu.treatMinutes+extension}),context.request);
 }

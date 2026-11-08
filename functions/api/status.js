@@ -1,4 +1,5 @@
 import { json, optionResponse, withCors, settings, tokyoNow } from '../lib/utils.js';
+import { publicMenu } from '../lib/config.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') return optionResponse(context.request);
@@ -18,5 +19,7 @@ export async function onRequest(context) {
     reopeningAt: active ? active.reopeningDate : null,
     // Public weekly hours so the homepage always matches the admin setting.
     businessHours: s.businessHours || {},
+    // Menus a patient can book on the web (no lanes, no staff details).
+    menus: (s.menus || []).filter(m => m.offered && m.web).map(publicMenu),
   }, 200, { 'Cache-Control': 'no-store' }), context.request);
 }

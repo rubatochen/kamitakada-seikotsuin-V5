@@ -332,20 +332,27 @@ p { margin: 0; }
 .footer-meta a { border-bottom: 1px solid rgba(255,255,255,.3); }
 
 /* Back to top */
-.back-top {   /* a panda head: ink circle with two ears */
+.back-top {   /* a 太極 disc that turns with the page; the "︿" above it stays still */
   position: fixed; right: 20px; bottom: 20px; z-index: 40;
   display: none; align-items: center; justify-content: center;
-  width: 46px; height: 46px; border: 0; border-radius: 50%;
-  background: var(--ai); cursor: pointer; box-shadow: var(--shadow);
-  transition: transform .2s ease;
+  width: 50px; height: 50px; padding: 0; border: 0; border-radius: 50%;
+  background: none; cursor: pointer;
+  transition: transform .25s cubic-bezier(.3, 1.5, .5, 1);
 }
-.back-top::before, .back-top::after {
-  content: ""; position: absolute; top: -3px; width: 16px; height: 16px; border-radius: 50%; background: var(--ai);
+.back-top-taiji {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: url("images/taiji.svg") center / 100% 100% no-repeat;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
+  transform: rotate(var(--rot, 0deg)); will-change: transform;
 }
-.back-top::before { left: 0; }
-.back-top::after { right: 0; }
+.back-top span {   /* the "up" chevron, sitting just above the disc */
+  display: block; position: absolute; left: 50%; top: -15px; width: 9px; height: 9px;
+  border-left: 2.5px solid var(--sumi); border-top: 2.5px solid var(--sumi); border-radius: 1px 0 0 0;
+  transform: translateX(-50%) rotate(45deg); transition: transform .2s ease;
+}
 .back-top:hover { transform: translateY(-3px); }
-.back-top span { position: relative; width: 10px; height: 10px; border-left: 2px solid #fff; border-top: 2px solid #fff; transform: translateY(2px) rotate(45deg); }
+.back-top:hover span { transform: translateX(-50%) translateY(-2px) rotate(45deg); }
+.back-top:focus-visible { outline: 2px solid var(--kincha); outline-offset: 3px; }
 
 /* ---------- Floating reservation calendar ---------- */
 #fixedCalendarRoot .fixed-calendar {
@@ -410,9 +417,8 @@ body.night-mode .service-item dt { color: var(--sumi); }
 body.night-mode .faq-question::after { background: linear-gradient(var(--sumi), var(--sumi)) center / 14px 1.5px no-repeat, linear-gradient(var(--sumi), var(--sumi)) center / 1.5px 14px no-repeat; }
 body.night-mode .contact { background: #0b0b0b; }
 body.night-mode .site-footer { background: #060606; }
-body.night-mode .back-top { background: #fff; }
-body.night-mode .back-top::before, body.night-mode .back-top::after { background: #fff; box-shadow: inset 0 0 0 5px #1c1c1c; }
-body.night-mode .back-top span { border-color: #141414; }
+body.night-mode .back-top-taiji { background-image: url("images/taiji-night.svg"); box-shadow: 0 6px 16px rgba(0, 0, 0, .45); }
+body.night-mode .back-top span { border-color: #88aa6f; }
 body.night-mode .language-selector { background-color: var(--shiro); border-color: var(--rule); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23ecebe6' stroke-width='1.5'/%3E%3C/svg%3E"); }
 body.night-mode .menu-toggle { background: var(--shiro); border-color: var(--rule); }
 body.night-mode .menu-toggle span { background: var(--sumi); }
@@ -518,3 +524,122 @@ body.night-mode #fixedCalendarRoot .fixed-calendar { box-shadow: 0 20px 50px rgb
   .faq-answer, .faq-question::after { transition: none; }
 }
 .footer-mark { width: 48px; height: 48px; margin-bottom: 14px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px #fff; }
+
+/* =========================================================
+   Motion
+   - page-to-page: cross-document view transition (fade)
+   - homepage: one load sequence in the hero, then blocks
+     reveal once as they scroll into view
+   - success screens: items appear in order
+   ========================================================= */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vt-out .22s ease both; }
+::view-transition-new(root) { animation: vt-in .45s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(8px); } }
+@supports not (view-transition-name: none) {
+  body { animation: vt-in .45s ease both; }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+@keyframes rise-soft { from { opacity: 0; transform: translateY(10px); filter: blur(6px); } }
+
+/* Hero load sequence */
+.hero-content > * { animation: rise .8s cubic-bezier(.2, .7, .2, 1) both; }
+.hero-content > .hero-eyebrow { animation-delay: .1s; }
+.hero-content > h1 { animation: rise-soft 1s cubic-bezier(.2, .7, .2, 1) .2s both; }
+.hero-content > .stitch-hero { animation: sew 1.2s cubic-bezier(.6, 0, .3, 1) .75s both; }
+.hero-content > .hero-copy { animation-delay: .55s; }
+.hero-content > .hero-actions { animation-delay: .7s; }
+.hero-content > .hero-subactions { animation-delay: .8s; }
+.hero-content > .hero-info { animation-delay: .9s; }
+.hero-photo .hero-bg { animation: photo-in 1.4s ease both; }
+@keyframes photo-in { from { opacity: 0; transform: scale(1.04); } }
+
+/* Scroll reveal (homepage) */
+html.js :is(.section-title, .about-text > p, .about-photo, .feature, .service-item, .flow-list > li, .gallery-grid > img, .faq-item, .contact-list > div, .contact-actions, .map-area):not(.in) {
+  opacity: 0; transform: translateY(18px);
+}
+.rv { transition: opacity .7s ease, transform .8s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--i, 0) * 90ms); }
+
+/* Success screens: children appear one after another */
+.seq > * { animation: rise .6s cubic-bezier(.2, .7, .2, 1) both; }
+.seq > :nth-child(2) { animation-delay: .18s; }
+.seq > :nth-child(3) { animation-delay: .28s; }
+.seq > :nth-child(4) { animation-delay: .4s; }
+.seq > :nth-child(5) { animation-delay: .5s; }
+.seq > :nth-child(6) { animation-delay: .6s; }
+.seq > :nth-child(7) { animation-delay: .7s; }
+.seq > :nth-child(8) { animation-delay: .8s; }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  .hero-content > *, .hero-content > h1, .hero-photo .hero-bg, .seq > *, .manage-result { animation: none !important; }
+  html.js :is(.section-title, .about-text > p, .about-photo, .feature, .service-item, .flow-list > li, .gallery-grid > img, .faq-item, .contact-list > div, .contact-actions, .map-area):not(.in) { opacity: 1; transform: none; }
+  .rv { transition: none; }
+}
+
+/* ---------- Faint traditional patterns on the white sections ----------
+   特徴 = 籠目 (bamboo basket weave), 来院の流れ = 麻の葉, FAQ = 七宝.
+   Drawn as masks so the same tile works in ink by day and white by night. */
+.features, .flow, .faq { position: relative; isolation: isolate; --pattern-ink: rgba(28, 28, 28, .055); }
+.features::before, .flow::before, .faq::before {
+  display: none; /* replaced by the 浸染 corner (.dye) — the faint full pattern now lives in the page background */
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--pattern-ink);
+  -webkit-mask-repeat: repeat; mask-repeat: repeat;
+}
+.features::before { -webkit-mask-image: url("images/pattern-kagome.svg"); mask-image: url("images/pattern-kagome.svg"); -webkit-mask-size: 34px auto; mask-size: 34px auto; }
+.flow::before     { -webkit-mask-image: url("images/pattern-asanoha.svg"); mask-image: url("images/pattern-asanoha.svg"); -webkit-mask-size: 44px auto; mask-size: 44px auto; }
+.faq::before      { -webkit-mask-image: url("images/pattern-shippo.svg"); mask-image: url("images/pattern-shippo.svg"); -webkit-mask-size: 40px auto; mask-size: 40px auto; }
+body.night-mode :is(.features, .flow, .faq) { --pattern-ink: rgba(255, 255, 255, .04); }
+
+/* ---------- 下地の和柄 + 浸染 ----------
+   One pattern per page, set on <body>:
+     body.dye-page                 麻の葉 (home, booking)
+     body.dye-page.dye-page-shippo 七宝   (change booking)
+     body.dye-page.dye-page-kagome 籠目   (privacy)
+   The page background carries it faintly everywhere. White cards / sections
+   marked .dye let the SAME pattern seep in from one corner, in bamboo green.
+   dye.js lines the tiles up with the background so it reads as one cloth. */
+body.dye-page {
+  position: relative;
+  --pat: url("images/pattern-asanoha.svg"); --pat-size: 46px 79.7px;
+}
+body.dye-page.dye-page-shippo { --pat: url("images/pattern-shippo.svg"); --pat-size: 42px 42px; }
+body.dye-page.dye-page-kagome { --pat: url("images/pattern-kagome.svg"); --pat-size: 36px 62.35px; }
+body.dye-page::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: rgba(28, 28, 28, .06);
+  -webkit-mask-image: var(--pat); mask-image: var(--pat);
+  -webkit-mask-size: var(--pat-size); mask-size: var(--pat-size);
+  -webkit-mask-position: 0 0; mask-position: 0 0;
+}
+body.dye-page.night-mode::after { background: rgba(255, 255, 255, .045); }
+
+.dye {
+  position: relative; isolation: isolate;
+  --dye-ink: rgba(79, 127, 58, .3);
+  --dye-w: 460px; --dye-h: 300px; --dye-at: 100% 0;
+}
+.dye.dye-bl { --dye-at: 0 100%; }
+.dye::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+  background: var(--dye-ink);
+  -webkit-mask-image: var(--pat), radial-gradient(ellipse var(--dye-w) var(--dye-h) at var(--dye-at), #000 0, #000 25%, rgba(0,0,0,.45) 55%, transparent 100%);
+  mask-image: var(--pat), radial-gradient(ellipse var(--dye-w) var(--dye-h) at var(--dye-at), #000 0, #000 25%, rgba(0,0,0,.45) 55%, transparent 100%);
+  -webkit-mask-size: var(--pat-size), 100% 100%; mask-size: var(--pat-size), 100% 100%;
+  -webkit-mask-repeat: repeat, no-repeat; mask-repeat: repeat, no-repeat;
+  /* dye.js sets --dye-ox/--dye-oy so the tiles continue the page background */
+  -webkit-mask-position: var(--dye-ox, 0) var(--dye-oy, 0), 0 0; mask-position: var(--dye-ox, 0) var(--dye-oy, 0), 0 0;
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+}
+body.night-mode .dye { --dye-ink: rgba(156, 196, 127, .14); }
+@media (max-width: 640px) { .dye { --dye-w: 300px; --dye-h: 220px; } }
+
+/* The three white sections on the home page: a bigger dyed corner. */
+.section.dye:is(.features, .flow, .faq) { --dye-w: 720px; --dye-h: 460px; }
+@media (max-width: 640px) { .section.dye:is(.features, .flow, .faq) { --dye-w: 360px; --dye-h: 320px; } }
+/* Privacy page: the text sits on a white card. */
+.policy .container.dye { background: var(--shiro); border: 1px solid var(--rule); border-radius: 12px; padding: clamp(28px, 5vw, 56px); box-shadow: 0 20px 50px rgba(0, 0, 0, .05); }
+body.night-mode .policy .container.dye { background: #1d1d1d; }

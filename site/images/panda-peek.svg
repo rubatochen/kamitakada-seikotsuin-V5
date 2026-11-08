@@ -9,7 +9,9 @@
   <ellipse cx="62" cy="34" rx="8.5" ry="6.5" transform="rotate(28 62 34)" fill="#1c1c1c"/>
   <circle cx="35.5" cy="32.5" r="2" fill="#fff"/>
   <circle cx="60.5" cy="32.5" r="2" fill="#fff"/>
-  <ellipse cx="48" cy="44" rx="4" ry="3" fill="#1c1c1c"/>
+  <ellipse cx="48" cy="41" rx="3.8" ry="2.8" fill="#1c1c1c"/>
+  <!-- nose line + ω mouth, same as the other pandas -->
+  <path d="M48 43.4V46.2M43.4 45.8q2.3 3.4 4.6.4q2.3 3 4.6-.4" fill="none" stroke="#1c1c1c" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
   <!-- paws on the edge -->
   <ellipse cx="25" cy="53" rx="10" ry="6" fill="#1c1c1c"/>
   <ellipse cx="71" cy="53" rx="10" ry="6" fill="#1c1c1c"/>

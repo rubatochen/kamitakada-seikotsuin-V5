@@ -26,7 +26,7 @@ export async function onRequest(context) {
       let e = null;
       try { e = JSON.parse(r.value); } catch { return null; }
       if (!['created','cancelled','moved'].includes(e.type)) return null;
-      return { id:r.id, type:e.type, date:e.date, time:e.time, nextDate:e.nextDate, nextTime:e.nextTime };
+      return { id:r.id, type:e.type, date:e.date, time:e.time, nextDate:e.nextDate, nextTime:e.nextTime, menuId:typeof e.menuId==='string'?e.menuId:null };
     }).filter(Boolean);
     const allRows = rows.results || [];
     const cursor = allRows.length ? allRows[allRows.length-1].id : after;

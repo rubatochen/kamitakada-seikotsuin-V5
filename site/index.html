@@ -35,8 +35,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js');</script>
 </head>
-<body>
+<body class="dye-page">
   <a class="skip-link" href="#main">本文へ移動</a>
   <header class="site-header">
     <div class="topbar">
@@ -114,7 +115,7 @@
       </div>
     </section>
 
-    <section class="section features">
+    <section class="section features dye dye-bl">
       <div class="container">
         <h2 class="section-title" data-i18n="features.title">当院の特徴</h2>
         <div class="feature-grid">
@@ -149,7 +150,7 @@
       </div>
     </section>
 
-    <section id="flow" class="section flow">
+    <section id="flow" class="section flow dye">
       <div class="container">
         <h2 class="section-title" data-i18n="flow.title">来院の流れ</h2>
         <ol class="flow-list">
@@ -173,7 +174,7 @@
       </div>
     </section>
 
-    <section id="faq" class="section faq">
+    <section id="faq" class="section faq dye dye-bl">
       <div class="container faq-grid">
         <h2 class="section-title" data-i18n="faq.title">よくある質問</h2>
         <div class="faq-list">
@@ -229,10 +230,11 @@
       </div>
     </div>
   </footer>
-  <button id="backToTop" class="back-top" type="button" aria-label="ページ上部へ"><span aria-hidden="true"></span></button>
+  <button id="backToTop" class="back-top" type="button" aria-label="ページ上部へ"><i class="back-top-taiji" aria-hidden="true"></i><span aria-hidden="true"></span></button>
 
   <script src="lang.js"></script>
   <script src="script.js"></script>
+  <script src="dye.js"></script>
   <script>
     (function(){
       const root=document.createElement('div');
@@ -267,15 +269,56 @@
         const bottom=Math.max(12, window.innerHeight-r.top+gap);
         backTop.style.bottom=`${bottom}px`;
       }
+      // 太極 back-to-top: the disc turns with the page, and on the way back up it
+      // spins quickly the other way.
+      const taiji=backTop?.querySelector('.back-top-taiji');
+      const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+      const DEG_PER_PX=.25;
+      let returning=false;
+      function spinFromScroll(){
+        if(taiji && !returning && !reduceMotion.matches) taiji.style.setProperty('--rot',`${(window.scrollY*DEG_PER_PX).toFixed(1)}deg`);
+      }
+      function backToTop(){
+        if(reduceMotion.matches){ window.scrollTo({top:0}); return; }
+        if(returning)return;
+        const y0=window.scrollY;
+        if(y0<=0)return;
+        returning=true;
+        const r0=y0*DEG_PER_PX;
+        const rEnd=Math.floor(r0/360)*360-720;              // at least two full turns backwards, ends upright
+        const duration=Math.min(900,Math.max(450,y0*.18));
+        const root=document.documentElement, prevBehavior=root.style.scrollBehavior;
+        root.style.scrollBehavior='auto';                   // we drive the scroll ourselves
+        const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+        let start=null, cancelled=false;
+        const stop=()=>{ cancelled=true; };
+        window.addEventListener('wheel',stop,{passive:true,once:true});
+        window.addEventListener('touchstart',stop,{passive:true,once:true});
+        function finish(){
+          returning=false; root.style.scrollBehavior=prevBehavior;
+          window.removeEventListener('wheel',stop); window.removeEventListener('touchstart',stop);
+          spinFromScroll(); updateBackTop();
+        }
+        function frame(ts){
+          if(cancelled){ finish(); return; }
+          if(start===null)start=ts;
+          const t=Math.min(1,(ts-start)/duration), e=ease(t);
+          window.scrollTo(0,Math.round(y0*(1-e)));
+          taiji?.style.setProperty('--rot',`${(r0+(rEnd-r0)*e).toFixed(1)}deg`);
+          if(t<1)requestAnimationFrame(frame); else finish();
+        }
+        requestAnimationFrame(frame);
+      }
       function updateBackTop(){
         if(!backTop)return;
-        const show=window.scrollY>360;
+        const show=returning||window.scrollY>360;
         backTop.style.display=show?'inline-flex':'none';
         if(show)positionBackTop();
       }
-      window.addEventListener('scroll',updateBackTop,{passive:true});
+      window.addEventListener('scroll',()=>{ updateBackTop(); spinFromScroll(); },{passive:true});
+      spinFromScroll();
       window.addEventListener('resize',positionBackTop);
-      backTop?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+      backTop?.addEventListener('click',backToTop);
 
       const grid=root.querySelector('#floatingCalendarGrid');
       const i18n={
@@ -435,6 +478,24 @@
         .then(j=>{data=j;render();})
         .catch(()=>{});
       document.getElementById('language')?.addEventListener('change',e=>{lang=e.target.value;render();});
+    })();
+  </script>
+  <script>
+    // Reveal blocks once as they scroll into view (hidden state lives in style.css).
+    (function(){
+      const sel='.section-title,.about-text > p,.about-photo,.feature,.service-item,.flow-list > li,.gallery-grid > img,.faq-item,.contact-list > div,.contact-actions,.map-area';
+      try{
+        const items=[...document.querySelectorAll(sel)];
+        // Stagger siblings of the same kind (e.g. the three features, the five flow steps).
+        items.forEach(el=>{
+          const sibs=[...el.parentElement.children].filter(x=>x.matches(sel));
+          el.style.setProperty('--i',Math.min(sibs.indexOf(el),6));
+          el.classList.add('rv');
+        });
+        if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){items.forEach(el=>el.classList.add('in'));return;}
+        const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{rootMargin:'0px 0px -8% 0px',threshold:.12});
+        items.forEach(el=>io.observe(el));
+      }catch(err){document.documentElement.classList.remove('js');}
     })();
   </script>
 </body>
