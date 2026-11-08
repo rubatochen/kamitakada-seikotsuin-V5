@@ -697,7 +697,8 @@
   // Error texts say what to check, with the status/code so problems can be traced.
   function loginErrorMessage(e){
     const known=({admin_password_not_configured:t('loginPasswordNotConfigured'),session_creation_failed:t('sessionCreationFailed'),invalid_password:t('invalidPassword'),rate_limited:t('rateLimited'),service_unavailable:t('serviceUnavailable')})[e.code];
-    return known || `${t('loginFailed')}（${e.status||'network'}${e.code?' / '+e.code:''}）`;
+    const base = known || `${t('loginFailed')}（${e.status||'network'}${e.code?' / '+e.code:''}）`;
+    return e.detail ? `${base} ${e.detail}` : base;
   }
   async function login(){ $('err').textContent=''; try{ await post('/api/login',{password:$('pw').value}); }catch(e){ $('err').textContent=loginErrorMessage(e); return; } $('pw').value=''; showApp(); }
   function showApp(){ $('login').hidden=true; $('app').hidden=false; setPattern(document.querySelector('.a-tabs [aria-selected="true"]')?.dataset.tab||'day'); if(!$('date').value) $('date').value=today(); applyAdminLanguage(); render().catch(handleAdminLoadError); pollReservationEvents(); }

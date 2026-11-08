@@ -8,3 +8,4 @@ node --experimental-default-type=module tests/api-smoke.mjs
 python3 tests/sql-overlap-smoke.py
 node --experimental-default-type=module tests/login-guard.mjs
 node --experimental-default-type=module tests/lanes-menus.mjs
+node --experimental-default-type=module tests/pages-build.mjs
