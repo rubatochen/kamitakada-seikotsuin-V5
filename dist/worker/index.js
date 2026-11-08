@@ -44,6 +44,17 @@ const ROUTES = {
   '/api/admin/pause': adminPause,
 };
 
+// API responses carry reservation data: never cache, never index, never frame.
+function withSecurityHeaders(response) {
+  const headers = new Headers(response.headers);
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('X-Robots-Tag', 'noindex');
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  headers.set('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
+  if (!headers.has('Cache-Control')) headers.set('Cache-Control', 'no-store');
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 function contextFor(request, env, ctx) {
   return {
     request,
@@ -93,7 +104,7 @@ export default {
     const handler = ROUTES[url.pathname];
 
     if (handler) {
-      return handler(contextFor(request, env, ctx));
+      return withSecurityHeaders(await handler(contextFor(request, env, ctx)));
     }
 
     return env.ASSETS.fetch(request);

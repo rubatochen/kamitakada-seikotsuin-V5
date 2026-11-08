@@ -2,9 +2,12 @@ import assert from 'node:assert/strict';
 import { onRequest as availability } from '../functions/api/availability.js';
 import { onRequest as events } from '../functions/api/admin/events.js';
 import { tokyoNow } from '../functions/lib/utils.js';
+// The fake DB below has Sunday closed, so pick the first non-Sunday date
+// at least n days ahead (the old fixed +2 days failed whenever it hit a Sunday).
 function future(n=2) {
   const today=tokyoNow().date;
   const d=new Date(today+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);
+  while(d.getUTCDay()===0) d.setUTCDate(d.getUTCDate()+1);
   return d.toISOString().slice(0,10);
 }
 class FakeDB {

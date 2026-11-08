@@ -19,8 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => {
       const item = button.closest(".faq-item");
       const shouldOpen = !item.classList.contains("open");
-      document.querySelectorAll(".faq-item").forEach((faq) => faq.classList.remove("open"));
-      if (shouldOpen) item.classList.add("open");
+      document.querySelectorAll(".faq-item").forEach((faq) => {
+        faq.classList.remove("open");
+        faq.querySelector(".faq-question")?.setAttribute("aria-expanded", "false");
+      });
+      if (shouldOpen) {
+        item.classList.add("open");
+        button.setAttribute("aria-expanded", "true");
+      }
     });
   });
 

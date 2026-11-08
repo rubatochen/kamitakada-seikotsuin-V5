@@ -14,7 +14,7 @@ function cleanup(now) {
 }
 
 function getClientKey(request, scope) {
-  const ip = request.headers.get('CF-Connecting-IP') || request.headers.get('X-Forwarded-For') || 'unknown';
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
   return `${scope}:${ip}`;
 }
 

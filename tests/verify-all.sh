@@ -6,3 +6,4 @@ node --check dist/worker/index.js
 node tests/parse-inline-scripts.mjs
 node --experimental-default-type=module tests/api-smoke.mjs
 python3 tests/sql-overlap-smoke.py
+node --experimental-default-type=module tests/login-guard.mjs

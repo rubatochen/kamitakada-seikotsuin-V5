@@ -7,6 +7,7 @@ import {
 } from '../lib/utils.js';
 import { rateLimit } from '../lib/rate-limit.js';
 import { readJsonObject } from '../lib/request-validation.js';
+import { clientIp, loginBlocked, recordLoginFailure, clearLoginFailures, passwordMatches } from '../lib/login-guard.js';
 
 export async function onRequest(context) {
   if (context.request.method === 'OPTIONS') {
@@ -20,7 +21,8 @@ export async function onRequest(context) {
     );
   }
 
-  const limit = rateLimit(context.request, 'admin-login', 5, 10 * 60 * 1000);
+  // Cheap first layer against floods; the real lockout is the D1 guard below.
+  const limit = rateLimit(context.request, 'admin-login', 20, 10 * 60 * 1000);
   if (!limit.allowed) {
     return withCors(
       json({ ok:false, code:'rate_limited', error:'試行回数が多すぎます。しばらくしてから再度お試しください。' },429,{ 'Retry-After': String(limit.retryAfter) }),
@@ -50,8 +52,23 @@ export async function onRequest(context) {
     );
   }
 
-  // ② Secret 存在，再检查密码
-  if (password !== context.env.ADMIN_PASSWORD) {
+  // ② Secret 存在，再检查密码（失败次数记录在 D1，跨实例生效）
+  const ip = clientIp(context.request);
+  try {
+    const guard = await loginBlocked(context.env.DB, ip);
+    if (guard.blocked) {
+      return withCors(
+        json({ ok:false, code:'rate_limited', error:'試行回数が多すぎます。しばらくしてから再度お試しください。' },429,{ 'Retry-After': String(guard.retryAfter) }),
+        context.request
+      );
+    }
+  } catch (error) {
+    console.error('Login guard unavailable', error);
+    return withCors(json({ ok:false, code:'service_unavailable', error:'現在ログインできません。' },503), context.request);
+  }
+
+  if (!(await passwordMatches(password, context.env.ADMIN_PASSWORD))) {
+    try { await recordLoginFailure(context.env.DB, ip); } catch (error) { console.error('Unable to record login failure', error); }
     return withCors(
       json({
         ok: false,
@@ -65,6 +82,7 @@ export async function onRequest(context) {
 
   // ③ 密码正确，创建登录 Session
   const token = randomId();
+  try { await clearLoginFailures(context.env.DB, ip); } catch (error) { console.error('Unable to clear login failures', error); }
 
   try {
     await context.env.DB

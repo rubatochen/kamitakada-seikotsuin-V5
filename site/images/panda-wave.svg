@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 0 172 160">
+  <!-- a round panda waving goodbye ("またね") -->
+  <g stroke="#1c1c1c" stroke-width="3.5" stroke-linejoin="round">
+    <ellipse cx="80" cy="118" rx="54" ry="38" fill="#fff"/>
+    <ellipse cx="44" cy="145" rx="21" ry="13" fill="#1c1c1c"/>
+    <ellipse cx="116" cy="145" rx="21" ry="13" fill="#1c1c1c"/>
+  </g>
+  <ellipse cx="44" cy="146" rx="8" ry="5.5" fill="#fff" opacity=".22"/>
+  <ellipse cx="116" cy="146" rx="8" ry="5.5" fill="#fff" opacity=".22"/>
+  <!-- resting arm -->
+  <ellipse cx="52" cy="112" rx="16" ry="22" transform="rotate(-20 52 112)" fill="#1c1c1c"/>
+  <!-- raised, waving arm -->
+  <ellipse cx="134" cy="80" rx="15" ry="25" transform="rotate(38 134 80)" fill="#1c1c1c"/>
+  <ellipse cx="148" cy="62" rx="7" ry="5.5" transform="rotate(38 148 62)" fill="#fff" opacity=".22"/>
+  <path d="M158 40q8 8 4 20M150 34q6 4 6 10" fill="none" stroke="#9cc47f" stroke-width="3" stroke-linecap="round"/>
+  <!-- ears -->
+  <circle cx="38" cy="32" r="16" fill="#1c1c1c"/>
+  <circle cx="122" cy="32" r="16" fill="#1c1c1c"/>
+  <!-- head -->
+  <ellipse cx="80" cy="64" rx="52" ry="42" fill="#fff" stroke="#1c1c1c" stroke-width="3.5"/>
+  <ellipse cx="56" cy="60" rx="14" ry="10.5" transform="rotate(-32 56 60)" fill="#1c1c1c"/>
+  <ellipse cx="104" cy="60" rx="14" ry="10.5" transform="rotate(32 104 60)" fill="#1c1c1c"/>
+  <!-- open eyes with a little shine -->
+  <circle cx="58" cy="59" r="4" fill="#fff"/>
+  <circle cx="102" cy="59" r="4" fill="#fff"/>
+  <circle cx="59.5" cy="57.5" r="1.4" fill="#1c1c1c"/>
+  <circle cx="100.5" cy="57.5" r="1.4" fill="#1c1c1c"/>
+  <!-- muzzle, small "o" mouth as if saying bye -->
+  <ellipse cx="80" cy="82" rx="19" ry="13.5" fill="#f1f1ee"/>
+  <path d="M73 76.5q7-4 14 0q-1.5 6-7 7.5q-5.5-1.5-7-7.5Z" fill="#1c1c1c"/>
+  <ellipse cx="80" cy="89" rx="3.6" ry="3" fill="#1c1c1c"/>
+  <ellipse cx="38" cy="80" rx="7.5" ry="4.5" fill="#f3b4ae" opacity=".7"/>
+  <ellipse cx="122" cy="80" rx="7.5" ry="4.5" fill="#f3b4ae" opacity=".7"/>
+</svg>

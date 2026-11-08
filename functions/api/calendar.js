@@ -24,20 +24,16 @@ export async function onRequest(context) {
     dates.push(dateKey(d));
   }
 
-  let rows, holidays;
+  let holidays;
   try {
     holidays = await context.env.DB.prepare(
       'SELECT date FROM holidays WHERE date >= ? AND date <= ?'
     ).bind(dates[0], dates[dates.length - 1]).all();
-    rows = await context.env.DB.prepare(
-      "SELECT date, COUNT(*) AS count FROM appointments WHERE status = 'confirmed' AND date >= ? AND date <= ? GROUP BY date"
-    ).bind(dates[0], dates[dates.length-1]).all();
   } catch (error) {
     console.error('Unable to load calendar bookings', error);
     return withCors(json({ok:false, code:'service_unavailable', error:'現在カレンダーを取得できません。'},503), context.request);
   }
   const holidayDates = new Set((holidays.results || []).map(x => String(x.date)));
-  const bookedCounts = new Map((rows.results || []).map(r => [String(r.date), Number(r.count)||0]));
   const pauses = Array.isArray(s.temporaryPausePeriods) ? s.temporaryPausePeriods : [];
 
   const result = dates.map(date => {
@@ -48,8 +44,7 @@ export async function onRequest(context) {
     return {
       date,
       closed: closedByHours || !!pause || holiday,
-      reason: pause ? 'temporary_pause' : (holiday ? 'holiday' : (closedByHours ? 'closed_day' : null)),
-      bookedCount: bookedCounts.get(date) || 0
+      reason: pause ? 'temporary_pause' : (holiday ? 'holiday' : (closedByHours ? 'closed_day' : null))
     };
   });
 

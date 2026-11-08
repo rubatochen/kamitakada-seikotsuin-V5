@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 56">
+  <!-- ears -->
+  <circle cx="22" cy="16" r="11" fill="#1c1c1c"/>
+  <circle cx="74" cy="16" r="11" fill="#1c1c1c"/>
+  <!-- head (lower half hides behind the card) -->
+  <path d="M10 56C10 30 26 10 48 10S86 30 86 56Z" fill="#fff" stroke="#1c1c1c" stroke-width="3"/>
+  <!-- eye patches, tilted like the logo -->
+  <ellipse cx="34" cy="34" rx="8.5" ry="6.5" transform="rotate(-28 34 34)" fill="#1c1c1c"/>
+  <ellipse cx="62" cy="34" rx="8.5" ry="6.5" transform="rotate(28 62 34)" fill="#1c1c1c"/>
+  <circle cx="35.5" cy="32.5" r="2" fill="#fff"/>
+  <circle cx="60.5" cy="32.5" r="2" fill="#fff"/>
+  <ellipse cx="48" cy="44" rx="4" ry="3" fill="#1c1c1c"/>
+  <!-- paws on the edge -->
+  <ellipse cx="25" cy="53" rx="10" ry="6" fill="#1c1c1c"/>
+  <ellipse cx="71" cy="53" rx="10" ry="6" fill="#1c1c1c"/>
+</svg>

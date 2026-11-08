@@ -45,11 +45,11 @@ export async function requireAdmin(request, env) {
 }
 
 export function setSessionCookie(token, maxAge = 60 * 60 * 8) {
-  return `session=${encodeURIComponent(token)}; Max-Age=${maxAge}; Path=/; HttpOnly; Secure; SameSite=Lax`;
+  return `session=${encodeURIComponent(token)}; Max-Age=${maxAge}; Path=/; HttpOnly; Secure; SameSite=Strict`;
 }
 
 export function clearSessionCookie() {
-  return "session=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax";
+  return "session=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Strict";
 }
 
 export function randomId() {

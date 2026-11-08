@@ -5,20 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>上高田整骨院 | 新井薬師前駅近くの整骨院</title>
   <meta name="description" content="上高田整骨院では、肩こり・腰痛・スポーツ障害など、お身体の悩みに合わせた施術を行っています。新井薬師前駅近く、Web予約受付中。">
-  <link rel="icon" href="favicon.ico">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="上高田整骨院">
+  <meta property="og:title" content="上高田整骨院 | 新井薬師前駅近くの整骨院">
+  <meta property="og:description" content="新井薬師前駅近くの整骨院。Web予約・電話・LINEで受付しています。">
+  <meta property="og:locale" content="ja_JP">
+  <!-- 正式ドメインが決まったら追加: <meta property="og:image" content="https://（ドメイン）/images/banner.webp"> と <link rel="canonical" href="https://（ドメイン）/"> -->
+  <meta name="theme-color" content="#1c1c1c">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "上高田整骨院",
+    "alternateName": "Kamitakada Seikotsuin",
+    "telephone": "+81-3-5380-1963",
+    "address": {
+      "@type": "PostalAddress",
+      "postalCode": "164-0002",
+      "addressRegion": "東京都",
+      "addressLocality": "中野区",
+      "streetAddress": "上高田5-47-8 1F",
+      "addressCountry": "JP"
+    }
+  }
+  </script>
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">本文へ移動</a>
   <header class="site-header">
     <div class="topbar">
-      <a class="logo" href="#top" data-i18n="site.name">上高田整骨院</a>
-      <button class="menu-toggle" type="button" aria-label="メニューを開く" aria-expanded="false">
+      <a class="logo" href="#top" aria-label="上高田整骨院 トップ">
+        <img class="logo-mark" src="images/logo-96.webp" srcset="images/logo-96.webp 1x, images/logo-192.webp 2x" width="44" height="44" alt="">
+        <span class="logo-name" data-i18n="site.name">上高田整骨院</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="siteNav">
         <span></span><span></span><span></span>
       </button>
-      <nav class="site-nav" aria-label="メインナビゲーション">
+      <nav class="site-nav" id="siteNav" aria-label="メインナビゲーション">
         <a href="#about" data-i18n="nav.about">当院について</a>
         <a href="#service" data-i18n="nav.service">施術内容</a>
         <a href="#flow" data-i18n="nav.flow">来院の流れ</a>
@@ -34,62 +63,73 @@
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero">
-      <img id="heroBg" class="hero-bg" src="images/banner.webp" alt="上高田整骨院の院内">
-      <div class="hero-content">
-        <p class="eyebrow" data-i18n="hero.eyebrow">新井薬師前駅近く・予約優先</p>
-        <h1 data-i18n="hero.title">地域の皆さまの健康を支える整骨院</h1>
-        <p class="hero-copy" data-i18n="hero.copy">肩こり、腰痛、スポーツによるケガなど、お身体の悩みをお気軽にご相談ください。</p>
-        <div class="hero-actions">
-          <a class="btn btn-phone" href="tel:0353801963" data-i18n="hero.phone">電話 03-5380-1963</a>
-          <a class="btn btn-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="hero.line">公式LINE</a>
-          <a class="btn btn-reserve" href="reserve.html" data-i18n="hero.webReserve">Webで予約</a>
-          <a class="btn btn-manage" href="manage.html" data-i18n="hero.manageReserve">予約変更・キャンセル</a>
-        </div>
-        <div class="hero-info">
-          <span data-i18n="hero.hours">営業時間 10:00-19:00</span>
-          <span data-i18n="hero.address">東京都中野区上高田5-47-8</span>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="section">
-      <div class="container split">
-        <div class="section-heading">
-          <span data-i18n="about.label">Greeting</span>
-          <h2 data-i18n="about.title">一人ひとりに寄り添う施術を</h2>
-        </div>
-        <div class="about-grid">
-          <img src="images/illust/doctor.png" alt="施術者のイラスト">
-          <div class="copy-block">
-            <h3 data-i18n="about.lead">身近で相談しやすい整骨院を目指しています。</h3>
-            <p data-i18n="about.text1">上高田整骨院では、現在のお身体の状態や生活習慣を丁寧に伺い、症状に合わせた施術をご提案します。</p>
-            <p data-i18n="about.text2">日常のつらさからスポーツ時の違和感まで、無理なく通える落ち着いた環境でサポートします。</p>
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-panel">
+        <div class="hero-content">
+          <p class="pause-notice" id="pauseNotice" role="status" hidden></p>
+          <p class="hero-eyebrow" data-i18n="hero.eyebrow">新井薬師前駅近く・予約優先</p>
+          <h1 data-i18n="hero.title">地域の皆さまの健康を支える整骨院</h1>
+          <span class="stitch stitch-hero" aria-hidden="true"></span>
+          <p class="hero-copy" data-i18n="hero.copy">肩こり、腰痛、スポーツによるケガなど、お身体の悩みをお気軽にご相談ください。</p>
+          <div class="hero-actions">
+            <a class="btn btn-reserve" href="reserve.html" data-i18n="hero.webReserve">Webで予約</a>
+            <a class="btn btn-phone" href="tel:0353801963" data-i18n="hero.phone">電話 03-5380-1963</a>
+          </div>
+          <div class="hero-subactions">
+            <a class="btn-sub btn-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="hero.line">公式LINE</a>
+            <a class="btn-sub btn-manage" href="manage.html" data-i18n="hero.manageReserve">予約変更・キャンセル</a>
+          </div>
+          <div class="hero-info">
+            <span id="heroHours" data-i18n="hero.hours">営業時間 10:00-19:00</span>
+            <span data-i18n="hero.address">東京都中野区上高田5-47-8</span>
           </div>
         </div>
       </div>
+      <figure class="hero-photo">
+        <img id="heroBg" class="hero-bg" alt="上高田整骨院の院内" width="1920" height="1288" fetchpriority="high">
+        <script>
+          (function(){
+            var p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+            var v={};p.forEach(function(x){v[x.type]=x.value;});
+            var m=Number(v.hour)*60+Number(v.minute);
+            document.getElementById('heroBg').src=(m>=540&&m<1140)?'images/banner.webp':'images/night-clinic.webp';
+          })();
+        </script>
+        <noscript><img class="hero-bg" src="images/banner.webp" alt="上高田整骨院の院内"></noscript>
+      </figure>
     </section>
 
-    <section class="section soft">
-      <div class="container">
-        <div class="section-heading center">
-          <span data-i18n="features.label">Feature</span>
-          <h2 data-i18n="features.title">当院の特徴</h2>
+    <section id="about" class="section about">
+      <div class="container about-grid">
+        <div class="about-text">
+          <h2 class="section-title" data-i18n="about.title">一人ひとりに寄り添う施術を</h2>
+          <p class="about-lead" data-i18n="about.lead">身近で相談しやすい整骨院を目指しています。</p>
+          <p data-i18n="about.text1">上高田整骨院では、現在のお身体の状態や生活習慣を丁寧に伺い、症状に合わせた施術をご提案します。</p>
+          <p data-i18n="about.text2">日常のつらさからスポーツ時の違和感まで、無理なく通える落ち着いた環境でサポートします。</p>
         </div>
+        <figure class="about-photo">
+          <img src="images/photo2.webp" alt="施術ベッドが並ぶ院内" width="1152" height="1536" loading="lazy" decoding="async">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section features">
+      <div class="container">
+        <h2 class="section-title" data-i18n="features.title">当院の特徴</h2>
         <div class="feature-grid">
-          <article class="feature-card">
-            <img src="images/illust/counseling.png" alt="">
+          <article class="feature">
+            <span class="seal" aria-hidden="true">聴</span>
             <h3 data-i18n="features.item1.title">丁寧なカウンセリング</h3>
             <p data-i18n="features.item1.text">はじめての方にも安心していただけるよう、痛みや不安をしっかり伺います。</p>
           </article>
-          <article class="feature-card">
-            <img src="images/illust/treatment.png" alt="">
+          <article class="feature">
+            <span class="seal" aria-hidden="true">合</span>
             <h3 data-i18n="features.item2.title">状態に合わせた施術</h3>
             <p data-i18n="features.item2.text">マニュアル通りではなく、身体の状態を見ながら無理のない施術を行います。</p>
           </article>
-          <article class="feature-card">
-            <img src="images/illust/sports.png" alt="">
+          <article class="feature">
+            <span class="seal" aria-hidden="true">動</span>
             <h3 data-i18n="features.item3.title">スポーツ障害にも対応</h3>
             <p data-i18n="features.item3.text">部活動や運動によるケガ、違和感、競技復帰までご相談いただけます。</p>
           </article>
@@ -97,80 +137,56 @@
       </div>
     </section>
 
-    <section id="service" class="section">
+    <section id="service" class="section service">
       <div class="container">
-        <div class="section-heading center">
-          <span data-i18n="service.label">Service</span>
-          <h2 data-i18n="service.title">施術内容</h2>
-        </div>
-        <div class="service-list">
-          <article class="service-item">
-            <img src="images/illust/shoulder.png" alt="">
-            <div><h3 data-i18n="service.shoulder.title">肩こり</h3><p data-i18n="service.shoulder.text">デスクワークや姿勢の乱れによる首・肩まわりのつらさを整えます。</p></div>
-          </article>
-          <article class="service-item">
-            <img src="images/illust/back.png" alt="">
-            <div><h3 data-i18n="service.back.title">腰痛</h3><p data-i18n="service.back.text">慢性的な腰の重さから急な痛みまで、状態に合わせて対応します。</p></div>
-          </article>
-          <article class="service-item">
-            <img src="images/illust/sports2.png" alt="">
-            <div><h3 data-i18n="service.sports.title">スポーツ障害</h3><p data-i18n="service.sports.text">捻挫、肉離れ、関節の違和感など、運動を続けたい方を支えます。</p></div>
-          </article>
-          <article class="service-item">
-            <img src="images/illust/pelvis.png" alt="">
-            <div><h3 data-i18n="service.pelvis.title">骨盤・姿勢調整</h3><p data-i18n="service.pelvis.text">姿勢や身体のバランスを整え、負担の少ない動きを目指します。</p></div>
-          </article>
-        </div>
+        <h2 class="section-title" data-i18n="service.title">施術内容</h2>
+        <dl class="service-list">
+          <div class="service-item"><dt data-i18n="service.shoulder.title">肩こり</dt><dd data-i18n="service.shoulder.text">デスクワークや姿勢の乱れによる首・肩まわりのつらさを整えます。</dd></div>
+          <div class="service-item"><dt data-i18n="service.back.title">腰痛</dt><dd data-i18n="service.back.text">慢性的な腰の重さから急な痛みまで、状態に合わせて対応します。</dd></div>
+          <div class="service-item"><dt data-i18n="service.sports.title">スポーツ障害</dt><dd data-i18n="service.sports.text">捻挫、肉離れ、関節の違和感など、運動を続けたい方を支えます。</dd></div>
+          <div class="service-item"><dt data-i18n="service.pelvis.title">骨盤・姿勢調整</dt><dd data-i18n="service.pelvis.text">姿勢や身体のバランスを整え、負担の少ない動きを目指します。</dd></div>
+        </dl>
       </div>
     </section>
 
-    <section id="flow" class="section soft">
+    <section id="flow" class="section flow">
       <div class="container">
-        <div class="section-heading center">
-          <span data-i18n="flow.label">Flow</span>
-          <h2 data-i18n="flow.title">来院の流れ</h2>
-        </div>
-        <div class="flow-grid">
-          <article><img src="images/illust/reservation.png" alt=""><strong>01</strong><h3 data-i18n="flow.step1.title">ご予約</h3><p data-i18n="flow.step1.text">電話またはWeb予約をご利用ください。</p></article>
-          <article><img src="images/illust/reception.png" alt=""><strong>02</strong><h3 data-i18n="flow.step2.title">受付</h3><p data-i18n="flow.step2.text">受付後、必要事項をご記入いただきます。</p></article>
-          <article><img src="images/illust/counseling2.png" alt=""><strong>03</strong><h3 data-i18n="flow.step3.title">問診</h3><p data-i18n="flow.step3.text">症状や生活習慣を確認します。</p></article>
-          <article><img src="images/illust/treatment2.png" alt=""><strong>04</strong><h3 data-i18n="flow.step4.title">施術</h3><p data-i18n="flow.step4.text">状態に合わせて施術を行います。</p></article>
-          <article><img src="images/illust/home.png" alt=""><strong>05</strong><h3 data-i18n="flow.step5.title">アフターケア</h3><p data-i18n="flow.step5.text">日常生活での注意点もお伝えします。</p></article>
-        </div>
+        <h2 class="section-title" data-i18n="flow.title">来院の流れ</h2>
+        <ol class="flow-list">
+          <li><span class="flow-num" aria-hidden="true">一</span><h3 data-i18n="flow.step1.title">ご予約</h3><p data-i18n="flow.step1.text">電話またはWeb予約をご利用ください。</p></li>
+          <li><span class="flow-num" aria-hidden="true">二</span><h3 data-i18n="flow.step2.title">受付</h3><p data-i18n="flow.step2.text">受付後、必要事項をご記入いただきます。</p></li>
+          <li><span class="flow-num" aria-hidden="true">三</span><h3 data-i18n="flow.step3.title">問診</h3><p data-i18n="flow.step3.text">症状や生活習慣を確認します。</p></li>
+          <li><span class="flow-num" aria-hidden="true">四</span><h3 data-i18n="flow.step4.title">施術</h3><p data-i18n="flow.step4.text">状態に合わせて施術を行います。</p></li>
+          <li><span class="flow-num" aria-hidden="true">五</span><h3 data-i18n="flow.step5.title">アフターケア</h3><p data-i18n="flow.step5.text">日常生活での注意点もお伝えします。</p></li>
+        </ol>
       </div>
     </section>
 
-    <section id="gallery" class="section">
+    <section id="gallery" class="section gallery">
       <div class="container">
-        <div class="section-heading center">
-          <span data-i18n="gallery.label">Gallery</span>
-          <h2 data-i18n="gallery.title">院内写真</h2>
-        </div>
+        <h2 class="section-title" data-i18n="gallery.title">院内写真</h2>
         <div class="gallery-grid">
-          <img class="gallery-large" src="images/photo1.png" alt="院内写真">
-          <img src="images/photo2.png" alt="院内写真">
-          <img src="images/photo3.png" alt="院内写真">
+          <img src="images/photo1.webp" alt="上高田整骨院の外観と入口" width="1536" height="1152" loading="lazy" decoding="async">
+          <img src="images/banner.webp" alt="施術ベッドが並ぶ院内" width="1920" height="1288" loading="lazy" decoding="async">
+          <img src="images/photo3.webp" alt="院内の飾り" width="1536" height="1152" loading="lazy" decoding="async">
         </div>
       </div>
     </section>
 
-    <section id="faq" class="section soft">
-      <div class="container narrow">
-        <div class="section-heading center">
-          <span data-i18n="faq.label">FAQ</span>
-          <h2 data-i18n="faq.title">よくある質問</h2>
-        </div>
+    <section id="faq" class="section faq">
+      <div class="container faq-grid">
+        <h2 class="section-title" data-i18n="faq.title">よくある質問</h2>
         <div class="faq-list">
           <article class="faq-item">
-            <button class="faq-question" type="button" data-i18n="faq.q1">予約は必要ですか？</button>
+            <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q1">予約は必要ですか？</button>
             <div class="faq-answer"><p data-i18n="faq.a1">予約優先です。電話またはLINEから事前にご連絡いただくとスムーズです。</p></div>
           </article>
           <article class="faq-item">
-            <button class="faq-question" type="button" data-i18n="faq.q2">健康保険は使えますか？</button>
+            <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q2">健康保険は使えますか？</button>
             <div class="faq-answer"><p data-i18n="faq.a2">症状や原因によって適用できる場合があります。詳しくは来院時にご相談ください。</p></div>
           </article>
           <article class="faq-item">
-            <button class="faq-question" type="button" data-i18n="faq.q3">どんな服装で行けばよいですか？</button>
+            <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q3">どんな服装で行けばよいですか？</button>
             <div class="faq-answer"><p data-i18n="faq.a3">動きやすい服装でお越しください。必要に応じてお着替えもご案内します。</p></div>
           </article>
         </div>
@@ -178,20 +194,21 @@
     </section>
 
     <section id="contact" class="section contact">
-      <div class="container">
-        <div class="section-heading center light">
-          <span data-i18n="contact.label">Contact</span>
-          <h2 data-i18n="contact.title">お問い合わせ</h2>
-        </div>
-        <div class="contact-grid">
-          <div class="contact-card"><h3 data-i18n="contact.phoneLabel">電話</h3><a href="tel:0353801963">03-5380-1963</a></div>
-          <div class="contact-card"><h3 data-i18n="contact.hoursLabel">営業時間</h3><p data-i18n="contact.hours">10:00-19:00</p></div>
-          <div class="contact-card"><h3 data-i18n="contact.lineLabel">公式LINE</h3><a class="mini-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="contact.lineButton">公式LINE</a></div>
+      <div class="container contact-grid">
+        <div class="contact-info">
+          <h2 class="section-title" data-i18n="contact.title">お問い合わせ</h2>
+          <dl class="contact-list">
+            <div><dt data-i18n="contact.phoneLabel">電話</dt><dd><a class="contact-phone" href="tel:0353801963">03-5380-1963</a></dd></div>
+            <div><dt data-i18n="contact.hoursLabel">営業時間</dt><dd id="contactHours" data-i18n="contact.hours">10:00-19:00</dd></div>
+            <div><dt data-i18n="contact.access">アクセス</dt><dd data-i18n="contact.address">〒164-0002 東京都中野区上高田5-47-8 1F</dd></div>
+          </dl>
+          <div class="contact-actions">
+            <a class="btn btn-reserve" href="reserve.html" data-i18n="hero.webReserve">Webで予約</a>
+            <a class="btn-sub btn-line" href="https://lin.ee/WPW2iSV" target="_blank" rel="noopener" data-i18n="contact.lineButton">公式LINE</a>
+          </div>
         </div>
         <div class="map-area">
-          <h3 data-i18n="contact.access">アクセス</h3>
-          <p data-i18n="contact.address">〒164-0002 東京都中野区上高田5-47-8 1F</p>
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25915.164591864974!2d139.68015359999998!3d35.7164888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f2a184497f5d%3A0x4ca10d6960815183!2z5LiK6auY55Sw5pW06aqo6ZmiIEDmlrDkupXolqzluKvliY3pp4U!5e0!3m2!1sja!2sjp!4v1783646563985!5m2!1sja!2sjp" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <iframe title="上高田整骨院の地図" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25915.164591864974!2d139.68015359999998!3d35.7164888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f2a184497f5d%3A0x4ca10d6960815183!2z5LiK6auY55Sw5pW06aqo6ZmiIEDmlrDkupXolqzluKvliY3pp4U!5e0!3m2!1sja!2sjp!4v1783646563985!5m2!1sja!2sjp" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
           <a class="map-link" href="https://maps.google.com/?q=東京都中野区上高田5-47-8" target="_blank" rel="noopener" data-i18n="contact.mapButton">Googleマップで開く</a>
         </div>
       </div>
@@ -199,15 +216,20 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      <strong data-i18n="site.name">上高田整骨院</strong>
-      <p data-i18n="footer.address">〒164-0002 東京都中野区上高田5-47-8 1F</p>
-      <p>TEL 03-5380-1963</p>
-      <small data-i18n="footer.copy">© 2026 上高田整骨院 All Rights Reserved.</small>
+    <div class="container footer-inner">
+      <div>
+        <img class="footer-mark" src="images/logo-96.webp" width="48" height="48" alt="" loading="lazy">
+        <strong data-i18n="site.name">上高田整骨院</strong>
+        <p data-i18n="footer.address">〒164-0002 東京都中野区上高田5-47-8 1F</p>
+        <p>TEL 03-5380-1963</p>
+      </div>
+      <div class="footer-meta">
+        <a href="privacy.html" data-i18n="footer.privacy">プライバシーポリシー</a>
+        <small data-i18n="footer.copy">© 2026 上高田整骨院 All Rights Reserved.</small>
+      </div>
     </div>
   </footer>
-
-  <button id="backToTop" class="back-top" type="button" aria-label="ページ上部へ">↑</button>
+  <button id="backToTop" class="back-top" type="button" aria-label="ページ上部へ"><span aria-hidden="true"></span></button>
 
   <script src="lang.js"></script>
   <script src="script.js"></script>
@@ -217,14 +239,27 @@
       root.id='fixedCalendarRoot';
       root.innerHTML=`
         <div class="fixed-calendar" id="floatingCalendar" aria-label="予約カレンダー">
-          <div class="fixed-calendar-title"><span id="calendarTitle"></span><span id="calendarWindow"></span></div>
-          <div class="fixed-calendar-grid" id="floatingCalendarGrid"></div>
-          <div class="fixed-calendar-legend"><span id="calendarOpenLegend"></span><span id="calendarClosedLegend"></span></div>
+          <button type="button" class="fixed-calendar-title" id="calendarToggle" aria-expanded="true" aria-controls="calendarBody"><span id="calendarTitle"></span><span class="fixed-calendar-meta"><span id="calendarWindow"></span><span class="fixed-calendar-chevron" aria-hidden="true"></span></span></button>
+          <div id="calendarBody">
+            <div class="fixed-calendar-grid" id="floatingCalendarGrid"></div>
+            <div class="fixed-calendar-legend"><span id="calendarOpenLegend"></span><span id="calendarClosedLegend"></span></div>
+          </div>
         </div>`;
-      document.documentElement.appendChild(root);
+      document.body.appendChild(root);
 
       const backTop=document.getElementById('backToTop');
       const calendar=root.querySelector('.fixed-calendar');
+      const toggle=root.querySelector('#calendarToggle');
+      const mobileQuery=window.matchMedia('(max-width: 640px)');
+      function setCollapsed(collapsed){
+        calendar.classList.toggle('collapsed',collapsed);
+        toggle.setAttribute('aria-expanded',String(!collapsed));
+        requestAnimationFrame(()=>positionBackTop());
+      }
+      // On phones the calendar starts as a slim bar so it doesn't cover the page.
+      setCollapsed(mobileQuery.matches);
+      toggle.addEventListener('click',()=>{ if(mobileQuery.matches) setCollapsed(!calendar.classList.contains('collapsed')); });
+      mobileQuery.addEventListener?.('change',e=>setCollapsed(e.matches));
       function positionBackTop(){
         if(!backTop || !calendar)return;
         const r=calendar.getBoundingClientRect();
@@ -325,7 +360,9 @@
 
       function setClinicMode(isOpen){
         document.body.classList.toggle('night-mode',!isOpen);
-        if(heroBg) heroBg.src=isOpen ? DAY_IMAGE : NIGHT_IMAGE;
+        const next=isOpen ? DAY_IMAGE : NIGHT_IMAGE;
+        if(heroBg && !heroBg.src.endsWith(next)) heroBg.src=next;
+        if(heroBg) heroBg.alt=isOpen ? '上高田整骨院の院内' : '夜の上高田整骨院の外観';
       }
 
       function updateClinicMode(){
@@ -334,6 +371,70 @@
 
       updateClinicMode();
       setInterval(updateClinicMode,60000);
+    })();
+  </script>
+  <script>
+    (function(){
+      const heroHours=document.getElementById('heroHours');
+      const contactHours=document.getElementById('contactHours');
+      const pauseNotice=document.getElementById('pauseNotice');
+      const T={
+        ja:{prefix:'営業時間 ',days:['日','月','火','水','木','金','土'],closed:d=>`${d}休み`,closedAll:'休業',sep:'・',range:(a,b)=>`${a}〜${b}`,pause:d=>`現在、臨時休業中です。再開予定日：${d}`,date:(m,d)=>`${m}月${d}日`},
+        zh:{prefix:'营业时间 ',days:['周日','周一','周二','周三','周四','周五','周六'],closed:d=>`${d}休息`,closedAll:'休业',sep:'・',range:(a,b)=>`${a}至${b}`,pause:d=>`目前临时休业中。预计恢复营业：${d}`,date:(m,d)=>`${m}月${d}日`},
+        en:{prefix:'Open ',days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],closed:d=>`closed ${d}`,closedAll:'Closed',sep:', ',range:(a,b)=>`${a}–${b}`,pause:d=>`We are temporarily closed. Expected to reopen: ${d}`,date:(m,d)=>`${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1]} ${d}`}
+      };
+      let data=null;
+      let lang=window.getPreferredLanguage?window.getPreferredLanguage():'ja';
+
+      function validRange(v){return Array.isArray(v)&&v.length===2&&/^\d\d:\d\d$/.test(v[0])&&/^\d\d:\d\d$/.test(v[1]);}
+      // Returns e.g. "10:00-19:00" or "10:00-19:00（日休み）" or "月〜金 10:00-19:00・土 10:00-17:00・日休み".
+      function formatHours(hours,t){
+        const order=[1,2,3,4,5,6,0];
+        const sig=d=>validRange(hours[String(d)])?hours[String(d)].join('-'):null;
+        const open=order.filter(d=>sig(d));
+        if(!open.length)return t.closedAll;
+        const closed=order.filter(d=>!sig(d));
+        const signatures=[...new Set(open.map(sig))];
+        if(signatures.length===1){
+          const base=signatures[0];
+          if(!closed.length)return base;
+          const c=t.closed(closed.map(d=>t.days[d]).join(t.sep));
+          return t===T.en?`${base} (${c})`:`${base}（${c}）`;
+        }
+        const groups=[];
+        order.forEach(d=>{const g=groups[groups.length-1];const v=sig(d);if(g&&g.v===v)g.days.push(d);else groups.push({v,days:[d]});});
+        return groups.map(g=>{
+          const label=g.days.length>2?t.range(t.days[g.days[0]],t.days[g.days[g.days.length-1]]):g.days.map(d=>t.days[d]).join(t.sep);
+          return g.v?`${label} ${g.v}`:t.closed(label);
+        }).join(' / ');
+      }
+      function render(){
+        if(!data)return;
+        const t=T[lang]||T.ja;
+        if(data.businessHours&&Object.keys(data.businessHours).length){
+          const text=formatHours(data.businessHours,t);
+          // Stop lang.js from overwriting these with the old fixed text.
+          heroHours.removeAttribute('data-i18n');contactHours.removeAttribute('data-i18n');
+          heroHours.textContent=t.prefix+text;
+          contactHours.textContent=text;
+        }
+        if(data.paused&&data.reopeningDate){
+          const [,m,d]=String(data.reopeningDate).split('-').map(Number);
+          const label=m&&d?t.date(m,d):data.reopeningDate;
+          const full=t.pause('\u0000');
+          const [before,after]=full.split('\u0000');
+          const strong=document.createElement('span');strong.style.whiteSpace='nowrap';strong.textContent=label;
+          pauseNotice.replaceChildren(before,strong,after||'');
+          pauseNotice.hidden=false;
+        }else{
+          pauseNotice.hidden=true;
+        }
+      }
+      fetch('/api/status',{cache:'no-store'})
+        .then(r=>r.ok?r.json():null)
+        .then(j=>{data=j;render();})
+        .catch(()=>{});
+      document.getElementById('language')?.addEventListener('change',e=>{lang=e.target.value;render();});
     })();
   </script>
 </body>

@@ -41,3 +41,7 @@ CREATE INDEX IF NOT EXISTS idx_sessions_expires ON sessions(expires_at);
 INSERT OR IGNORE INTO settings(key,value) VALUES
 ('business_hours','{"0":null,"1":["10:00","19:00"],"2":["10:00","19:00"],"3":["10:00","19:00"],"4":["10:00","19:00"],"5":["10:00","19:00"],"6":["10:00","19:00"]}'),
 ('slot_minutes','30');
+
+-- Staff login brute-force protection (also created automatically on first login).
+CREATE TABLE IF NOT EXISTS login_failures (ip TEXT NOT NULL, at INTEGER NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_login_failures_at ON login_failures(at);

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 0 172 160">
+  <!-- a round, sitting panda holding a bamboo sprig -->
+  <g stroke="#1c1c1c" stroke-width="3.5" stroke-linejoin="round">
+    <!-- body -->
+    <ellipse cx="80" cy="118" rx="54" ry="38" fill="#fff"/>
+    <!-- feet -->
+    <ellipse cx="44" cy="145" rx="21" ry="13" fill="#1c1c1c"/>
+    <ellipse cx="116" cy="145" rx="21" ry="13" fill="#1c1c1c"/>
+  </g>
+  <ellipse cx="44" cy="146" rx="8" ry="5.5" fill="#fff" opacity=".22"/>
+  <ellipse cx="116" cy="146" rx="8" ry="5.5" fill="#fff" opacity=".22"/>
+  <!-- bamboo sprig -->
+  <g>
+    <path d="M100 132L152 74" stroke="#4f7f3a" stroke-width="7" stroke-linecap="round"/>
+    <path d="M131 96.5l5.6 5" stroke="#2f5222" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M150 78C156 64 164 58 168 56C166 66 160 74 150 78Z" fill="#9cc47f"/>
+    <path d="M149 79C140 70 136 60 136 52C143 58 148 68 149 79Z" fill="#7fae5f"/>
+  </g>
+  <!-- arms hugging the sprig -->
+  <ellipse cx="50" cy="110" rx="17" ry="23" transform="rotate(-38 50 110)" fill="#1c1c1c"/>
+  <ellipse cx="108" cy="108" rx="17" ry="23" transform="rotate(42 108 108)" fill="#1c1c1c"/>
+  <!-- ears -->
+  <circle cx="38" cy="32" r="16" fill="#1c1c1c"/>
+  <circle cx="122" cy="32" r="16" fill="#1c1c1c"/>
+  <!-- head: wider than tall, like a bear -->
+  <ellipse cx="80" cy="64" rx="52" ry="42" fill="#fff" stroke="#1c1c1c" stroke-width="3.5"/>
+  <!-- eye patches drooping outward -->
+  <ellipse cx="56" cy="60" rx="14" ry="10.5" transform="rotate(-32 56 60)" fill="#1c1c1c"/>
+  <ellipse cx="104" cy="60" rx="14" ry="10.5" transform="rotate(32 104 60)" fill="#1c1c1c"/>
+  <!-- happy closed eyes -->
+  <path d="M50 61q6-6.5 12 0M98 61q6-6.5 12 0" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+  <!-- muzzle -->
+  <ellipse cx="80" cy="82" rx="19" ry="13.5" fill="#f1f1ee"/>
+  <path d="M73 76.5q7-4 14 0q-1.5 6-7 7.5q-5.5-1.5-7-7.5Z" fill="#1c1c1c"/>
+  <path d="M80 84v3M73 88q7 5 14 0" fill="none" stroke="#1c1c1c" stroke-width="2.6" stroke-linecap="round"/>
+  <!-- cheeks -->
+  <ellipse cx="38" cy="80" rx="7.5" ry="4.5" fill="#f3b4ae" opacity=".7"/>
+  <ellipse cx="122" cy="80" rx="7.5" ry="4.5" fill="#f3b4ae" opacity=".7"/>
+</svg>
