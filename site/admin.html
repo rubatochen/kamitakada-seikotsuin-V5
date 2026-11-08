@@ -664,7 +664,7 @@
   async function api(path,opt={}){
     const r=await fetch(path,{...opt,credentials:'same-origin'});
     const j=await r.json().catch(()=>({error:'error'}));
-    if(!r.ok){ const e=new Error(j.error||'error'); e.code=j.code; e.status=r.status; throw e; }
+    if(!r.ok){ const e=new Error(j.error||'error'); e.code=j.code; e.status=r.status; e.detail=j.detail; throw e; }
     return j;
   }
   const post=(path,body)=>api(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
@@ -706,7 +706,7 @@
     console.error('admin load failed',e);
     if(e && (e.status===401||e.status===403)){ $('err').textContent=t('sessionInvalid'); showLogin(); return; }
     // Logged in, but the page could not be drawn: say why instead of silently going back to the login form.
-    const detail=e && e.code==='old_backend' ? t('oldBackend') : `${t('dataLoadFailed')}（${(e&&(e.status?e.status+' '+(e.code||''):e.message))||'?'}）`;
+    const detail=e && e.code==='old_backend' ? t('oldBackend') : `${t('dataLoadFailed')}（${(e&&(e.status?e.status+' '+(e.code||'')+(e.detail?' : '+e.detail:''):e.message))||'?'}）`;
     $('err').textContent=detail; showLogin();
   }
   function checkData(d){

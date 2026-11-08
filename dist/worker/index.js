@@ -117,7 +117,16 @@ export default {
         console.error('Schema upgrade failed', error);
         return withSecurityHeaders(new Response(JSON.stringify({ ok: false, code: 'service_unavailable', error: '現在ご利用いただけません。' }), { status: 503, headers: { 'content-type': 'application/json; charset=UTF-8' } }));
       }
-      return withSecurityHeaders(await handler(contextFor(request, env, ctx)));
+      try {
+        return withSecurityHeaders(await handler(contextFor(request, env, ctx)));
+      } catch (error) {
+        // Never answer with Cloudflare's bare error page: log it, and give the
+        // admin page something it can show (patients only see a generic text).
+        console.error('API error', url.pathname, error && error.stack || error);
+        const isAdmin = url.pathname.startsWith('/api/admin/');
+        const detail = isAdmin ? String(error && error.message || error).slice(0, 300) : undefined;
+        return withSecurityHeaders(new Response(JSON.stringify({ ok: false, code: 'server_error', error: 'サーバーでエラーが発生しました。', detail }), { status: 500, headers: { 'content-type': 'application/json; charset=UTF-8' } }));
+      }
     }
 
     return env.ASSETS.fetch(request);

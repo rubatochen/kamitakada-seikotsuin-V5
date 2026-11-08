@@ -126,6 +126,21 @@ export function timeString(n) {
   return `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(n % 60).padStart(2, "0")}`;
 }
 
+// Business hours are stored as {"0": ["10:00","19:00"] | null, ...}. Older
+// admin pages saved whatever they were sent, so read them defensively: any
+// day that is not a valid [open, close] pair counts as closed.
+function cleanBusinessHours(raw) {
+  let v = {};
+  try { v = JSON.parse(raw || '{}') || {}; } catch {}
+  const ok = t => typeof t === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(t);
+  const out = {};
+  for (let d = 0; d < 7; d++) {
+    const h = v[String(d)] ?? v[d];
+    out[String(d)] = Array.isArray(h) && h.length >= 2 && ok(h[0]) && ok(h[1]) && h[0] < h[1] ? [h[0], h[1]] : null;
+  }
+  return out;
+}
+
 export async function settings(env) {
   const rows = await env.DB.prepare("SELECT key,value FROM settings WHERE key IN ('business_hours','slot_minutes','temporary_pause_periods','lanes','menus','capacity')").all();
   const out = {};
@@ -135,7 +150,7 @@ export async function settings(env) {
   const menus = rawMenus.map(m => ({ ...m, offered: isOffered(m, lanes) }));
 
   return {
-    businessHours: JSON.parse(out.business_hours || '{}'),
+    businessHours: cleanBusinessHours(out.business_hours),
     slotMinutes: Number(out.slot_minutes || 30),
     temporaryPausePeriods: (() => { try { const v = JSON.parse(out.temporary_pause_periods || '[]'); return Array.isArray(v) ? v : []; } catch { return []; } })(),
     lanes,
