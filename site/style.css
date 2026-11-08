@@ -76,9 +76,15 @@ p { margin: 0; }
   background-size: 100% 2px;
   background-repeat: no-repeat;
   animation: sew 1.4s cubic-bezier(.6, 0, .3, 1) .35s both;
-  clip-path: inset(0 100% 0 0);
+  clip-path: inset(-12px 100% -12px 0);
+  position: relative;
 }
-@keyframes sew { to { clip-path: inset(0 0 0 0); } }
+.stitch-hero::after {   /* the same bamboo leaf as on the section titles, at the tip */
+  content: ""; position: absolute; left: calc(100% - 4px); bottom: -3px;
+  width: 22px; height: 10px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 10'%3E%3Cpath d='M0 7C6 1 14 0 22 2C15 5 8 8 0 7Z' fill='%239cc47f'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+@keyframes sew { to { clip-path: inset(-12px -30px -12px 0); } }
 
 /* ---------- Header ---------- */
 .site-header {
@@ -158,7 +164,7 @@ p { margin: 0; }
   font-size: 14px; color: rgba(255,255,255,.82);
 }
 .hero-photo { margin: 0; position: relative; overflow: hidden; background: var(--kon); }
-.hero-bg { width: 100%; height: 100%; object-fit: cover; }
+.hero-bg { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
 .pause-notice {
   margin-bottom: 24px; padding: 12px 16px;
   border-left: 3px solid var(--kincha-light);

@@ -370,6 +370,17 @@
     .a-cancelled{padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.75)}
     body.night-mode .a-cancelled{background:rgba(20,20,20,.6)}
     @media (prefers-reduced-motion:reduce){body.admin-page::before{transition:none}}
+    .a-quick{display:flex;align-items:center;gap:6px;padding:4px 4px 4px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--shiro)}
+    .a-quick .lbl{font-size:12px;font-weight:700;color:var(--nezumi);margin-right:4px;white-space:nowrap}
+    .a-quick .a-btn{gap:0;min-height:32px;padding:0 10px;font-size:13px;border-color:var(--kincha);color:var(--kincha);background:#f3f7ef}
+    .a-quick .a-btn:hover{background:var(--kincha);color:#fff}
+    body.night-mode .a-quick .a-btn{background:transparent;color:var(--kincha-light);border-color:var(--kincha-light)}
+    .a-opt{font-weight:400;margin-left:4px;color:var(--nezumi)}
+    @media (max-width:640px){
+      .a-quick,.a-quick.act{width:100%;flex:1 1 100%;flex-wrap:wrap;padding:8px 10px;order:5}
+      .a-quick .lbl{width:100%;margin:0 0 2px}
+      .a-quick .a-btn{flex:1;min-height:40px;font-size:14px}
+    }
   </style>
 </head>
 <body class="admin-page">
@@ -424,19 +435,12 @@
         <button class="a-btn small" type="button" data-act="day" data-n="1" data-i18n-aria-label="nextDay" aria-label="次の日">›</button>
         <button class="a-btn small" type="button" data-act="today" data-i18n="today">今日</button>
         <span class="spacer"></span>
-        <div class="a-stop act">
-          <button class="a-btn act" style="width:100%" type="button" data-act="toggle-stop" aria-expanded="false" data-i18n="stopNow">今から受付を止める</button>
-          <div id="stopPanel" class="a-stop-panel" hidden>
-            <p data-i18n="stopHelp">今からの時間、Web予約を受け付けません（飛び込みのお客様の対応などに）。</p>
-            <label class="a-label" for="stopLane" data-i18n="lane">枠</label>
-            <select id="stopLane" class="a-select"></select>
-            <div class="a-stop-grid">
-              <button class="a-btn small" type="button" data-act="stop" data-min="30">30<span data-i18n="minutesUnit">分</span></button>
-              <button class="a-btn small" type="button" data-act="stop" data-min="40">40<span data-i18n="minutesUnit">分</span></button>
-              <button class="a-btn small" type="button" data-act="stop" data-min="50">50<span data-i18n="minutesUnit">分</span></button>
-              <button class="a-btn small" type="button" data-act="stop" data-min="60">60<span data-i18n="minutesUnit">分</span></button>
-            </div>
-          </div>
+        <div class="a-quick act" role="group" aria-labelledby="quickLbl">
+          <span id="quickLbl" class="lbl" data-i18n="stopNow">今から止める</span>
+          <button class="a-btn" type="button" data-act="stop" data-min="30">＋30<span data-i18n="minutesUnit">分</span></button>
+          <button class="a-btn" type="button" data-act="stop" data-min="40">＋40<span data-i18n="minutesUnit">分</span></button>
+          <button class="a-btn" type="button" data-act="stop" data-min="50">＋50<span data-i18n="minutesUnit">分</span></button>
+          <button class="a-btn" type="button" data-act="stop" data-min="60">＋60<span data-i18n="minutesUnit">分</span></button>
         </div>
         <button class="a-btn primary act" type="button" data-act="new" data-i18n="newBooking">＋ 予約を入れる</button>
       </div>
@@ -538,7 +542,7 @@
       <div class="a-field" id="fExtField"><label class="a-label" for="fExt" data-i18n="extensionTreatment">延長</label><select id="fExt" class="a-select"></select></div>
     </div>
     <div class="a-field"><label class="a-label" for="fName" data-i18n="name">お名前</label><input id="fName" class="a-input" maxlength="80" autocomplete="off"></div>
-    <div class="a-field"><label class="a-label" for="fPhone" data-i18n="phoneNumber">電話番号</label><input id="fPhone" class="a-input" type="tel" maxlength="40" autocomplete="off"></div>
+    <div class="a-field"><label class="a-label" for="fPhone"><span data-i18n="phoneNumber">電話番号</span><span class="a-opt" data-i18n="optional">（任意）</span></label><input id="fPhone" class="a-input" type="tel" maxlength="40" autocomplete="off"></div>
     <div class="a-field"><label class="a-label" for="fNote" data-i18n="notes">備考</label><textarea id="fNote" class="a-textarea" maxlength="500"></textarea></div>
     <p id="fError" class="a-error" role="alert"></p>
     <div class="a-modal-actions"><button class="a-btn" type="button" data-act="close-modal" data-i18n="cancel">キャンセル</button><button id="fSubmit" class="a-btn primary" type="button" data-act="submit-booking"></button></div>
@@ -585,7 +589,7 @@
     ja: {
       adminTitle:'予約管理', adminPassword:'管理者パスワード', login:'ログイン', logout:'ログアウト', language:'言語', notificationVolume:'音量',
       tabDay:'予約表', tabList:'一覧・検索', tabSettings:'設定', pickDate:'日付', today:'今日', prevDay:'前の日', nextDay:'次の日',
-      stopNow:'今から受付を止める', stopHelp:'今からの時間、Web予約を受け付けません（飛び込みのお客様の対応などに）。', allLanes:'すべての枠',
+      stopNow:'飛び込み・今から止める', stopHelp:'今からの時間、Web予約を受け付けません（飛び込みのお客様の対応などに）。', allLanes:'すべての枠',
       newBooking:'＋ 予約を入れる', reservationCount:'予約人数', peopleUnit:'名', reservationTotalTime:'施術時間の合計', nextBooking:'次の予約', firstBooking:'最初の予約', noMore:'本日の予約はすべて終了しました', none:'なし',
       timelineHint:'予約表の空いているところを押すと、その時間・その枠で予約を入れられます。',
       closedDay:'この日は休診日です。', holidayDay:'この日は休業日に設定されています。', laneClosed:'休み', cancelledList:n=>`キャンセル済み（${n}件）`, deleteRecord:'記録を削除',
@@ -600,10 +604,10 @@
       businessHours:'営業時間', businessHoursDesc:'毎週の営業時間です。枠の時間はこの範囲内で使われます。', saveBusinessHours:'営業時間を保存', businessHoursSaved:'営業時間を保存しました。', open:'営業', weekday:'曜日',
       breaksTitle:'受付停止（休憩など）', breaksHelp:'指定した時間は新しい予約を受け付けません。枠を選ぶと、その枠だけ止まります。', addBreak:'受付停止を追加', breakAdded:'受付停止を追加しました。', breakDeleted:'受付停止を削除しました。', deleteBreakConfirm:'この受付停止を削除しますか？', breaksOn:d=>`${d} の受付停止`,
       pauseClinic:'臨時休業', pauseHint:'休業期間中は新しい予約を止め、ホームページにお知らせを出します。', pauseStartDate:'開始日', reopeningDate:'再開日', pauseSave:'臨時休業を設定', pauseUpdate:'変更を保存', pauseInvalid:'開始日と再開日を正しく選択してください。', pauseFailed:'臨時休業の設定に失敗しました。', pauseSaved:'臨時休業を保存しました。', pauseDeleted:'臨時休業を解除しました。', pauseEdit:'変更', pauseDelete:'解除', pauseNoItems:'臨時休業は設定されていません。', pauseDeleteConfirm:'この臨時休業を解除しますか？',
-      date:'日付', time:'時間', lane:'枠', laneAuto:'空いている枠に自動で入れる', menu:'メニュー', extensionTreatment:'延長', extNone:'なし', extOption:n=>`${n}分延長`, name:'お名前', phoneNumber:'電話番号', email:'メール', notes:'備考', createdAt:'登録日時', startTime:'開始', endTime:'終了', minutesUnit:'分',
+      date:'日付', time:'時間', lane:'枠', laneAuto:'空いている枠に自動で入れる', menu:'メニュー', extensionTreatment:'延長', extNone:'なし', extOption:n=>`${n}分延長`, name:'お名前', phoneNumber:'電話番号', optional:'（任意）', email:'メール', notes:'備考', createdAt:'登録日時', startTime:'開始', endTime:'終了', minutesUnit:'分',
       createTitle:'予約を入れる', editTitle:'予約を変更', createSubmit:'予約を登録', editSubmit:'変更を保存', edit:'変更', cancelBooking:'予約をキャンセル', cancel:'キャンセル', back:'戻る', call:'電話する', delete:'削除',
       cancelReservationConfirm:'この予約をキャンセルしますか？', deleteReservationConfirm:'この予約記録を完全に削除しますか？', doCancel:'キャンセルする', doDelete:'削除する',
-      manualRegistered:'予約を登録しました。', reservationUpdated:'予約を変更しました。', reservationCancelled:'予約をキャンセルしました。', reservationDeleted:'予約記録を削除しました。', extendSuccess:m=>`今から${m}分、受付を止めました。`, extendFailed:'受付を止められませんでした。',
+      manualRegistered:'予約を登録しました。', reservationUpdated:'予約を変更しました。', reservationCancelled:'予約をキャンセルしました。', reservationDeleted:'予約記録を削除しました。', extendSuccess:(m,l)=>`今から${m}分、${l||''}を止めました。`, extendFailed:'受付を止められませんでした。',
       exportAppointments:'予約データを書き出す', exportShort:'書き出し', exportConfirm:'お客様の氏名・連絡先などを含む予約CSVファイルをダウンロードします。よろしいですか？', exportFailed:'書き出しに失敗しました。', download:'ダウンロード',
       loginPasswordNotConfigured:'管理者ログインは現在設定されていません。', sessionCreationFailed:'ログインセッションを作成できませんでした。', invalidPassword:'パスワードが正しくありません。', rateLimited:'試行回数が多すぎます。しばらくしてから再度お試しください。', loginFailed:'ログインに失敗しました。', serviceUnavailable:'サーバーのデータベース準備に失敗しました（Workerのログを確認してください）。', oldBackend:'画面は新しいのに、サーバー側（Worker）が古いままです。site フォルダだけでなく、プロジェクト全体を wrangler deploy してください。', sessionInvalid:'セッションが切れました。もう一度ログインしてください。', dataLoadFailed:'データを読み込めませんでした。',
       notFound:'予約が見つかりません。画面を更新してください。', notEditable:'キャンセル済みの予約は変更できません。', invalidExtension:'延長時間が正しくありません。', alreadyBooked:'この時間はすでに予約で埋まっています。', pastTime:'過去の時間は予約できません。', breakTime:'受付停止中の時間です。', unavailable:'この時間・この枠では予約できません。', invalidDate:'日付を選んでください。', invalidTime:'時間を入力してください。', invalidName:'お名前を入力してください。', invalidPhone:'電話番号を正しく入力してください。', invalidLane:'このメニューはその枠では受けられません。', invalidMenu:'メニューを選んでください。', saveFailed:'保存できませんでした。',
@@ -613,7 +617,7 @@
     zh: {
       adminTitle:'预约管理', adminPassword:'管理员密码', login:'登录', logout:'退出登录', language:'语言', notificationVolume:'音量',
       tabDay:'预约表', tabList:'列表・搜索', tabSettings:'设置', pickDate:'日期', today:'今天', prevDay:'前一天', nextDay:'后一天',
-      stopNow:'从现在起停止接受预约', stopHelp:'从现在开始的一段时间内不接受网上预约（例如接待临时上门的顾客时）。', allLanes:'所有枠',
+      stopNow:'临时来客・从现在占用', stopHelp:'从现在开始的一段时间内不接受网上预约（例如接待临时上门的顾客时）。', allLanes:'所有枠',
       newBooking:'＋ 添加预约', reservationCount:'预约人数', peopleUnit:'人', reservationTotalTime:'施术时间合计', nextBooking:'下一位预约', firstBooking:'第一位预约', noMore:'今天的预约已全部结束', none:'无',
       timelineHint:'点击预约表的空白处，即可在该时间、该枠添加预约。',
       closedDay:'这一天是休息日。', holidayDay:'这一天被设为休业日。', laneClosed:'休息', cancelledList:n=>`已取消（${n}条）`, deleteRecord:'删除记录',
@@ -628,10 +632,10 @@
       businessHours:'营业时间', businessHoursDesc:'每周的营业时间。各枠只在此范围内使用。', saveBusinessHours:'保存营业时间', businessHoursSaved:'营业时间已保存。', open:'营业', weekday:'星期',
       breaksTitle:'停止接受预约（休息等）', breaksHelp:'设定的时间段不接受新的预约。选择枠时只停止该枠。', addBreak:'添加停止时段', breakAdded:'已添加停止时段。', breakDeleted:'已删除停止时段。', deleteBreakConfirm:'确定删除这个停止时段吗？', breaksOn:d=>`${d} 的停止时段`,
       pauseClinic:'临时歇业', pauseHint:'歇业期间停止新预约，并在主页显示通知。', pauseStartDate:'开始日期', reopeningDate:'再开日期', pauseSave:'设定临时歇业', pauseUpdate:'保存修改', pauseInvalid:'请选择有效的开始日期和再开日期。', pauseFailed:'临时歇业设置失败。', pauseSaved:'临时歇业已保存。', pauseDeleted:'临时歇业已取消。', pauseEdit:'修改', pauseDelete:'取消', pauseNoItems:'没有设置临时歇业。', pauseDeleteConfirm:'确定取消这段临时歇业吗？',
-      date:'日期', time:'时间', lane:'枠', laneAuto:'自动放入空着的枠', menu:'菜单', extensionTreatment:'延长', extNone:'无', extOption:n=>`延长 ${n} 分钟`, name:'姓名', phoneNumber:'电话号码', email:'邮箱', notes:'备注', createdAt:'登记时间', startTime:'开始', endTime:'结束', minutesUnit:'分',
+      date:'日期', time:'时间', lane:'枠', laneAuto:'自动放入空着的枠', menu:'菜单', extensionTreatment:'延长', extNone:'无', extOption:n=>`延长 ${n} 分钟`, name:'姓名', phoneNumber:'电话号码', optional:'（选填）', email:'邮箱', notes:'备注', createdAt:'登记时间', startTime:'开始', endTime:'结束', minutesUnit:'分',
       createTitle:'添加预约', editTitle:'修改预约', createSubmit:'登记预约', editSubmit:'保存修改', edit:'修改', cancelBooking:'取消预约', cancel:'取消', back:'返回', call:'拨打电话', delete:'删除',
       cancelReservationConfirm:'确定要取消这条预约吗？', deleteReservationConfirm:'确定要彻底删除这条预约记录吗？', doCancel:'确定取消', doDelete:'确定删除',
-      manualRegistered:'预约已登记。', reservationUpdated:'预约已修改。', reservationCancelled:'预约已取消。', reservationDeleted:'预约记录已删除。', extendSuccess:m=>`已从现在起停止接受预约 ${m} 分钟。`, extendFailed:'无法停止接受预约。',
+      manualRegistered:'预约已登记。', reservationUpdated:'预约已修改。', reservationCancelled:'预约已取消。', reservationDeleted:'预约记录已删除。', extendSuccess:(m,l)=>`已从现在起占用${l||''} ${m} 分钟。`, extendFailed:'无法停止接受预约。',
       exportAppointments:'导出预约数据', exportShort:'导出', exportConfirm:'将下载包含顾客姓名、联系方式等信息的预约 CSV 文件。确定导出吗？', exportFailed:'导出失败。', download:'下载',
       loginPasswordNotConfigured:'管理员登录尚未配置。', sessionCreationFailed:'无法创建登录会话。', invalidPassword:'密码不正确。', rateLimited:'尝试次数过多，请稍后再试。', loginFailed:'登录失败。', serviceUnavailable:'服务器数据库准备失败（请查看 Worker 日志）。', oldBackend:'页面已是新版，但服务器端（Worker）还是旧版。请不要只替换 site 文件夹，用 wrangler deploy 部署整个项目。', sessionInvalid:'登录已过期，请重新登录。', dataLoadFailed:'无法加载数据。',
       notFound:'找不到该预约，请刷新页面。', notEditable:'已取消的预约无法修改。', invalidExtension:'延长时间不正确。', alreadyBooked:'该时间已经约满。', pastTime:'不能预约过去的时间。', breakTime:'该时间已停止接受预约。', unavailable:'该时间、该枠无法预约。', invalidDate:'请选择日期。', invalidTime:'请输入时间。', invalidName:'请输入姓名。', invalidPhone:'请正确输入电话号码。', invalidLane:'该菜单不能在这个枠接待。', invalidMenu:'请选择菜单。', saveFailed:'保存失败。',
@@ -736,7 +740,7 @@
   function renderDay(){
     const date=$('date').value; const isToday=date===D.today;
     $('dayTitle').textContent=dateLabel(date);
-    renderWeek(); renderSummary(); renderTimeline(); renderCancelled(); renderStopLanes();
+    renderWeek(); renderSummary(); renderTimeline(); renderCancelled();
     document.querySelector('[data-act="stop"]') && document.querySelectorAll('[data-act="stop"]').forEach(b=>b.disabled=!isToday);
   }
   function renderWeek(){
@@ -843,7 +847,6 @@
     box.querySelector('ul').innerHTML=list.map(a=>`<li><span>${esc(a.time)}</span><s>${esc(a.name)}</s><span class="a-tag">${esc(menuLabel(a.menu_id))}</span><button class="a-btn small" type="button" data-act="delete-record" data-id="${esc(a.id)}">${esc(t('deleteRecord'))}</button></li>`).join('');
   }
   function laneOptions(selected,withAll){ return (withAll?`<option value="">${esc(t('allLanes'))}</option>`:'')+D.lanes.filter(l=>l.active).map(l=>`<option value="${esc(l.id)}"${l.id===selected?' selected':''}>${esc(l.name)}</option>`).join(''); }
-  function renderStopLanes(){ const v=$('stopLane').value; $('stopLane').innerHTML=laneOptions(v,true); $('stopLane').value=v; }
   function gotoDate(d){ $('date').value=d; render().catch(handleAdminLoadError); }
 
   // ------------------------------------------------------------ detail
@@ -853,14 +856,15 @@
     $('detailTitle').textContent=a.name;
     const e=toMin(a.time)+(Number(a.duration_minutes)||30);
     const tel=String(a.phone||'').replace(/[^\d+]/g,'');
-    const rows=[[t('date'),`${esc(listDate(a.date))} ${esc(a.time)}–${hhmm(e)}`],[t('menu'),esc(menuLabel(a.menu_id))+` <span class="a-muted">（${Number(a.duration_minutes)||30}${esc(t('minutesUnit'))}）</span>`],[t('lane'),esc(laneLabel(a.lane_id))],[t('phoneNumber'),`<a href="tel:${esc(tel)}">${esc(a.phone)}</a>`]];
+    const rows=[[t('date'),`${esc(listDate(a.date))} ${esc(a.time)}–${hhmm(e)}`],[t('menu'),esc(menuLabel(a.menu_id))+` <span class="a-muted">（${Number(a.duration_minutes)||30}${esc(t('minutesUnit'))}）</span>`],[t('lane'),esc(laneLabel(a.lane_id))]];
+    if(tel) rows.push([t('phoneNumber'),`<a href="tel:${esc(tel)}">${esc(a.phone)}</a>`]);
     if(a.email) rows.push([t('email'),esc(a.email)]);
     if(a.note) rows.push([t('notes'),esc(a.note)]);
     if(a.created_at && a.created_at!=='x') rows.push([t('createdAt'),esc(fmtCreated(a.created_at))]);
     $('detailBody').innerHTML=rows.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${v}</dd>`).join('');
     $('detailActions').innerHTML=a.status==='cancelled'
       ? `<button class="a-btn danger left" type="button" data-act="delete-record" data-id="${esc(a.id)}">${esc(t('deleteRecord'))}</button><button class="a-btn" type="button" data-act="close-modal">${esc(t('back'))}</button>`
-      : `<button class="a-btn danger left" type="button" data-act="cancel-booking" data-id="${esc(a.id)}">${esc(t('cancelBooking'))}</button><a class="a-btn" href="tel:${esc(tel)}">${esc(t('call'))}</a><button class="a-btn primary" type="button" data-act="edit" data-id="${esc(a.id)}">${esc(t('edit'))}</button>`;
+      : `<button class="a-btn danger left" type="button" data-act="cancel-booking" data-id="${esc(a.id)}">${esc(t('cancelBooking'))}</button>${tel?`<a class="a-btn" href="tel:${esc(tel)}">${esc(t('call'))}</a>`:''}<button class="a-btn primary" type="button" data-act="edit" data-id="${esc(a.id)}">${esc(t('edit'))}</button>`;
     $('detailModal').hidden=false;
   }
 
@@ -904,7 +908,6 @@
     if(!payload.date) return err.textContent=t('invalidDate');
     if(!payload.time) return err.textContent=t('invalidTime');
     if(!payload.name) return err.textContent=t('invalidName');
-    if(!payload.phone) return err.textContent=t('invalidPhone');
     if(modalMode==='edit') payload.id=editingId;
     $('fSubmit').disabled=true;
     try{
@@ -923,9 +926,23 @@
     if(!await ask(t('deleteReservationConfirm'),t('doDelete'))) return;
     try{ await post('/api/admin/delete',{id}); closeModals(); toast(t('reservationDeleted')); await render(); }catch(e){ toast(errorText(e,'saveFailed'),true); }
   }
+  // Walk-in: one tap holds the next N minutes for them, in ONE 枠 (the first
+  // pool 枠 that is open and free right now), so other 枠 and 鍼灸 keep going.
+  function pickWalkInLane(minutes){
+    const now=nowMin(), end=now+minutes, max=D.capacity?.max||1;
+    const open=D.lanes.filter(l=>l.kind==='pool' && Number(l.id.slice(1))<=max)
+      .filter(l=>!(D.capacity?.closed?.[l.id]||[]).some(([a,b])=>toMin(a)<=now && now<toMin(b)));
+    const busy=l=>(D.appointments||[]).some(a=>a.status==='confirmed' && (a.lane_id||'L1')===l.id && toMin(a.time)<end && toMin(a.time)+(Number(a.duration_minutes)||30)>now)
+      || (D.breaks||[]).some(b=>b.date===D.today && (!b.laneId||b.laneId===l.id) && toMin(b.startTime)<end && toMin(b.endTime)>now);
+    return (open.find(l=>!busy(l)) || open[0] || D.lanes[0]).id;
+  }
   async function stopNow(minutes){
-    try{ await post('/api/admin/extend',{date:today(),minutes,laneId:$('stopLane').value||undefined}); $('stopPanel').hidden=true; toast(t('extendSuccess',minutes)); if($('date').value!==today()) $('date').value=today(); await render(); }
-    catch(e){ toast(errorText(e,'extendFailed'),true); }
+    try{
+      if($('date').value!==today()){ $('date').value=today(); await render(); }
+      const laneId=pickWalkInLane(minutes);
+      await post('/api/admin/extend',{date:today(),minutes,laneId});
+      toast(t('extendSuccess',minutes,laneLabel(laneId))); await render();
+    }catch(e){ toast(errorText(e,'extendFailed'),true); }
   }
 
   // ------------------------------------------------------------ search
@@ -1128,7 +1145,6 @@
         openBooking({laneId:lane.dataset.lane,time:hhmm(m),date:$('date').value});
       }
       if(!e.target.closest('.a-menu')) $('topMenu').hidden=true;
-      if(!e.target.closest('.a-stop')) $('stopPanel').hidden=true;
       if(e.target.classList.contains('a-modal')) closeModals();
       return;
     }
@@ -1142,7 +1158,6 @@
       case 'day': return gotoDate(addDays($('date').value||today(),Number(el.dataset.n)));
       case 'today': return gotoDate(today());
       case 'goto': return gotoDate(el.dataset.date);
-      case 'toggle-stop': { const p=$('stopPanel'); p.hidden=!p.hidden; return; }
       case 'stop': return stopNow(Number(el.dataset.min));
       case 'new': return openBooking({});
       case 'detail': return openDetail(el.dataset.id);

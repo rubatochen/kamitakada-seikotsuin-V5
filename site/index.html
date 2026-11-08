@@ -10,7 +10,7 @@
   <meta property="og:title" content="上高田整骨院 | 新井薬師前駅近くの整骨院">
   <meta property="og:description" content="新井薬師前駅近くの整骨院。Web予約・電話・LINEで受付しています。">
   <meta property="og:locale" content="ja_JP">
-  <!-- 正式ドメインが決まったら追加: <meta property="og:image" content="https://（ドメイン）/images/banner.webp"> と <link rel="canonical" href="https://（ドメイン）/"> -->
+  <!-- 正式ドメインが決まったら追加: <meta property="og:image" content="https://（ドメイン）/images/hero-beds.webp"> と <link rel="canonical" href="https://（ドメイン）/"> -->
   <meta name="theme-color" content="#1c1c1c">
   <script type="application/ld+json">
   {
@@ -88,16 +88,16 @@
         </div>
       </div>
       <figure class="hero-photo">
-        <img id="heroBg" class="hero-bg" alt="上高田整骨院の院内" width="1920" height="1288" fetchpriority="high">
+        <img id="heroBg" class="hero-bg" alt="上高田整骨院の施術室" width="1920" height="1345" fetchpriority="high">
         <script>
           (function(){
             var p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
             var v={};p.forEach(function(x){v[x.type]=x.value;});
             var m=Number(v.hour)*60+Number(v.minute);
-            document.getElementById('heroBg').src=(m>=540&&m<1140)?'images/banner.webp':'images/night-clinic.webp';
+            document.getElementById('heroBg').src=(m>=540&&m<1140)?'images/hero-beds.webp':'images/hero-night.webp';
           })();
         </script>
-        <noscript><img class="hero-bg" src="images/banner.webp" alt="上高田整骨院の院内"></noscript>
+        <noscript><img class="hero-bg" src="images/hero-beds.webp" alt="上高田整骨院の院内"></noscript>
       </figure>
     </section>
 
@@ -110,7 +110,7 @@
           <p data-i18n="about.text2">日常のつらさからスポーツ時の違和感まで、無理なく通える落ち着いた環境でサポートします。</p>
         </div>
         <figure class="about-photo">
-          <img src="images/photo2.webp" alt="施術ベッドが並ぶ院内" width="1152" height="1536" loading="lazy" decoding="async">
+          <img src="images/about-waiting.webp" alt="待合室。熊猫と太極ののれん、観葉植物とソファ" width="1152" height="1440" loading="lazy" decoding="async">
         </figure>
       </div>
     </section>
@@ -167,9 +167,9 @@
       <div class="container">
         <h2 class="section-title" data-i18n="gallery.title">院内写真</h2>
         <div class="gallery-grid">
-          <img src="images/photo1.webp" alt="上高田整骨院の外観と入口" width="1536" height="1152" loading="lazy" decoding="async">
-          <img src="images/banner.webp" alt="施術ベッドが並ぶ院内" width="1920" height="1288" loading="lazy" decoding="async">
-          <img src="images/photo3.webp" alt="院内の飾り" width="1536" height="1152" loading="lazy" decoding="async">
+          <img src="images/gallery-front.webp" alt="上高田整骨院の外観と入口" width="1536" height="1152" loading="lazy" decoding="async">
+          <img src="images/gallery-waiting.webp" alt="待合室のソファと掛け軸" width="1100" height="1375" loading="lazy" decoding="async">
+          <img src="images/gallery-panda.webp" alt="受付で迎えてくれる熊猫のぬいぐるみとお菓子" width="1100" height="1375" loading="lazy" decoding="async">
         </div>
       </div>
     </section>
@@ -386,8 +386,8 @@
   <script>
     (function(){
       const heroBg=document.getElementById('heroBg');
-      const NIGHT_IMAGE='images/night-clinic.webp';
-      const DAY_IMAGE='images/banner.webp';
+      const NIGHT_IMAGE='images/hero-night.webp';
+      const DAY_IMAGE='images/hero-beds.webp';
 
       function tokyoParts(){
         const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());

@@ -244,7 +244,14 @@ const dataFor = async (db, date) => (await api(db, `/api/admin/data?date=${date}
   const ext = await api(db, '/api/admin/extend', { date: today, minutes: 30, laneId: 'L2' }, true);
   assert.equal(ext.status, 200);
   assert.equal(db.raw.prepare('SELECT lane_id FROM breaks WHERE date=?').get(today).lane_id, 'L2');
+  // Phone calls / walk-ins: staff may leave the phone number empty; the web still requires it.
+  const noPhone = await api(db, '/api/admin/reserve', { date: D, time: '16:00', name: '電話のおばあちゃん', phone: '' }, true);
+  assert.equal(noPhone.status, 200, await noPhone.clone().text());
+  assert.equal((await api(db, '/api/admin/reserve', { date: D, time: '17:00', name: 'x', phone: 'abc' }, true)).status, 400, 'a phone, if given, must be valid');
+  assert.equal((await book(db, D, '17:30', { phone: '' })).status, 400, 'web booking still needs a phone');
+  const npId = db.raw.prepare("SELECT id FROM appointments WHERE name='電話のおばあちゃん'").get().id;
+  assert.equal((await api(db, '/api/admin/update', { id: npId, date: D, time: '16:10', name: '電話のおばあちゃん', phone: '', note: '', extensionMinutes: 0 }, true)).status, 200);
   const csv = await (await api(db, '/api/admin/export', null, true)).text();
   assert(csv.includes('"メニュー","枠"') && csv.includes('"通常","枠1"'));
-  console.log('PASS: staff can pick a 枠, moves switch 枠 when needed, search, data, quick stop per 枠, CSV');
+  console.log('PASS: staff can pick a 枠, moves switch 枠 when needed, phone optional for staff, search, data, quick stop per 枠, CSV');
 }

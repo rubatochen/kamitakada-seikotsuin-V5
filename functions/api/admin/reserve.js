@@ -44,8 +44,9 @@ export async function onRequest(context) {
   if (!isValidDate(date)) return fail(request, 400, 'invalid_date', '予約日が正しくありません。');
   if (!isValidTime(time)) return fail(request, 400, 'invalid_time', '予約時間が正しくありません。');
   if (!name) return fail(request, 400, 'invalid_name', 'お名前を入力してください。');
-  if (!phone) return fail(request, 400, 'invalid_phone', '電話番号を入力してください。');
-  if (!isValidJapanesePhone(phone)) return fail(request, 400, 'invalid_phone', '電話番号の形式が正しくありません。例：090-1234-5678');
+  // Staff bookings are for phone calls and walk-ins: the phone number is optional here
+  // (the public booking page still requires it).
+  if (phone && !isValidJapanesePhone(phone)) return fail(request, 400, 'invalid_phone', '電話番号の形式が正しくありません。例：090-1234-5678');
   if (name.length > 80 || phone.length > 40 || email.length > 120 || note.length > 500) return fail(request, 400, 'input_too_long', '入力内容が長すぎます。');
   if (hasSlotStartedInTokyo(date, time)) return fail(request, 409, 'past_time', '開始済みまたは過去の時間は予約できません。');
 
