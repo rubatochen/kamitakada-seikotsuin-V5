@@ -605,7 +605,7 @@
       cancelReservationConfirm:'この予約をキャンセルしますか？', deleteReservationConfirm:'この予約記録を完全に削除しますか？', doCancel:'キャンセルする', doDelete:'削除する',
       manualRegistered:'予約を登録しました。', reservationUpdated:'予約を変更しました。', reservationCancelled:'予約をキャンセルしました。', reservationDeleted:'予約記録を削除しました。', extendSuccess:m=>`今から${m}分、受付を止めました。`, extendFailed:'受付を止められませんでした。',
       exportAppointments:'予約データを書き出す', exportShort:'書き出し', exportConfirm:'お客様の氏名・連絡先などを含む予約CSVファイルをダウンロードします。よろしいですか？', exportFailed:'書き出しに失敗しました。', download:'ダウンロード',
-      loginPasswordNotConfigured:'管理者ログインは現在設定されていません。', sessionCreationFailed:'ログインセッションを作成できませんでした。', invalidPassword:'パスワードが正しくありません。', rateLimited:'試行回数が多すぎます。しばらくしてから再度お試しください。', loginFailed:'ログインに失敗しました。', sessionInvalid:'セッションが切れました。もう一度ログインしてください。', dataLoadFailed:'データを読み込めませんでした。',
+      loginPasswordNotConfigured:'管理者ログインは現在設定されていません。', sessionCreationFailed:'ログインセッションを作成できませんでした。', invalidPassword:'パスワードが正しくありません。', rateLimited:'試行回数が多すぎます。しばらくしてから再度お試しください。', loginFailed:'ログインに失敗しました。', serviceUnavailable:'サーバーのデータベース準備に失敗しました（Workerのログを確認してください）。', oldBackend:'画面は新しいのに、サーバー側（Worker）が古いままです。site フォルダだけでなく、プロジェクト全体を wrangler deploy してください。', sessionInvalid:'セッションが切れました。もう一度ログインしてください。', dataLoadFailed:'データを読み込めませんでした。',
       notFound:'予約が見つかりません。画面を更新してください。', notEditable:'キャンセル済みの予約は変更できません。', invalidExtension:'延長時間が正しくありません。', alreadyBooked:'この時間はすでに予約で埋まっています。', pastTime:'過去の時間は予約できません。', breakTime:'受付停止中の時間です。', unavailable:'この時間・この枠では予約できません。', invalidDate:'日付を選んでください。', invalidTime:'時間を入力してください。', invalidName:'お名前を入力してください。', invalidPhone:'電話番号を正しく入力してください。', invalidLane:'このメニューはその枠では受けられません。', invalidMenu:'メニューを選んでください。', saveFailed:'保存できませんでした。',
       weekdays:['日','月','火','水','木','金','土'], dateTitle:(y,m,d,w)=>`${m}月${d}日（${w}）`, listDate:(m,d,w)=>`${m}月${d}日（${w}）`,
       spokenMenu:n=>`${n}の`
@@ -633,7 +633,7 @@
       cancelReservationConfirm:'确定要取消这条预约吗？', deleteReservationConfirm:'确定要彻底删除这条预约记录吗？', doCancel:'确定取消', doDelete:'确定删除',
       manualRegistered:'预约已登记。', reservationUpdated:'预约已修改。', reservationCancelled:'预约已取消。', reservationDeleted:'预约记录已删除。', extendSuccess:m=>`已从现在起停止接受预约 ${m} 分钟。`, extendFailed:'无法停止接受预约。',
       exportAppointments:'导出预约数据', exportShort:'导出', exportConfirm:'将下载包含顾客姓名、联系方式等信息的预约 CSV 文件。确定导出吗？', exportFailed:'导出失败。', download:'下载',
-      loginPasswordNotConfigured:'管理员登录尚未配置。', sessionCreationFailed:'无法创建登录会话。', invalidPassword:'密码不正确。', rateLimited:'尝试次数过多，请稍后再试。', loginFailed:'登录失败。', sessionInvalid:'登录已过期，请重新登录。', dataLoadFailed:'无法加载数据。',
+      loginPasswordNotConfigured:'管理员登录尚未配置。', sessionCreationFailed:'无法创建登录会话。', invalidPassword:'密码不正确。', rateLimited:'尝试次数过多，请稍后再试。', loginFailed:'登录失败。', serviceUnavailable:'服务器数据库准备失败（请查看 Worker 日志）。', oldBackend:'页面已是新版，但服务器端（Worker）还是旧版。请不要只替换 site 文件夹，用 wrangler deploy 部署整个项目。', sessionInvalid:'登录已过期，请重新登录。', dataLoadFailed:'无法加载数据。',
       notFound:'找不到该预约，请刷新页面。', notEditable:'已取消的预约无法修改。', invalidExtension:'延长时间不正确。', alreadyBooked:'该时间已经约满。', pastTime:'不能预约过去的时间。', breakTime:'该时间已停止接受预约。', unavailable:'该时间、该枠无法预约。', invalidDate:'请选择日期。', invalidTime:'请输入时间。', invalidName:'请输入姓名。', invalidPhone:'请正确输入电话号码。', invalidLane:'该菜单不能在这个枠接待。', invalidMenu:'请选择菜单。', saveFailed:'保存失败。',
       weekdays:['周日','周一','周二','周三','周四','周五','周六'], dateTitle:(y,m,d,w)=>`${m}月${d}日 ${w}`, listDate:(m,d,w)=>`${m}月${d}日 ${w}`,
       spokenMenu:n=>`${n}的`
@@ -694,12 +694,26 @@
   function setAdminLanguage(lang){ adminLanguage=lang==='zh'?'zh':'ja'; localStorage.setItem('kamitakada-admin-language',adminLanguage); applyAdminLanguage(); }
 
   // ------------------------------------------------------------ login / load
-  function loginErrorMessage(e){ return ({admin_password_not_configured:t('loginPasswordNotConfigured'),session_creation_failed:t('sessionCreationFailed'),invalid_password:t('invalidPassword'),rate_limited:t('rateLimited')})[e.code] || t('loginFailed'); }
+  // Error texts say what to check, with the status/code so problems can be traced.
+  function loginErrorMessage(e){
+    const known=({admin_password_not_configured:t('loginPasswordNotConfigured'),session_creation_failed:t('sessionCreationFailed'),invalid_password:t('invalidPassword'),rate_limited:t('rateLimited'),service_unavailable:t('serviceUnavailable')})[e.code];
+    return known || `${t('loginFailed')}（${e.status||'network'}${e.code?' / '+e.code:''}）`;
+  }
   async function login(){ $('err').textContent=''; try{ await post('/api/login',{password:$('pw').value}); }catch(e){ $('err').textContent=loginErrorMessage(e); return; } $('pw').value=''; showApp(); }
   function showApp(){ $('login').hidden=true; $('app').hidden=false; setPattern(document.querySelector('.a-tabs [aria-selected="true"]')?.dataset.tab||'day'); if(!$('date').value) $('date').value=today(); applyAdminLanguage(); render().catch(handleAdminLoadError); pollReservationEvents(); }
   function showLogin(){ $('login').hidden=false; $('app').hidden=true; setPattern('login'); }
-  function handleAdminLoadError(e){ $('err').textContent=(e.status===401||e.status===403)?t('sessionInvalid'):t('dataLoadFailed'); showLogin(); }
-  async function render(){ D=await api('/api/admin/data?date='+encodeURIComponent($('date').value||today())); if(!draft||!draftDirty) resetDraft(); renderDay(); renderSettings(); if(pendingDetailId){ const id=pendingDetailId; pendingDetailId=null; openDetail(id); } }
+  function handleAdminLoadError(e){
+    console.error('admin load failed',e);
+    if(e && (e.status===401||e.status===403)){ $('err').textContent=t('sessionInvalid'); showLogin(); return; }
+    // Logged in, but the page could not be drawn: say why instead of silently going back to the login form.
+    const detail=e && e.code==='old_backend' ? t('oldBackend') : `${t('dataLoadFailed')}（${(e&&(e.status?e.status+' '+(e.code||''):e.message))||'?'}）`;
+    $('err').textContent=detail; showLogin();
+  }
+  function checkData(d){
+    if(!d || !Array.isArray(d.lanes) || !Array.isArray(d.menus) || !d.capacity){ const err=new Error('old backend'); err.code='old_backend'; throw err; }
+    return d;
+  }
+  async function render(){ D=checkData(await api('/api/admin/data?date='+encodeURIComponent($('date').value||today()))); if(!draft||!draftDirty) resetDraft(); renderDay(); renderSettings(); if(pendingDetailId){ const id=pendingDetailId; pendingDetailId=null; openDetail(id); } }
   async function logout(){ await fetch('/api/logout',{method:'POST',credentials:'same-origin'}); showLogin(); }
 
   // ------------------------------------------------------------ tabs
