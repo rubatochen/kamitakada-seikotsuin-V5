@@ -1,5 +1,6 @@
 const languageData = {
   zh: {
+    "skip": "跳到正文",
     "site.name": "上高田整骨院",
     "nav.about": "关于本院",
     "nav.service": "治疗项目",
@@ -116,6 +117,7 @@ const languageData = {
     "reserve.footer": "如有疑问，请通过电话联系我们。"
   },
   en: {
+    "skip": "Skip to main content",
     "site.name": "Kamitakada Seikotsuin",
     "nav.about": "About",
     "nav.service": "Services",

@@ -58,7 +58,8 @@ export async function onRequest(context) {
 
   const nowMinutes = minutesOf(now.time);
   const start = nowMinutes;
-  const newEnd = start + minutes;
+  // Never past midnight (a break is one day only).
+  const newEnd = Math.min(start + minutes, 24 * 60 - 1);
 
   // 今日以外はこのボタンでは扱わない。
   if (date !== now.date) {

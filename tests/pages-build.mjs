@@ -58,3 +58,38 @@ assert.equal(r.status, 500);
 const j = await r.json();
 assert.equal(j.code, 'server_error'); assert.match(j.detail, /D1_ERROR: test/);
 console.log('PASS: unexpected errors come back as JSON with the reason for the admin page');
+
+// Privacy policy: bookings older than ~3 months are deleted. No cron in this
+// build, so the middleware does it once per Tokyo day.
+{
+  const { threeMonthsAgoTokyoDate } = await import(path.join(root, 'lib/cleanup.js'));
+  const db = createD1(`
+    CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+    CREATE TABLE appointments (id TEXT PRIMARY KEY, date TEXT NOT NULL, time TEXT NOT NULL, name TEXT NOT NULL, phone TEXT NOT NULL, email TEXT, note TEXT, status TEXT NOT NULL DEFAULT 'confirmed', created_at TEXT NOT NULL, duration_minutes INTEGER NOT NULL DEFAULT 30);
+    CREATE TABLE breaks (id TEXT PRIMARY KEY, date TEXT NOT NULL, start_time TEXT NOT NULL, end_time TEXT NOT NULL, created_at TEXT NOT NULL);
+    CREATE TABLE holidays (date TEXT PRIMARY KEY, reason TEXT);
+    CREATE TABLE sessions (token TEXT PRIMARY KEY, expires_at INTEGER NOT NULL);
+  `);
+  const cutoff = threeMonthsAgoTokyoDate();
+  const before = new Date(cutoff + 'T00:00:00Z'); before.setUTCDate(before.getUTCDate() - 1);
+  const oldDay = before.toISOString().slice(0, 10);
+  const ins = (id, date) => db.raw.prepare("INSERT INTO appointments(id,date,time,name,phone,status,created_at) VALUES(?,?,'10:00','x','090','confirmed','t')").run(id, date);
+  ins('old', oldDay); ins('edge', cutoff); ins('new', '2099-01-01');
+  const pending = [];
+  const env2 = { DB: db, ADMIN_PASSWORD: 'pw', ASSETS: { fetch: () => new Response('asset') } };
+  const run = async () => {
+    const request = new Request('https://x.test/api/status');
+    await middleware({ request, env: env2, params: {}, waitUntil: p => pending.push(p), next: async () => new Response('{}') });
+    await Promise.all(pending.splice(0));
+  };
+  await run();
+  const ids = () => db.raw.prepare('SELECT id FROM appointments ORDER BY id').all().map(r => r.id).join(',');
+  assert.equal(ids(), 'edge,new');
+  ins('old2', oldDay);
+  await run(); // same day: no second run
+  assert.equal(ids(), 'edge,new,old2');
+  db.raw.prepare("UPDATE settings SET value='2000-01-01' WHERE key='last_cleanup_date'").run();
+  await run(); // next day
+  assert.equal(ids(), 'edge,new');
+  console.log('PASS: bookings older than 3 months are deleted once a day (no cron needed)');
+}

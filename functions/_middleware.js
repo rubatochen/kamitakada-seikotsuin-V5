@@ -4,8 +4,10 @@
 // It does the same three jobs as that wrapper:
 //   1. bring the D1 database up to the current schema (idempotent),
 //   2. add security headers to API responses,
-//   3. turn unexpected errors into JSON instead of a bare 500 page.
+//   3. turn unexpected errors into JSON instead of a bare 500 page,
+//   4. once a day, delete bookings older than 3 months (no cron in this build).
 import { ensureSchema } from './lib/schema.js';
+import { dailyCleanup } from './lib/cleanup.js';
 
 function withSecurityHeaders(response) {
   const headers = new Headers(response.headers);
@@ -34,6 +36,10 @@ export async function onRequest(context) {
     return withSecurityHeaders(jsonError(503, 'service_unavailable', '現在ご利用いただけません。',
       url.pathname.startsWith('/api/admin/') ? String(error && error.message || error).slice(0, 300) : undefined));
   }
+
+  // Never delays or breaks the request itself.
+  const cleanup = dailyCleanup(context.env).catch(error => console.error('Daily cleanup failed', error && error.stack || error));
+  if (typeof context.waitUntil === 'function') context.waitUntil(cleanup);
 
   try {
     return withSecurityHeaders(await context.next());
