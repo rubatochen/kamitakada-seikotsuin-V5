@@ -538,10 +538,28 @@
       applyReserveTheme();
     }
     function renderDateLabel(){document.getElementById('dateLabel').textContent=t('dateFormat')(date);}
+    let currentDayHours=null;
+    let unavailableOwnedBySlots=false; // true only while the box shows the slot list (not a closed/error message)
+    function passedSpanToday(){
+      if(!currentDayHours || document.getElementById('reserveTime').disabled) return null;
+      const n=tokyoNowParts();
+      if(iso(date)!==`${n.year}-${n.month}-${n.day}`) return null;
+      const toMin=v=>{const [h,m]=String(v).split(':').map(Number);return h*60+m};
+      const fmt=m=>`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+      const open=toMin(currentDayHours[0]), close=toMin(currentDayHours[1]);
+      const end=Math.min(Number(n.hour)*60+Number(n.minute)+((menu&&menu.noticeMinutes)||0), close);
+      return end>open ? {startTime:fmt(open), endTime:fmt(end)} : null;
+    }
     function renderCurrentUnavailable(){
       const info=document.getElementById('unavailableInfo');
-      if(!currentUnavailable.length){info.style.display='none';info.textContent='';return;}
-      const sorted=currentUnavailable
+      // Today: times that have already passed (plus the menu's advance notice)
+      // are listed too. Recomputed every minute, so it never goes stale.
+      unavailableOwnedBySlots=true;
+      const spans=currentUnavailable.slice();
+      const passed=passedSpanToday();
+      if(passed) spans.push(passed);
+      if(!spans.length){info.style.display='none';info.textContent='';return;}
+      const sorted=spans
         .filter(x=>x && x.startTime && x.endTime)
         .map(x=>({start:x.startTime,end:x.endTime}))
         .sort((a,b)=>a.start.localeCompare(b.start));
@@ -606,7 +624,7 @@
         if(requestId!==availabilityRequestId)return;
         input.disabled=true;
         const info=document.getElementById('unavailableInfo');
-        info.style.display='block'; info.innerHTML=`<strong>${t('loadError')}</strong>`;
+        unavailableOwnedBySlots=false; info.style.display='block'; info.innerHTML=`<strong>${t('loadError')}</strong>`;
       }finally{
         if(requestId===availabilityRequestId){
           setAvailabilityLoading(false);
@@ -645,6 +663,7 @@
         const h=businessHours[String(date.getDay())];
         dayHoursEl.textContent=Array.isArray(h)?`${h[0]}～${h[1]}`:t('dayClosed');
       }
+      currentDayHours=businessHours&&Array.isArray(businessHours[String(date.getDay())])?businessHours[String(date.getDay())]:null;
       // Earliest/latest start come from the server's slot list (menu length and lane hours included).
       input.min=(list&&list[0]&&list[0].time)||'10:00';
       input.max=(list&&list.length&&list[list.length-1].time)||'18:30';
@@ -673,7 +692,7 @@
         if(!temporarilyClosed){
           const info=document.getElementById('unavailableInfo');
           info.style.display='block';
-          info.innerHTML=`<strong>${t('noReception')}</strong>`;
+          unavailableOwnedBySlots=false; info.innerHTML=`<strong>${t('noReception')}</strong>`;
         }
         updateDurationSummary();
         return;
@@ -707,6 +726,7 @@
       document.getElementById('next').disabled=iso(date)>=iso(maxDate());
       selected='';
       currentUnavailable=[];
+      unavailableOwnedBySlots=false; currentDayHours=null;
       setTimeReselectionNeeded(false);
       document.getElementById('form').reset();
       setReservationClosedView(null);
@@ -802,7 +822,7 @@
       renderExtensions();
       load();
     })();
-    setInterval(refreshReserveTheme,60000);
+    setInterval(()=>{ refreshReserveTheme(); if(unavailableOwnedBySlots) renderCurrentUnavailable(); },60000);
   </script>
   <script src="dye.js"></script>
 </body>

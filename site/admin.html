@@ -489,6 +489,14 @@
             <div id="menusEditor"></div>
             <button class="a-btn small" type="button" data-act="add-menu" data-i18n="addMenu">＋ メニューを追加</button>
           </section>
+          <section class="a-panel" id="devicePanel">
+            <h2 data-i18n="deviceTitle">通知（この端末）</h2>
+            <p class="a-muted" data-i18n="deviceHelp">この端末（このブラウザ）だけの設定です。変えるとすぐ反映され、保存は不要です。</p>
+            <label class="a-check a-device-row"><input type="checkbox" id="notifyDefault"><span data-i18n="notifyDefault">管理画面を開いたら通知をオンにする</span></label>
+            <p class="a-cap-note" data-i18n="notifyDefaultNote">ブラウザの仕様で、開いたあと画面を一度タップ（クリック）すると音が出るようになります。</p>
+            <div class="a-device-row a-volume"><label for="notifyVolume" data-i18n="notificationVolume">音量</label><input id="notifyVolume" type="range" min="0" max="100" step="5" value="100"><output id="notifyVolumeValue">100%</output><button class="a-btn small" type="button" data-act="test-sound" data-i18n="testSound">試しに鳴らす</button></div>
+            <p id="notifySync" class="a-sync" role="status">接続確認中…</p>
+          </section>
         </div>
         <div class="a-col">
           <section class="a-panel">
@@ -518,14 +526,6 @@
             <p class="a-muted" data-i18n="businessHoursDesc">毎週の営業時間です。枠の時間はこの範囲内で使われます。</p>
             <div id="hours"></div>
             <button class="a-btn primary" style="margin-top:12px" type="button" data-act="save-hours" data-i18n="saveBusinessHours">営業時間を保存</button>
-          </section>
-          <section class="a-panel" id="devicePanel">
-            <h2 data-i18n="deviceTitle">通知（この端末）</h2>
-            <p class="a-muted" data-i18n="deviceHelp">この端末（このブラウザ）だけの設定です。変えるとすぐ反映され、保存は不要です。</p>
-            <label class="a-check a-device-row"><input type="checkbox" id="notifyDefault"><span data-i18n="notifyDefault">管理画面を開いたら通知をオンにする</span></label>
-            <p class="a-cap-note" data-i18n="notifyDefaultNote">ブラウザの仕様で、開いたあと画面を一度タップ（クリック）すると音が出るようになります。</p>
-            <div class="a-device-row a-volume"><label for="notifyVolume" data-i18n="notificationVolume">音量</label><input id="notifyVolume" type="range" min="0" max="100" step="5" value="100"><output id="notifyVolumeValue">100%</output><button class="a-btn small" type="button" data-act="test-sound" data-i18n="testSound">試しに鳴らす</button></div>
-            <p id="notifySync" class="a-sync" role="status">接続確認中…</p>
           </section>
         </div>
 
