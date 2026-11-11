@@ -117,8 +117,8 @@
     .a-break{position:absolute;left:6px;right:6px;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:6px;padding:4px 6px 4px 9px;border-radius:7px;background:repeating-linear-gradient(135deg,#ecece8 0 6px,#f6f6f3 6px 12px);border:1px dashed #c9cac4;font-size:12px;color:var(--nezumi);overflow:hidden;cursor:default}
     body.night-mode .a-break{background:repeating-linear-gradient(135deg,#262622 0 6px,#1f1f1c 6px 12px);border-color:#3a3b35}
     .a-break button{border:0;background:transparent;color:inherit;font-size:16px;line-height:1;cursor:pointer;padding:0 2px}
-    .a-now{position:absolute;left:0;right:0;z-index:4;height:0;border-top:2px solid #c0392b;pointer-events:none}
-    .a-now::before{content:attr(data-time);position:absolute;left:4px;top:-10px;padding:1px 6px;border-radius:999px;background:#c0392b;color:#fff;font-size:11px;font-weight:700}
+    .a-now{position:absolute;left:0;right:0;z-index:0;height:0;border-top:2px solid #c0392b;pointer-events:none}
+    .a-now::before{content:attr(data-time);position:absolute;right:100%;margin-right:3px;top:-10px;padding:1px 6px;border-radius:999px;background:#c0392b;color:#fff;font-size:11px;font-weight:700}
     .a-empty{padding:36px;text-align:center;color:var(--nezumi)}
     .a-cancelled{margin-top:14px}
     .a-cancelled summary{cursor:pointer;font-size:14px;color:var(--nezumi);font-weight:700}
@@ -224,7 +224,14 @@
     .a-break span{min-width:0;overflow:hidden}
     .a-break b{font-weight:700}
     .a-break i{font-style:normal}
-    @media (max-width:640px){.a-appt{padding:4px 6px 4px 7px;left:3px;right:3px}.a-appt .e{display:none}.a-appt.tiny{gap:4px}.a-break{left:3px;right:3px;padding:3px 4px 3px 6px;font-size:11px}.a-break b{display:block}}
+    @media (max-width:640px){.a-appt{padding:4px 6px 4px 7px;left:3px;right:3px}.a-appt.tiny{gap:4px}.a-break{left:3px;right:3px;padding:3px 4px 3px 6px;font-size:11px}}
+    /* Narrow lane columns (e.g. 3 枠 on a phone): stack label and time instead of hiding them. */
+    .a-narrow .a-break{position:absolute;left:2px;right:2px;padding:3px 14px 3px 5px}
+    .a-narrow .a-break b{display:none}
+    .a-narrow .a-break i{display:block;white-space:normal;font-size:10.5px;line-height:1.3;font-weight:700;font-variant-numeric:tabular-nums}
+    .a-narrow .a-break button{position:absolute;top:2px;right:1px;font-size:13px;padding:0 2px}
+    .a-narrow .a-appt{left:2px;right:2px;padding:3px 3px 3px 5px;border-left-width:3px}
+    .a-narrow .a-appt .t{font-size:10px;letter-spacing:-.02em;text-overflow:clip}
     .a-stat.cap{display:flex;flex-direction:column;align-items:flex-start}
     .a-stat.cap .row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
     .a-stat.cap .a-btn{margin-top:6px}
@@ -315,8 +322,6 @@
       .a-stat.cap{flex-basis:100%;border-right:0;flex-wrap:wrap}
       .a-stat.next{flex-basis:100%;border-bottom:0}
       .a-lane-head small{display:none}
-      .a-break i{display:none}
-      .a-break b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px}
       .a-tl-corner,.a-lane-head{padding:6px 6px}
     }
     .a-lang button{padding:6px 10px;font-size:12px}
@@ -804,6 +809,7 @@
     const ppm=pxPerMin();
     const H=(end-start)*ppm;
     box.style.gridTemplateColumns=`52px repeat(${lanes.length},minmax(0,1fr))`;
+    box.dataset.lanes=String(lanes.length); applyTimelineDensity();
     let html=`<div class="a-tl-corner"></div>`;
     for(const l of lanes){ const open=laneOpenSpans(l); html+=`<div class="a-lane-head"><strong>${esc(l.name)}</strong> <small>${open.length?open.map(x=>`${hhmm(x[0])}–${hhmm(x[1])}`).join(', '):esc(t('laneClosed'))}</small></div>`; }
     let axis=`<div class="a-axis" style="height:${H}px">`;
@@ -824,7 +830,7 @@
       }
       for(const b of breaks.filter(b=>!b.laneId||b.laneId===l.id)){
         const top=(toMin(b.startTime)-start)*ppm, hgt=Math.max(18,(toMin(b.endTime)-toMin(b.startTime))*ppm-2);
-        col+=`<div class="a-break" style="top:${top}px;height:${hgt}px" title="${esc(t('stop'))}"><span><b>${esc(t('stop'))}</b> <i>${esc(b.startTime)}–${esc(b.endTime)}</i></span><button type="button" data-act="del-break" data-id="${esc(b.id)}" aria-label="${esc(t('delete'))}">×</button></div>`;
+        col+=`<div class="a-break" style="top:${top}px;height:${hgt}px" title="${esc(t('stop'))} ${esc(b.startTime)}–${esc(b.endTime)}"><span><b>${esc(t('stop'))}</b> <i>${esc(b.startTime)}<wbr>–${esc(b.endTime)}</i></span><button type="button" data-act="del-break" data-id="${esc(b.id)}" aria-label="${esc(t('delete'))}">×</button></div>`;
       }
       for(const a of appts.filter(a=>(a.lane_id||'L1')===l.id)){
         const s=toMin(a.time), dur=Number(a.duration_minutes)||30, e=s+dur;
@@ -846,6 +852,13 @@
       box.append(line);
     }
   }
+  // Decide by the real column width, not the screen: one 枠 on a phone has
+  // plenty of room to show the same details as on a computer.
+  function applyTimelineDensity(){
+    const box=$('timeline'); const n=Number(box.dataset.lanes)||1;
+    box.classList.toggle('a-narrow',(box.clientWidth-52)/n<150);
+  }
+  window.addEventListener('resize',()=>{ try{ applyTimelineDensity(); }catch{} });
   function renderCancelled(){
     const box=$('cancelled'); const list=(D.appointments||[]).filter(a=>a.status==='cancelled');
     box.hidden=!list.length; if(!list.length) return;
